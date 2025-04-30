@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:app_creditos/src/shared/theme/app_colors.dart';
 import '../widgets/login_form.dart';
 import '../widgets/logo_title.dart';
-import '../widgets/welcome_text.dart';
+import '../../../shared/components/welcome_text.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -85,7 +85,13 @@ class _LoginBody extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: [
-        const WelcomeText(),
+        const WelcomeText(
+          titlePrefix: 'Bienvenidos a',
+          titleHighlight: 'CrediBridge',
+          titleSuffix: 'toma el control de tus finanzas',
+          subtitle: 'Introduce tu información y descubre tus opciones de crédito.',
+        ),
+
         const SizedBox(height: 24),
         const LoginForm(),
         const SizedBox(height: 24),

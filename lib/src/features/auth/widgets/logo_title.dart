@@ -8,22 +8,27 @@ class LogoTitle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Detectamos si estamos en una tablet o en celular
+    final isTablet = MediaQuery.of(context).size.width > 600;
+
     return RichText(
       // Permite combinar estilos en una sola línea de texto
       text: TextSpan(
-        // Estilo base para todo el texto (fuente, tamaño y color)
-        style: AppTextStyles.logoText.copyWith(
-          fontSize: 58, // Tamaño sobrescrito para hacerlo más llamativo
-          fontWeight: FontWeight.w800, // Peso extra negrita
+        // Estilo base para todo el texto, sobrescribiendo tamaño y peso
+        style: AppTextStyles.logoText(context).copyWith(
+          fontSize: isTablet ? 58 : 42, // Tamaño más grande en tablet
+          fontWeight: FontWeight.w800, // Extra negrita
         ),
         children: [
-          // Parte "Credi" con estilo base
+          // Texto "Credi" con estilo base
           const TextSpan(text: 'Credi'),
-          // Parte "Bridge." con color primario y negrita personalizada
+
+          // Texto "Bridge." con estilo de color destacado
           TextSpan(
             text: 'Bridge.',
-            style: AppTextStyles.logoHighlight.copyWith(
-              fontWeight: FontWeight.w800,
+            style: AppTextStyles.logoHighlight(context).copyWith(
+              fontWeight: FontWeight.w800, // Negrita más fuerte
+              fontSize: isTablet ? 58 : 42, // Coincide con el tamaño del logo
             ),
           ),
         ],

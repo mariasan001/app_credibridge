@@ -1,8 +1,11 @@
-// lib/src/features/splash/widgets/preloader_c_animated.dart
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:app_creditos/src/shared/theme/app_colors.dart';
+import 'package:app_creditos/src/shared/services/session_manager.dart';
+import 'package:app_creditos/src/features/auth/page/login_page.dart';
+import 'package:app_creditos/src/features/inicio/page/dashboard_page.dart';
+import 'package:app_creditos/src/features/auth/services/auth_service.dart';
 
 class PreloaderCAnimated extends StatefulWidget {
   const PreloaderCAnimated({super.key});
@@ -16,6 +19,7 @@ class _PreloaderCAnimatedState extends State<PreloaderCAnimated>
   final String fullText = "rediBridge";
   String visibleText = "";
   int index = 0;
+
   late final Timer _textTimer;
   late final AnimationController _controller;
 
@@ -36,11 +40,37 @@ class _PreloaderCAnimatedState extends State<PreloaderCAnimated>
         });
       } else {
         _textTimer.cancel();
-        Future.delayed(const Duration(seconds: 1), () {
-          Navigator.pushReplacementNamed(context, '/login');
-        });
+        _checkSession(); // Verificamos sesión cuando termina la animación
       }
     });
+  }
+
+  Future<void> _checkSession() async {
+    final token = await SessionManager.getToken();
+
+    // Esperamos un poco para terminar animación
+    await Future.delayed(const Duration(milliseconds: 800));
+
+    if (!mounted) return;
+
+    if (token != null) {
+      final user = await AuthService.getProfile();
+      if (!mounted) return;
+
+      if (user != null) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (_) => DashboardPage(user: user)),
+        );
+        return;
+      }
+    }
+
+    // Si no hay sesión activa, mandamos al login
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (_) => const LoginPage()),
+    );
   }
 
   @override

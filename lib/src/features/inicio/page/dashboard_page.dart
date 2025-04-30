@@ -1,6 +1,7 @@
-// lib/src/features/dashboard/pages/dashboard_page.dart
 import 'package:flutter/material.dart';
 import 'package:app_creditos/src/features/auth/models/user_model.dart';
+import 'package:app_creditos/src/shared/services/session_manager.dart';
+import 'package:app_creditos/src/features/auth/page/login_page.dart';
 
 class DashboardPage extends StatelessWidget {
   final User user;
@@ -11,7 +12,7 @@ class DashboardPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Perfin de Usuario'),
+        title: const Text('Perfil de Usuario'),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
@@ -32,7 +33,32 @@ class DashboardPage extends StatelessWidget {
               style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 8),
-            ...user.roles.map((role) => _buildInfoRow('Rol', role.description)).toList(),
+            ...user.roles
+                .map((role) => _buildInfoRow('Rol', role.description))
+                .toList(),
+            const SizedBox(height: 32),
+
+            // Botón para cerrar sesión
+            Center(
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.redAccent,
+                  foregroundColor: Colors.white,
+                  padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
+                ),
+                onPressed: () async {
+                  await SessionManager.clearToken();
+                  if (context.mounted) {
+                    Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(builder: (_) => const LoginPage()),
+                      (route) => false,
+                    );
+                  }
+                },
+                child: const Text('Cerrar sesión'),
+              ),
+            )
           ],
         ),
       ),

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:app_creditos/src/shared/theme/app_colors.dart';
 import 'package:app_creditos/src/shared/theme/app_text_styles.dart';
 
+/// Campo de texto para el número de Servidor Público.
+/// Reutilizable y con estilos responsive.
 class UsernameField extends StatelessWidget {
   final TextEditingController controller;
 
@@ -9,6 +11,9 @@ class UsernameField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final isTablet = screenWidth > 600;
+
     return TextFormField(
       controller: controller,
       keyboardType: TextInputType.number,
@@ -16,8 +21,12 @@ class UsernameField extends StatelessWidget {
         labelText: 'Número de Servidor público *',
         hintText: 'Ingresa número',
         floatingLabelBehavior: FloatingLabelBehavior.always,
-        labelStyle: AppTextStyles.inputLabel,
-        hintStyle: AppTextStyles.inputHint,
+        labelStyle: AppTextStyles.inputLabel(context).copyWith(
+          fontSize: isTablet ? 20 : 16,
+        ),
+        hintStyle: AppTextStyles.inputHint(context).copyWith(
+          fontSize: isTablet ? 16 : 14,
+        ),
         contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
