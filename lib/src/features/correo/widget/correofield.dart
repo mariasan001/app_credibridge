@@ -2,32 +2,26 @@ import 'package:flutter/material.dart';
 import 'package:app_creditos/src/shared/theme/app_colors.dart';
 import 'package:app_creditos/src/shared/theme/app_text_styles.dart';
 
-/// Campo de texto para el número de Servidor Público.
-/// Reutilizable y con estilos responsive.
-class UsernameField extends StatelessWidget {
+class CorreoField extends StatelessWidget {
   final TextEditingController controller;
 
-  const UsernameField({super.key, required this.controller});
+  const CorreoField({super.key, required this.controller});
 
   @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
-    final isTablet = screenWidth > 600;
-
     return TextFormField(
       controller: controller,
-      keyboardType: TextInputType.number,
+      keyboardType: TextInputType.emailAddress,
       decoration: InputDecoration(
-        labelText: 'Número de Servidor público *',
-        hintText: 'Ingresa número',
+        labelText: 'Correo electrónico *',
+        hintText: 'Ej. nombre@dominio.com',
         floatingLabelBehavior: FloatingLabelBehavior.always,
-        labelStyle: AppTextStyles.inputLabel(context).copyWith(
-          fontSize: isTablet ? 20 : 16,
+        labelStyle: AppTextStyles.inputLabel(context),
+        hintStyle: AppTextStyles.inputHint(context),
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 16,
+          vertical: 14,
         ),
-        hintStyle: AppTextStyles.inputHint(context).copyWith(
-          fontSize: isTablet ? 16 : 14,
-        ),
-        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
           borderSide: const BorderSide(color: AppColors.inputBorder),
@@ -41,9 +35,16 @@ class UsernameField extends StatelessWidget {
           borderSide: const BorderSide(color: AppColors.primary, width: 2),
         ),
       ),
-      validator: (value) => value == null || value.isEmpty
-          ? 'Por favor ingresa tu número de servidor'
-          : null,
+      validator: (value) {
+        if (value == null || value.isEmpty) {
+          return 'Este campo es obligatorio';
+        }
+        final emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
+        if (!emailRegex.hasMatch(value)) {
+          return 'Ingresa un correo válido';
+        }
+        return null;
+      },
     );
   }
 }

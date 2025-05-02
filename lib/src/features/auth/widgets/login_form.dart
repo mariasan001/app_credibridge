@@ -1,3 +1,4 @@
+import 'package:app_creditos/src/shared/components/alertas.dart';
 import 'package:flutter/material.dart';
 import 'package:app_creditos/src/features/auth/services/auth_service.dart';
 import 'package:app_creditos/src/features/auth/widgets/form_fields.dart';
@@ -15,35 +16,7 @@ class LoginForm extends StatefulWidget {
   State<LoginForm> createState() => _LoginFormState();
 }
 
-void showCustomSnackBar(
-  BuildContext context,
-  String message, {
-  bool isError = false,
-}) {
-  final color = isError ? Colors.red[400] : Colors.green[400];
-  final icon = isError ? Icons.error_outline : Icons.check_circle_outline;
 
-  ScaffoldMessenger.of(context).showSnackBar(
-    SnackBar(
-      backgroundColor: color,
-      behavior: SnackBarBehavior.floating,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      content: Row(
-        children: [
-          Icon(icon, color: Colors.white),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Text(
-              message,
-              style: const TextStyle(color: Colors.white, fontSize: 16),
-            ),
-          ),
-        ],
-      ),
-      duration: const Duration(seconds: 3),
-    ),
-  );
-}
 
 class _LoginFormState extends State<LoginForm> {
   final _formKey = GlobalKey<FormState>();
@@ -106,7 +79,7 @@ class _LoginFormState extends State<LoginForm> {
 
           SizedBox(height: fieldSpacing),
 
-          _buildPasswordField(),
+          buildPasswordField(),
 
           const SizedBox(height: 8),
 
@@ -128,7 +101,7 @@ class _LoginFormState extends State<LoginForm> {
     );
   }
 
-  Widget _buildPasswordField() {
+  Widget buildPasswordField() {
     return TextFormField(
       controller: _passwordController,
       obscureText: _obscurePassword,

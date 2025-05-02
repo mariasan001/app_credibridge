@@ -37,6 +37,8 @@ dependencies:
   dio: ^5.8.0+1
   flutter_secure_storage: ^9.2.4
   google_fonts: ^6.2.1
+  mockito: ^5.4.2
+  build_runner: ^2.4.6
 
 dev_dependencies:
   flutter_test:

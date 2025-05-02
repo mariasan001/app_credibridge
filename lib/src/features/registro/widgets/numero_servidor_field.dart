@@ -1,33 +1,27 @@
-import 'package:flutter/material.dart';
 import 'package:app_creditos/src/shared/theme/app_colors.dart';
 import 'package:app_creditos/src/shared/theme/app_text_styles.dart';
+import 'package:flutter/material.dart';
 
-/// Campo de texto para el número de Servidor Público.
-/// Reutilizable y con estilos responsive.
-class UsernameField extends StatelessWidget {
+class NumeroServidorField extends StatelessWidget {
   final TextEditingController controller;
 
-  const UsernameField({super.key, required this.controller});
+  const NumeroServidorField({super.key, required this.controller});
 
   @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
-    final isTablet = screenWidth > 600;
-
     return TextFormField(
-      controller: controller,
+      controller:  controller,
       keyboardType: TextInputType.number,
       decoration: InputDecoration(
-        labelText: 'Número de Servidor público *',
-        hintText: 'Ingresa número',
+        labelText: 'Número de Servidor Público *',
+        hintText: 'Ej. 123456',
         floatingLabelBehavior: FloatingLabelBehavior.always,
-        labelStyle: AppTextStyles.inputLabel(context).copyWith(
-          fontSize: isTablet ? 20 : 16,
+        labelStyle: AppTextStyles.inputLabel(context),
+        hintStyle: AppTextStyles.inputHint(context),
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 16,
+          vertical: 14,
         ),
-        hintStyle: AppTextStyles.inputHint(context).copyWith(
-          fontSize: isTablet ? 16 : 14,
-        ),
-        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
           borderSide: const BorderSide(color: AppColors.inputBorder),
@@ -41,9 +35,11 @@ class UsernameField extends StatelessWidget {
           borderSide: const BorderSide(color: AppColors.primary, width: 2),
         ),
       ),
-      validator: (value) => value == null || value.isEmpty
-          ? 'Por favor ingresa tu número de servidor'
-          : null,
+      validator:
+          (value) =>
+              (value == null || value.isEmpty)
+                  ? 'Este campo es obligatorio'
+                  : null,
     );
   }
 }
