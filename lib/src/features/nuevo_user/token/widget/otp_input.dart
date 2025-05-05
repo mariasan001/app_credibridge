@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+/// Widget para ingresar un código de 6 caracteres alfanuméricos.
+/// Cada carácter se ingresa en un campo separado y se notifica cuando se completa.
 class OtpInput extends StatefulWidget {
   final void Function(String) onCompleted;
 
@@ -10,6 +12,7 @@ class OtpInput extends StatefulWidget {
 }
 
 class _OtpInputState extends State<OtpInput> {
+  // Lista de controladores y focusNodes para los 6 campos
   final List<FocusNode> _focusNodes = List.generate(6, (_) => FocusNode());
   final List<TextEditingController> _controllers =
       List.generate(6, (_) => TextEditingController());
@@ -25,6 +28,7 @@ class _OtpInputState extends State<OtpInput> {
     super.dispose();
   }
 
+  /// Maneja el cambio en cada campo individual
   void _onChanged(String value, int index) {
     // Validar que solo se permita un carácter alfanumérico
     if (!RegExp(r'^[a-zA-Z0-9]?$').hasMatch(value)) {
@@ -32,15 +36,15 @@ class _OtpInputState extends State<OtpInput> {
       return;
     }
 
-    // Avanzar automáticamente al siguiente input
+    // Avanzar automáticamente al siguiente campo si no es el último
     if (value.isNotEmpty && index < 5) {
       _focusNodes[index + 1].requestFocus();
     }
 
-    // Construir el código actual
+    // Construir el código completo
     final code = _controllers.map((c) => c.text).join();
 
-    // Notificar a la página padre siempre que cambie algo
+    // Notificar a la página padre
     widget.onCompleted(code);
   }
 
@@ -58,10 +62,13 @@ class _OtpInputState extends State<OtpInput> {
             focusNode: _focusNodes[i],
             textAlign: TextAlign.center,
             maxLength: 1,
-            onChanged: (value) => _onChanged(value.toUpperCase(), i),
             keyboardType: TextInputType.text,
             textInputAction: TextInputAction.next,
-            style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            style: const TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+              letterSpacing: 1.5,
+            ),
             decoration: InputDecoration(
               counterText: '',
               contentPadding: EdgeInsets.zero,
@@ -74,6 +81,15 @@ class _OtpInputState extends State<OtpInput> {
                 borderSide: const BorderSide(color: Colors.teal, width: 2),
               ),
             ),
+            onChanged: (value) {
+              // Convertir cualquier entrada a mayúsculas
+              final uppercaseValue = value.toUpperCase();
+              _controllers[i].value = TextEditingValue(
+                text: uppercaseValue,
+                selection: TextSelection.collapsed(offset: uppercaseValue.length),
+              );
+              _onChanged(uppercaseValue, i);
+            },
           ),
         );
       }),
