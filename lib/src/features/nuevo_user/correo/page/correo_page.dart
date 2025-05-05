@@ -1,12 +1,17 @@
-import 'package:app_creditos/src/features/nuevo_user/correo/service/registro_service.dart';
-import 'package:app_creditos/src/features/nuevo_user/correo/widget/correofield.dart';
-import 'package:app_creditos/src/shared/components/login_button.dart';
 import 'package:flutter/material.dart';
-import 'package:app_creditos/src/features/auth/widgets/logo_title.dart';
-import 'package:app_creditos/src/shared/theme/app_colors.dart';
-import 'package:app_creditos/src/shared/components/welcome_text.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
+// Features
+import 'package:app_creditos/src/features/auth/widgets/logo_title.dart';
+import 'package:app_creditos/src/features/nuevo_user/correo/service/registro_service.dart';
+import 'package:app_creditos/src/features/nuevo_user/correo/widget/correofield.dart';
+
+// Shared
+import 'package:app_creditos/src/shared/components/login_button.dart';
+import 'package:app_creditos/src/shared/components/welcome_text.dart';
+import 'package:app_creditos/src/shared/theme/app_colors.dart';
+
+/// Página donde el usuario debe ingresar su correo para recibir un token de verificación
 class CorreoPage extends StatefulWidget {
   const CorreoPage({super.key});
 
@@ -20,6 +25,8 @@ class _CorreoPageState extends State<CorreoPage> {
   @override
   void initState() {
     super.initState();
+
+    // Activamos la animación de entrada del formulario
     Future.delayed(const Duration(milliseconds: 400), () {
       setState(() => showContainer = true);
     });
@@ -41,6 +48,7 @@ class _CorreoPageState extends State<CorreoPage> {
       backgroundColor: AppColors.background,
       body: Stack(
         children: [
+          // Logo institucional con animación
           AnimatedPositioned(
             duration: const Duration(milliseconds: 800),
             curve: Curves.easeOut,
@@ -49,6 +57,8 @@ class _CorreoPageState extends State<CorreoPage> {
             right: 0,
             child: const Center(child: LogoTitle()),
           ),
+
+          // Contenedor con el formulario
           AnimatedPositioned(
             duration: const Duration(milliseconds: 800),
             curve: Curves.easeOut,
@@ -86,6 +96,7 @@ class _CorreoBodyState extends State<_CorreoBody> {
   final TextEditingController _correoController = TextEditingController();
   bool _isLoading = false;
 
+  /// Función que valida el formulario y envía el token por correo
   void _enviarToken() async {
     if (!_formKey.currentState!.validate()) return;
 
@@ -93,6 +104,7 @@ class _CorreoBodyState extends State<_CorreoBody> {
     setState(() => _isLoading = true);
 
     try {
+      // Recuperamos el número de servidor previamente almacenado
       final userId =
           await const FlutterSecureStorage().read(key: 'registro_userId');
 
@@ -100,10 +112,15 @@ class _CorreoBodyState extends State<_CorreoBody> {
         throw 'No se encontró el número de servidor.';
       }
 
-     await CorreoService.enviarTokenPorCorreo(userId: userId, email: correo);
-
+      // Enviamos el token al correo del usuario
+      await CorreoService.enviarTokenPorCorreo(
+        userId: userId,
+        email: correo,
+      );
 
       if (!mounted) return;
+
+      // Navegamos a la pantalla para validar el token
       Navigator.pushNamed(context, '/token');
     } catch (e) {
       if (!mounted) return;
@@ -131,8 +148,13 @@ class _CorreoBodyState extends State<_CorreoBody> {
                 'Por seguridad, enviaremos un token de verificación a tu correo electrónico.',
           ),
           const SizedBox(height: 32),
+
+          // Campo de correo electrónico
           CorreoField(controller: _correoController),
+
           const SizedBox(height: 64),
+
+          // Botón para enviar token
           SizedBox(
             width: double.infinity,
             child: PrimaryButton(
@@ -141,7 +163,10 @@ class _CorreoBodyState extends State<_CorreoBody> {
               onPressed: _enviarToken,
             ),
           ),
+
           const SizedBox(height: 24),
+
+          // Aviso de privacidad
           Center(
             child: Text(
               'Aviso de privacidad',

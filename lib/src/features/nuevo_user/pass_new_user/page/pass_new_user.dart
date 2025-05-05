@@ -1,15 +1,16 @@
-import 'package:app_creditos/src/features/nuevo_user/pass_new_user/widgets/PasswordField.dart';
-import 'package:app_creditos/src/features/nuevo_user/token/services/token_services.dart';
 import 'package:flutter/material.dart';
-import 'package:app_creditos/src/shared/components/login_button.dart';
+
+import 'package:app_creditos/src/features/nuevo_user/token/services/token_services.dart';
+import 'package:app_creditos/src/features/nuevo_user/pass_new_user/widgets/PasswordField.dart';
 import 'package:app_creditos/src/features/auth/widgets/logo_title.dart';
-import 'package:app_creditos/src/shared/theme/app_colors.dart';
+import 'package:app_creditos/src/shared/components/login_button.dart';
 import 'package:app_creditos/src/shared/components/welcome_text.dart';
+import 'package:app_creditos/src/shared/theme/app_colors.dart';
 
-
-
+/// Página para que el usuario cree su contraseña después de verificar su código.
+/// Esta pantalla se muestra después de `TokenPage`.
 class ContrasenaPage extends StatefulWidget {
-  final String code; // <-- recibe el code desde TokenPage
+  final String code; // Código verificado que viene desde TokenPage
 
   const ContrasenaPage({super.key, required this.code});
 
@@ -27,50 +28,53 @@ class _ContrasenaPageState extends State<ContrasenaPage> {
   @override
   void initState() {
     super.initState();
+
+    // Animación de entrada del contenedor inferior
     Future.delayed(const Duration(milliseconds: 400), () {
       setState(() => showContainer = true);
     });
   }
 
-void _guardarContrasena() async {
-  final nueva = _passController.text.trim();
-  final confirmacion = _confirmPassController.text.trim();
+  /// Valida las contraseñas y envía la solicitud para guardar la nueva contraseña
+  void _guardarContrasena() async {
+    final nueva = _passController.text.trim();
+    final confirmacion = _confirmPassController.text.trim();
 
-  if (nueva != confirmacion || nueva.length < 8) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Las contraseñas no coinciden o son inválidas')),
-    );
-    return;
+    // Validación de campos
+    if (nueva != confirmacion || nueva.length < 8) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Las contraseñas no coinciden o son inválidas')),
+      );
+      return;
+    }
+
+    setState(() => _isLoading = true);
+
+    try {
+      // Llamada al backend para guardar la nueva contraseña
+      await TokenService.verificarToken(
+        code: widget.code,
+        newPassword: nueva,
+      );
+
+      if (!mounted) return;
+
+      // Confirmación y navegación al login
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('✅ Contraseña actualizada correctamente')),
+      );
+
+      Navigator.popUntil(context, (route) => route.isFirst);
+    } catch (e) {
+      if (!mounted) return;
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(e.toString())),
+      );
+    } finally {
+      if (mounted) setState(() => _isLoading = false);
+    }
   }
-
-  setState(() => _isLoading = true);
-
-  try {
-    // Llamada real al backend
-    await TokenService.verificarToken(
-      code: widget.code,
-      newPassword: nueva,
-    );
-
-    if (!mounted) return;
-
-    // Mostrar confirmación
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('✅ Contraseña actualizada correctamente')),
-    );
-
-    // Redirigir al login
-    Navigator.popUntil(context, (route) => route.isFirst);
-
-  } catch (e) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(e.toString())),
-    );
-  } finally {
-    if (mounted) setState(() => _isLoading = false);
-  }
-}
-
 
   @override
   Widget build(BuildContext context) {
@@ -80,13 +84,16 @@ void _guardarContrasena() async {
 
     final horizontalPadding = isTablet ? 70.0 : 24.0;
     final verticalPadding = isTablet ? 72.0 : 48.0;
-    final double logoTop =
-        showContainer ? (isKeyboardVisible ? 190.0 : (isTablet ? 350.0 : 180.0)) : 50.0;
+
+    final double logoTop = showContainer
+        ? (isKeyboardVisible ? 190.0 : (isTablet ? 350.0 : 180.0))
+        : 50.0;
 
     return Scaffold(
       backgroundColor: AppColors.background,
       body: Stack(
         children: [
+          // Logo superior
           AnimatedPositioned(
             duration: const Duration(milliseconds: 800),
             curve: Curves.easeOut,
@@ -95,6 +102,8 @@ void _guardarContrasena() async {
             right: 0,
             child: const Center(child: LogoTitle()),
           ),
+
+          // Contenedor inferior con formulario
           AnimatedPositioned(
             duration: const Duration(milliseconds: 800),
             curve: Curves.easeOut,

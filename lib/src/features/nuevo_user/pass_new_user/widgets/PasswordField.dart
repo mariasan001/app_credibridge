@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+
 import 'package:app_creditos/src/shared/theme/app_colors.dart';
 import 'package:app_creditos/src/shared/theme/app_text_styles.dart';
 
+/// Campo personalizado para ingreso de contraseña con opción de mostrar/ocultar caracteres.
 class PasswordField extends StatefulWidget {
   final String label;
   final TextEditingController controller;
@@ -17,8 +19,10 @@ class PasswordField extends StatefulWidget {
 }
 
 class _PasswordFieldState extends State<PasswordField> {
+  /// Controla si la contraseña se muestra u oculta
   bool _obscureText = true;
 
+  /// Cambia la visibilidad del texto
   void _toggleVisibility() {
     setState(() => _obscureText = !_obscureText);
   }
@@ -46,6 +50,7 @@ class _PasswordFieldState extends State<PasswordField> {
           borderRadius: BorderRadius.circular(8),
           borderSide: const BorderSide(color: AppColors.primary, width: 2),
         ),
+        // Botón para alternar la visibilidad
         suffixIcon: IconButton(
           icon: Icon(
             _obscureText ? Icons.visibility : Icons.visibility_off,
