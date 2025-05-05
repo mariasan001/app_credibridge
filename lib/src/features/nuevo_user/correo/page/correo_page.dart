@@ -1,5 +1,5 @@
-import 'package:app_creditos/src/features/correo/service/registro_service.dart';
-import 'package:app_creditos/src/features/correo/widget/correofield.dart';
+import 'package:app_creditos/src/features/nuevo_user/correo/service/registro_service.dart';
+import 'package:app_creditos/src/features/nuevo_user/correo/widget/correofield.dart';
 import 'package:app_creditos/src/shared/components/login_button.dart';
 import 'package:flutter/material.dart';
 import 'package:app_creditos/src/features/auth/widgets/logo_title.dart';

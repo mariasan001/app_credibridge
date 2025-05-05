@@ -26,14 +26,22 @@ class _OtpInputState extends State<OtpInput> {
   }
 
   void _onChanged(String value, int index) {
+    // Validar que solo se permita un carácter alfanumérico
+    if (!RegExp(r'^[a-zA-Z0-9]?$').hasMatch(value)) {
+      _controllers[index].clear();
+      return;
+    }
+
+    // Avanzar automáticamente al siguiente input
     if (value.isNotEmpty && index < 5) {
       _focusNodes[index + 1].requestFocus();
     }
 
+    // Construir el código actual
     final code = _controllers.map((c) => c.text).join();
-    if (code.length == 6 && !code.contains('')) {
-      widget.onCompleted(code);
-    }
+
+    // Notificar a la página padre siempre que cambie algo
+    widget.onCompleted(code);
   }
 
   @override
@@ -50,8 +58,9 @@ class _OtpInputState extends State<OtpInput> {
             focusNode: _focusNodes[i],
             textAlign: TextAlign.center,
             maxLength: 1,
-            onChanged: (value) => _onChanged(value, i),
+            onChanged: (value) => _onChanged(value.toUpperCase(), i),
             keyboardType: TextInputType.text,
+            textInputAction: TextInputAction.next,
             style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             decoration: InputDecoration(
               counterText: '',
