@@ -1,7 +1,8 @@
 import 'package:app_creditos/src/features/nuevo_user/correo/page/correo_page.dart';
-import 'package:app_creditos/src/features/nuevo_user/pass_new_user/page/pass_new_user.dart';
 import 'package:app_creditos/src/features/nuevo_user/registro/page/registro_page.dart';
 import 'package:app_creditos/src/features/nuevo_user/token/page/token_page.dart';
+import 'package:app_creditos/src/features/recuperar_pasword/correo/page/correo_page.dart';
+import 'package:app_creditos/src/features/recuperar_pasword/token/page/token_recuperar_page.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -35,8 +36,10 @@ class MyApp extends StatelessWidget {
         '/login': (context) => const LoginPage(),
         '/token': (context) => const TokenPage(),
         '/registro': (context) => const RegistroPage(),
-        '/correo': (context) => const CorreoPage(),
-        //'/contrasena':(context) =>const ContrasenaPage(code: '124134',),
+        '/correo': (context) => const CorreoPage(), //nuevo user
+        '/Rcorreo': (context) => const RcorreoPage(), //recuperar contraseña
+        '/token_recuperar': (context) => const TokenRecuperarPage(),
+       
       },
     );
   }

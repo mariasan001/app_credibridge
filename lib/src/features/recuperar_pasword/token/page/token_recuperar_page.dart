@@ -1,46 +1,48 @@
+// Flutter
 import 'package:flutter/material.dart';
 
-import 'package:app_creditos/src/features/nuevo_user/token/services/token_services.dart';
-import 'package:app_creditos/src/features/nuevo_user/pass_new_user/widgets/PasswordField.dart';
+
+//Imports del proyecto
 import 'package:app_creditos/src/features/auth/widgets/logo_title.dart';
+import 'package:app_creditos/src/features/nuevo_user/pass_new_user/page/pass_new_user.dart';
+import 'package:app_creditos/src/features/nuevo_user/token/services/token_services.dart';
+import 'package:app_creditos/src/features/nuevo_user/token/widget/otp_input.dart';
 import 'package:app_creditos/src/shared/components/login_button.dart';
 import 'package:app_creditos/src/shared/components/welcome_text.dart';
 import 'package:app_creditos/src/shared/theme/app_colors.dart';
-import 'package:app_creditos/src/shared/components/alertas.dart'; // ← ✅ Importa el nuevo SnackBar
 
-class ContrasenaPage extends StatefulWidget {
-  final String code;
 
-  const ContrasenaPage({super.key, required this.code});
+/// Pantalla donde el usuario ingresa el código que recibió por correo.
+/// Esta validación es necesaria antes de permitirle crear una contraseña nueva.
+class TokenRecuperarPage extends StatefulWidget {
+  const TokenRecuperarPage({super.key});
 
   @override
-  State<ContrasenaPage> createState() => _ContrasenaPageState();
+  State<TokenRecuperarPage> createState() => _TokenRecuperarPageState();
 }
 
-class _ContrasenaPageState extends State<ContrasenaPage> {
-  bool showContainer = false;
-  bool _isLoading = false;
-
-  final TextEditingController _passController = TextEditingController();
-  final TextEditingController _confirmPassController = TextEditingController();
+class _TokenRecuperarPageState extends State<TokenRecuperarPage> {
+  bool showContainer = false; // Controla la animación de aparición del contenedor inferior
+  bool _isLoading = false;    // Indica si se está procesando la validación del token
+  String _codigoIngresado = ''; // Almacena el código ingresado por el usuario
 
   @override
   void initState() {
     super.initState();
+    // Espera 400ms antes de mostrar la sección inferior con animación
     Future.delayed(const Duration(milliseconds: 400), () {
       setState(() => showContainer = true);
     });
   }
 
-  void _guardarContrasena() async {
-    final nueva = _passController.text.trim();
-    final confirmacion = _confirmPassController.text.trim();
+  /// Función que valida el token ingresado por el usuario.
+  /// Si es válido, se redirige a la página de creación de contraseña.
+  void _validarToken() async {
+    const String passwordTemporal = 'temporal123'; // Contraseña temporal que exige el backend
 
-    if (nueva != confirmacion || nueva.length < 8) {
-      showCustomSnackBar(
-        context,
-        'Las contraseñas no coinciden o son inválidas',
-        isError: true,
+    if (_codigoIngresado.isEmpty || _codigoIngresado.length < 6) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Ingresa un código válido')),
       );
       return;
     }
@@ -48,27 +50,24 @@ class _ContrasenaPageState extends State<ContrasenaPage> {
     setState(() => _isLoading = true);
 
     try {
+      // Llamada al servicio que valida el token en el backend
       await TokenService.verificarToken(
-        code: widget.code,
-        newPassword: nueva,
+        code: _codigoIngresado,
+        newPassword: passwordTemporal,
       );
 
+      // Si todo salió bien, navegamos a la pantalla para crear contraseña
       if (!mounted) return;
-
-      showCustomSnackBar(
+      Navigator.push(
         context,
-        'Contraseña actualizada correctamente',
-        isError: false,
+        MaterialPageRoute(
+          builder: (_) => ContrasenaPage(code: _codigoIngresado),
+        ),
       );
-
-      Navigator.popUntil(context, (route) => route.isFirst);
     } catch (e) {
-      if (!mounted) return;
-
-      showCustomSnackBar(
-        context,
-        e.toString(),
-        isError: true,
+      // En caso de error (token incorrecto, expirado, etc.)
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(e.toString())),
       );
     } finally {
       if (mounted) setState(() => _isLoading = false);
@@ -83,14 +82,14 @@ class _ContrasenaPageState extends State<ContrasenaPage> {
 
     final horizontalPadding = isTablet ? 70.0 : 24.0;
     final verticalPadding = isTablet ? 72.0 : 48.0;
-    final double logoTop = showContainer
-        ? (isKeyboardVisible ? 190.0 : (isTablet ? 350.0 : 180.0))
-        : 50.0;
+    final double logoTop =
+        showContainer ? (isKeyboardVisible ? 190.0 : (isTablet ? 350.0 : 180.0)) : 50.0;
 
     return Scaffold(
       backgroundColor: AppColors.background,
       body: Stack(
         children: [
+          // Logo animado que se posiciona según teclado/pantalla
           AnimatedPositioned(
             duration: const Duration(milliseconds: 800),
             curve: Curves.easeOut,
@@ -99,6 +98,7 @@ class _ContrasenaPageState extends State<ContrasenaPage> {
             right: 0,
             child: const Center(child: LogoTitle()),
           ),
+          // Contenedor inferior que aparece con animación
           AnimatedPositioned(
             duration: const Duration(milliseconds: 800),
             curve: Curves.easeOut,
@@ -119,33 +119,40 @@ class _ContrasenaPageState extends State<ContrasenaPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
                 children: [
+                  // Texto de bienvenida e instrucciones
                   const WelcomeText(
-                    titlePrefix: 'Crea una ',
-                    titleHighlight: 'contraseña',
-                    titleSuffix: '',
+                    titlePrefix: 'Revisa tu',
+                    titleHighlight: 'correo electrónico',
+                    titleSuffix: 'e ingresa tu código',
                     subtitle:
-                        'Crea una contraseña de al menos 8 caracteres combinando letras, números y símbolos para mayor seguridad.',
+                        'Te enviamos un token de verificación. Por seguridad, este token fue enviado a tu correo registrado.',
                   ),
                   const SizedBox(height: 42),
-                  PasswordField(
-                    label: 'Ingresa tu contraseña',
-                    controller: _passController,
+
+                  // Campo OTP para ingresar los 6 dígitos del código
+                  OtpInput(
+                    onCompleted: (code) {
+                      setState(() {
+                        _codigoIngresado = code;
+                      });
+                    },
                   ),
-                  const SizedBox(height: 24),
-                  PasswordField(
-                    label: 'Nuevamente',
-                    controller: _confirmPassController,
-                  ),
+
                   const SizedBox(height: 64),
+
+                  // Botón para validar el token ingresado
                   SizedBox(
                     width: double.infinity,
                     child: PrimaryButton(
-                      label: 'Registrarme',
+                      label: 'Validar Token',
                       isLoading: _isLoading,
-                      onPressed: _guardarContrasena,
+                      onPressed: _validarToken,
                     ),
                   ),
+
                   const SizedBox(height: 24),
+
+                  // Texto de aviso legal
                   Center(
                     child: Text(
                       'Aviso de privacidad',
