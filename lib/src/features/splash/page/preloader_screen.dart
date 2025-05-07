@@ -60,7 +60,7 @@ class _PreloaderCAnimatedState extends State<PreloaderCAnimated>
       if (user != null) {
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (_) => DashboardPage(user: user)),
+          MaterialPageRoute(builder: (_) => HomePage(user: user)),
         );
         return;
       }

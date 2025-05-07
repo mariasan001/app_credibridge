@@ -6,7 +6,7 @@ enum Environment { casa, oficina, prod }
 
 class ApiService {
   /// Selecciona aquí tu entorno actual
-  static const Environment currentEnv = Environment.casa;
+  static const Environment currentEnv = Environment.oficina;
 
   /// Retorna el baseUrl según el entorno actual
   static String _getBaseUrl() {

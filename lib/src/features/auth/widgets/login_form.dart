@@ -49,7 +49,7 @@ class _LoginFormState extends State<LoginForm> {
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(
-        builder: (context) => DashboardPage(user: result.user),
+        builder: (context) => HomePage(user: result.user),
       ),
     );
   } catch (e) {

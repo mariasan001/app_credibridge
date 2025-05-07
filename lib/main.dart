@@ -36,7 +36,7 @@ class MyApp extends StatelessWidget {
         '/login': (context) => const LoginPage(),
         '/token': (context) => const TokenPage(),
         '/registro': (context) => const RegistroPage(),
-        '/correo': (context) => const CorreoPage(), //nuevo user
+        '/correo': (context) => const CorreoPage(), //nuevo user 
         '/Rcorreo': (context) => const RcorreoPage(), //recuperar contraseña
         '/token_recuperar': (context) => const TokenRecuperarPage(),
        
