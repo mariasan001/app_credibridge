@@ -1,9 +1,11 @@
+import 'package:app_creditos/src/features/inicio/widget/DescuentoCardSkeleton.dart';
 import 'package:app_creditos/src/features/inicio/widget/descuento_card.dart';
 import 'package:app_creditos/src/features/inicio/widget/nombre_formateado.dart';
 import 'package:app_creditos/src/features/inicio/widget/promocion_card.dart';
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 import 'package:app_creditos/src/shared/theme/app_colors.dart';
+import 'package:app_creditos/src/shared/theme/app_text_styles.dart';
 import 'package:app_creditos/src/features/auth/models/user_model.dart';
 import 'package:app_creditos/src/shared/components/ustom_app_bar.dart';
 import 'package:app_creditos/src/shared/services/session_manager.dart';
@@ -24,35 +26,36 @@ class _HomePageState extends State<HomePage> {
     super.initState();
     _cargarDescuento();
   }
-Future<void> _cargarDescuento() async {
-  try {
-    final data = await DescuentoService.obtenerDescuento(widget.user.userId);
 
-    if (!mounted) return;
+  Future<void> _cargarDescuento() async {
+    try {
+      final data = await DescuentoService.obtenerDescuento(widget.user.userId);
 
-    setState(() {
-      descuento = data.amount;
-    });
-  } on DioException catch (e) {
-    if (!mounted) return;
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(
-          'Error del servidor: ${e.response?.data['message'] ?? 'Sin detalles'}',
+      if (!mounted) return;
+
+      setState(() {
+        descuento = data.amount;
+      });
+    } on DioException catch (e) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            'Error del servidor: ${e.response?.data['message'] ?? 'Sin detalles'}',
+          ),
         ),
-      ),
-    );
-  } catch (e) {
-    if (!mounted) return;
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(
-          e is String ? e : 'Error inesperado al obtener descuento',
+      );
+    } catch (e) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            e is String ? e : 'Error inesperado al obtener descuento',
+          ),
         ),
-      ),
-    );
+      );
+    }
   }
-}
 
   @override
   Widget build(BuildContext context) {
@@ -64,20 +67,47 @@ Future<void> _cargarDescuento() async {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              'Bienvenido ${obtenerNombreFormateado(widget.user.name)} 👋',
-              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 20),
+              color: const Color(0xFFFCF8F2),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  RichText(
+                    text: TextSpan(
+                      style: AppTextStyles.heading(context),
+                      children: [
+                        const TextSpan(text: 'Bienvenido '),
+                        TextSpan(
+                          text: '${obtenerNombreFormateado(widget.user.name)} ',
+                          style: AppTextStyles.heading(
+                            context,
+                          ).copyWith(fontWeight: FontWeight.w900),
+                        ),
+                        const TextSpan(text: '👋'),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    'Gestiona tu cuenta de manera rápida y sencilla.',
+                    style: AppTextStyles.bodySmall(context),
+                  ),
+                ],
+              ),
             ),
-            const SizedBox(height: 4),
-            const Text('Gestiona tu cuenta de manera rápida y sencilla.'),
             const SizedBox(height: 24),
-            DescuentoCard(descuento: descuento, user: widget.user,),
-            const SizedBox(height: 32),
-            const Text(
+            descuento == null
+                ? const DescuentoCardSkeleton()
+                : DescuentoCard(descuento: descuento, user: widget.user),
+            const SizedBox(height: 42),
+            Text(
               'Promociones',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              style: AppTextStyles.heading(context).copyWith(fontSize: 20),
             ),
-            const SizedBox(height: 12),
+
+            const SizedBox(height: 32),
             buildPromocionCard(),
             const SizedBox(height: 32),
             Center(

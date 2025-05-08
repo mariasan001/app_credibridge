@@ -1,6 +1,5 @@
 // directorio_utils.dart
 import 'package:flutter/material.dart';
-import 'package:app_creditos/src/features/directorio/model/lender_service_model.dart';
 
 Color getColorForService(String type) {
   switch (type.toLowerCase()) {
