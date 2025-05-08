@@ -1,3 +1,4 @@
+import 'package:app_creditos/src/features/directorio/page/directorio_page.dart';
 import 'package:app_creditos/src/features/nuevo_user/correo/page/correo_page.dart';
 import 'package:app_creditos/src/features/nuevo_user/registro/page/registro_page.dart';
 import 'package:app_creditos/src/features/nuevo_user/token/page/token_page.dart';
@@ -39,7 +40,7 @@ class MyApp extends StatelessWidget {
         '/correo': (context) => const CorreoPage(), //nuevo user 
         '/Rcorreo': (context) => const RcorreoPage(), //recuperar contraseña
         '/token_recuperar': (context) => const TokenRecuperarPage(),
-       
+        '/directorio': (context) => const DirectorioPage(),
       },
     );
   }
