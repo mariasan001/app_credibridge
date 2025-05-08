@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:app_creditos/src/shared/theme/app_colors.dart';
+import 'package:animations/animations.dart';
+import 'package:app_creditos/src/features/auth/models/user_model.dart';
+import 'package:app_creditos/src/features/directorio/page/directorio_page.dart';
 
 class DescuentoCard extends StatelessWidget {
   final double? descuento;
+  final User user;
 
-  const DescuentoCard({super.key, required this.descuento});
+  const DescuentoCard({super.key, required this.descuento, required this.user});
 
   @override
   Widget build(BuildContext context) {
@@ -54,12 +58,19 @@ class DescuentoCard extends StatelessWidget {
             children: [
               _DashboardAction(icon: Icons.search, label: 'Consultar'),
               _DashboardAction(icon: Icons.swap_horiz, label: 'Movimientos'),
-              _DashboardAction(
-                icon: Icons.menu_book,
-                label: 'Directorio',
-                onTap: () {
-                  Navigator.pushNamed(context, '/directorio');
-                },
+              OpenContainer(
+                
+                transitionType: ContainerTransitionType.fadeThrough,
+                closedElevation: 0,
+                closedShape: const RoundedRectangleBorder(borderRadius: BorderRadius.zero),
+                closedColor: Colors.transparent,
+                openBuilder: (context, _) => DirectorioPage(user: user),
+                closedBuilder: (context, openContainer) => _DashboardAction(
+                  icon: Icons.menu_book,
+                  label: 'Directorio',
+                  onTap: openContainer,
+                  
+                ),
               ),
             ],
           ),

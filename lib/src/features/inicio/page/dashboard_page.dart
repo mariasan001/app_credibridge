@@ -71,7 +71,7 @@ Future<void> _cargarDescuento() async {
             const SizedBox(height: 4),
             const Text('Gestiona tu cuenta de manera rápida y sencilla.'),
             const SizedBox(height: 24),
-            DescuentoCard(descuento: descuento),
+            DescuentoCard(descuento: descuento, user: widget.user,),
             const SizedBox(height: 32),
             const Text(
               'Promociones',
