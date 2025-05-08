@@ -1,4 +1,4 @@
-import 'package:dio/dio.dart';
+
 import 'package:app_creditos/src/shared/services/api_service.dart';
 import 'package:app_creditos/src/features/directorio/model/lender_service_model.dart';
 

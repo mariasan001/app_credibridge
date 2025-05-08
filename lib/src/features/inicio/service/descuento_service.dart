@@ -1,6 +1,5 @@
 import 'package:app_creditos/src/features/inicio/model/descuento_response.dart';
 import 'package:app_creditos/src/shared/services/api_service.dart';
-import 'package:dio/dio.dart';
 
 class DescuentoService {
 static Future<DescuentoResponse> obtenerDescuento(String userId) async {
