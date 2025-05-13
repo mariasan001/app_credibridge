@@ -92,7 +92,7 @@ class DescuentoCard extends StatelessWidget {
                   closedColor: Colors.white,
                   openBuilder: (context, _) => DirectorioPage(user: user),
                   closedBuilder: (context, openContainer) => _DashboardAction(
-                    icon: Icons.menu_book,
+                    icon: Icons.book_outlined,
                     label: 'Directorio',
                     onTap: openContainer,
                   ),

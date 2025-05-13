@@ -1,8 +1,11 @@
+import 'package:app_creditos/src/features/inicio/model/model_promociones.dart';
+import 'package:app_creditos/src/features/inicio/service/promociones_service.dart';
 import 'package:app_creditos/src/features/inicio/widget/DescuentoCardSkeleton.dart';
+import 'package:app_creditos/src/features/inicio/widget/PromocionCardSkeleton.dart';
 import 'package:app_creditos/src/features/inicio/widget/PromocionesActivasWidget.dart';
 import 'package:app_creditos/src/features/inicio/widget/descuento_card.dart';
 import 'package:app_creditos/src/features/inicio/widget/nombre_formateado.dart';
-
+import 'package:app_creditos/src/features/inicio/widget/sin_promociones_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 import 'package:app_creditos/src/shared/theme/app_colors.dart';
@@ -61,17 +64,18 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: const Color.fromARGB(255, 255, 251, 245),
       appBar: CustomAppBar(user: widget.user),
       body: SingleChildScrollView(
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            // Saludo
             Container(
               width: double.infinity,
               padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 20),
-              color: const Color(0xFFFCF8F2),
+
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -82,9 +86,9 @@ class _HomePageState extends State<HomePage> {
                         const TextSpan(text: 'Bienvenido '),
                         TextSpan(
                           text: '${obtenerNombreFormateado(widget.user.name)} ',
-                          style: AppTextStyles.heading(context).copyWith(
-                            fontWeight: FontWeight.w900,
-                          ),
+                          style: AppTextStyles.heading(
+                            context,
+                          ).copyWith(fontWeight: FontWeight.w900),
                         ),
                         const TextSpan(text: '👋'),
                       ],
@@ -98,24 +102,68 @@ class _HomePageState extends State<HomePage> {
                 ],
               ),
             ),
+
             const SizedBox(height: 24),
+
+            // Tarjeta de descuento
             descuento == null
                 ? const DescuentoCardSkeleton()
-                : DescuentoCard(descuento: descuento, user: widget.user),
+                : DescuentoCard(descuento: descuento!, user: widget.user),
+
             const SizedBox(height: 42),
+
+            // Título de promociones
             Text(
               'Promociones',
               style: AppTextStyles.heading(context).copyWith(fontSize: 20),
             ),
             const SizedBox(height: 16),
-            const PromocionesActivasWidget(),
-            const SizedBox(height: 32),
+
+            FutureBuilder<List<Promotion>>(
+              future: PromotionService.obtenerPromocionesActivas(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return Column(
+                    children: const [
+                      PromocionCardSkeleton(),
+                      PromocionCardSkeleton(),
+                      PromocionCardSkeleton(),
+                    ],
+                  );
+                }
+
+                if (snapshot.hasError) {
+                  return Center(child: Text('Error: ${snapshot.error}'));
+                }
+
+                final promociones = snapshot.data ?? [];
+
+                if (promociones.isEmpty) {
+                  return const SinPromocionesWidget();
+                }
+// aqui podras enco
+                return ListView.builder(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: promociones.length,
+                  itemBuilder: (context, index) {
+                    final promo = promociones[index];
+                    return PromocionCardVisual(promo: promo);
+                  },
+                );
+              },
+            ),
+
+            // Botón cerrar sesión
             Center(
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.redAccent,
                   foregroundColor: Colors.white,
-                  padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 32,
+                    vertical: 12,
+                  ),
                 ),
                 onPressed: () async {
                   await SessionManager.clearToken();

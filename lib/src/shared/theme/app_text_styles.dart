@@ -76,5 +76,50 @@ class AppTextStyles {
       color: AppColors.text,
     );
   }
+  static TextStyle promoTitle(BuildContext context) {
+  return GoogleFonts.poppins(
+    fontSize: _isTablet(context) ? 20 : 18,
+    fontWeight: FontWeight.bold,
+    color: AppColors.text,
+  );
+}
+
+static TextStyle promoBold(BuildContext context) {
+  return GoogleFonts.poppins(
+    fontSize: _isTablet(context) ? 16 : 14,
+    fontWeight: FontWeight.w600,
+    color: AppColors.text,
+  );
+}
+
+static TextStyle promoBody(BuildContext context) {
+  return GoogleFonts.poppins(
+    fontSize: _isTablet(context) ? 14.5 : 13,
+    color: AppColors.textMuted,
+  );
+}
+
+static TextStyle promoListText(BuildContext context) {
+  return GoogleFonts.poppins(
+    fontSize: _isTablet(context) ? 15 : 13,
+    color: AppColors.text,
+  );
+}
+
+static TextStyle promoFooterDate(BuildContext context) {
+  return GoogleFonts.poppins(
+    fontSize: _isTablet(context) ? 14 : 13,
+    color: AppColors.textMuted,
+  );
+}
+
+static TextStyle promoButtonText(BuildContext context) {
+  return GoogleFonts.poppins(
+    fontSize: _isTablet(context) ? 16 : 14,
+    fontWeight: FontWeight.w600,
+    color: AppColors.text,
+  );
+}
+
 
 }

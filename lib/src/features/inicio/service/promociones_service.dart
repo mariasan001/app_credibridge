@@ -1,4 +1,4 @@
-import 'package:app_creditos/src/features/inicio/model/Crea%20tu%20archivo%20model_promociones.dart';
+import 'package:app_creditos/src/features/inicio/model/model_promociones.dart';
 import 'package:app_creditos/src/shared/services/api_service.dart';
 
 class PromotionService {
