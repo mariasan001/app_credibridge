@@ -10,7 +10,6 @@ import 'package:app_creditos/src/shared/services/api_service.dart';
 
 import 'auth_service_test.mocks.dart'; // generado por build_runner
 
-// 👇 Generamos mocks para Dio y FlutterSecureStorage
 @GenerateMocks([Dio, FlutterSecureStorage])
 void main() {
   group('AuthService', () {
@@ -25,12 +24,11 @@ void main() {
       AuthService.setStorageForTest(mockStorage);
     });
 
-    test('Login exitoso devuelve LoginResponse', () async {
+    test('Login exitoso devuelve User', () async {
       final mockResponse = Response(
         requestOptions: RequestOptions(path: '/auth/login'),
         statusCode: 200,
         data: {
-          'token': 'fakeToken',
           'user': {
             'userId': '123',
             'name': 'Usuario de prueba',
@@ -38,21 +36,26 @@ void main() {
             'roles': [
               {'id': 1, 'description': 'admin'},
             ],
-          },
+          }
         },
+        headers: Headers.fromMap({
+          'set-cookie': ['JWT=fakeToken123; Path=/; HttpOnly']
+        }),
       );
 
       when(
         mockDio.post(any, data: anyNamed('data')),
       ).thenAnswer((_) async => mockResponse);
+
       when(
         mockStorage.write(key: anyNamed('key'), value: anyNamed('value')),
-      ).thenAnswer((_) async => null); // Simula guardado exitoso
+      ).thenAnswer((_) async => null);
 
       final result = await AuthService.login('test', '1234');
 
-      expect(result, isA<LoginResponse>());
-      expect(result?.user.name, equals('Usuario de prueba'));
+      expect(result, isA<User>());
+      expect(result?.name, equals('Usuario de prueba'));
+      expect(result?.userId, equals('123'));
     });
 
     test('Login fallido devuelve error del backend', () async {
@@ -72,11 +75,10 @@ void main() {
 
       expect(
         () => AuthService.login('baduser', 'wrongpass'),
-        throwsA(
-          predicate((e) => e.toString().contains('Credenciales inválidas')),
-        ),
+        throwsA(predicate((e) => e.toString().contains('Credenciales inválidas'))),
       );
     });
+
     test('getProfile devuelve objeto User con datos válidos', () async {
       final mockResponse = Response(
         requestOptions: RequestOptions(path: '/auth/profile'),

@@ -1,31 +1,25 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
-/// Enum que define los entornos disponibles
 enum Environment { casa, oficina, prod }
 
 class ApiService {
-  /// Selecciona aquí tu entorno actual
   static const Environment currentEnv = Environment.oficina;
 
-  /// Retorna el baseUrl según el entorno actual
   static String _getBaseUrl() {
     switch (currentEnv) {
       case Environment.casa:
-        return 'http://192.168.100.183:2910'; // Cambia por tu IP local en casa
+        return 'http://192.168.100.183:2910';
       case Environment.oficina:
-        return 'http://10.0.32.117:2910'; // IP del backend en oficina
+        return 'http://10.0.32.117:2910';
       case Environment.prod:
-        return 'https://api.credibridge.com'; // Producción
+        return 'https://api.credibridge.com';
     }
   }
 
-  /// Dio se define como `late` para poder reemplazarlo en tests si es necesario
   static late Dio _dio;
-
   static final FlutterSecureStorage _storage = const FlutterSecureStorage();
 
-  /// Inicializa Dio con configuración base y token interceptor
   static void init() {
     _dio = Dio(
       BaseOptions(
@@ -35,15 +29,19 @@ class ApiService {
         headers: {
           'Content-Type': 'application/json',
         },
+        extra: {'withCredentials': true},
       ),
     );
 
     _dio.interceptors.add(
       InterceptorsWrapper(
         onRequest: (options, handler) async {
-          final token = await _storage.read(key: 'token');
+          final token = await _storage.read(key: 'jwt_token');
           if (token != null) {
-            options.headers['Authorization'] = 'Bearer $token';
+            options.headers['cookie'] = 'JWT=$token';
+            print('✅ JWT enviado por cookie');
+          } else {
+            print('⚠️ No se encontró token en el storage');
           }
           return handler.next(options);
         },
@@ -56,9 +54,6 @@ class ApiService {
     );
   }
 
-  /// Acceso global a Dio
   static Dio get dio => _dio;
-
-  /// Permite reemplazar Dio (útil para tests)
   static set dio(Dio client) => _dio = client;
 }

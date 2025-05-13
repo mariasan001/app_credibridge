@@ -26,7 +26,7 @@ class _LoginFormState extends State<LoginForm> {
   bool _isLoading = false;
   bool _obscurePassword = true;
 
-  Future<void> _submit() async {
+ Future<void> _submit() async {
   if (!_formKey.currentState!.validate()) return;
 
   setState(() => _isLoading = true);
@@ -49,7 +49,7 @@ class _LoginFormState extends State<LoginForm> {
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(
-        builder: (context) => HomePage(user: result.user),
+        builder: (context) => HomePage(user: result), // ✅ Cambio clave aquí
       ),
     );
   } catch (e) {
@@ -61,6 +61,7 @@ class _LoginFormState extends State<LoginForm> {
     }
   }
 }
+
 
   @override
   Widget build(BuildContext context) {

@@ -1,7 +1,8 @@
 import 'package:app_creditos/src/features/inicio/widget/DescuentoCardSkeleton.dart';
+import 'package:app_creditos/src/features/inicio/widget/PromocionesActivasWidget.dart';
 import 'package:app_creditos/src/features/inicio/widget/descuento_card.dart';
 import 'package:app_creditos/src/features/inicio/widget/nombre_formateado.dart';
-import 'package:app_creditos/src/features/inicio/widget/promocion_card.dart';
+
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 import 'package:app_creditos/src/shared/theme/app_colors.dart';
@@ -15,12 +16,14 @@ import 'package:app_creditos/src/features/inicio/service/descuento_service.dart'
 class HomePage extends StatefulWidget {
   final User user;
   const HomePage({super.key, required this.user});
+
   @override
   State<HomePage> createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
   double? descuento;
+
   @override
   void initState() {
     super.initState();
@@ -30,9 +33,7 @@ class _HomePageState extends State<HomePage> {
   Future<void> _cargarDescuento() async {
     try {
       final data = await DescuentoService.obtenerDescuento(widget.user.userId);
-
       if (!mounted) return;
-
       setState(() {
         descuento = data.amount;
       });
@@ -41,7 +42,7 @@ class _HomePageState extends State<HomePage> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(
-            'Error del servidor: ${e.response?.data['message'] ?? 'Sin detalles'}',
+            'Error del servidor: ${e.response?.data is Map ? e.response?.data['message'] : 'Sin detalles'}',
           ),
         ),
       );
@@ -81,9 +82,9 @@ class _HomePageState extends State<HomePage> {
                         const TextSpan(text: 'Bienvenido '),
                         TextSpan(
                           text: '${obtenerNombreFormateado(widget.user.name)} ',
-                          style: AppTextStyles.heading(
-                            context,
-                          ).copyWith(fontWeight: FontWeight.w900),
+                          style: AppTextStyles.heading(context).copyWith(
+                            fontWeight: FontWeight.w900,
+                          ),
                         ),
                         const TextSpan(text: '👋'),
                       ],
@@ -106,19 +107,15 @@ class _HomePageState extends State<HomePage> {
               'Promociones',
               style: AppTextStyles.heading(context).copyWith(fontSize: 20),
             ),
-
-            const SizedBox(height: 32),
-            buildPromocionCard(),
+            const SizedBox(height: 16),
+            const PromocionesActivasWidget(),
             const SizedBox(height: 32),
             Center(
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.redAccent,
                   foregroundColor: Colors.white,
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 32,
-                    vertical: 12,
-                  ),
+                  padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
                 ),
                 onPressed: () async {
                   await SessionManager.clearToken();
