@@ -86,7 +86,7 @@ class _TokenPageState extends State<TokenPage> {
         showContainer ? (isKeyboardVisible ? 190.0 : (isTablet ? 350.0 : 180.0)) : 50.0;
 
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor:AppColors.background(context),
       body: Stack(
         children: [
           // Logo animado que se posiciona según teclado/pantalla

@@ -88,7 +88,7 @@ class _ContrasenaPageState extends State<ContrasenaPage> {
         : 50.0;
 
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: AppColors.background(context),
       body: Stack(
         children: [
           AnimatedPositioned(

@@ -8,7 +8,6 @@ import 'package:app_creditos/src/features/inicio/widget/nombre_formateado.dart';
 import 'package:app_creditos/src/features/inicio/widget/sin_promociones_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
-import 'package:app_creditos/src/shared/theme/app_colors.dart';
 import 'package:app_creditos/src/shared/theme/app_text_styles.dart';
 import 'package:app_creditos/src/features/auth/models/user_model.dart';
 import 'package:app_creditos/src/shared/components/ustom_app_bar.dart';

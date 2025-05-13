@@ -19,10 +19,6 @@ class DescuentoCard extends StatelessWidget {
       return const DescuentoCardSkeleton();
     }
 
-    final textoDescuento = descuento! > 0
-        ? NumberFormat.currency(locale: 'es_MX', symbol: '\$').format(descuento)
-        : 'Sin descuento disponible';
-
     return Container(
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
@@ -43,14 +39,23 @@ class DescuentoCard extends StatelessWidget {
             style: AppTextStyles.heading(context).copyWith(fontSize: 18),
           ),
           const SizedBox(height: 16),
-          Text(
-            textoDescuento,
-            style: AppTextStyles.heading(context).copyWith(
-              fontSize: 48,
-              fontWeight: FontWeight.w900,
-              color: AppColors.primary,
-            ),
+
+          /// Animación de entrada del valor
+          TweenAnimationBuilder<double>(
+            tween: Tween(begin: 0, end: descuento!),
+            duration: const Duration(milliseconds: 600),
+            builder: (context, value, child) {
+              return Text(
+                NumberFormat.currency(locale: 'es_MX', symbol: '\$').format(value),
+                style: AppTextStyles.heading(context).copyWith(
+                  fontSize: 48,
+                  fontWeight: FontWeight.w900,
+                  color: AppColors.primary,
+                ),
+              );
+            },
           ),
+
           const SizedBox(height: 12),
           Text(
             'Se muestra el monto que puede descontarse de tu nómina.',
@@ -58,6 +63,8 @@ class DescuentoCard extends StatelessWidget {
             style: AppTextStyles.bodySmall(context),
           ),
           const SizedBox(height: 24),
+
+          /// Acciones
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
             decoration: BoxDecoration(
@@ -88,7 +95,9 @@ class DescuentoCard extends StatelessWidget {
                 OpenContainer(
                   transitionType: ContainerTransitionType.fadeThrough,
                   closedElevation: 0,
-                  closedShape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                  closedShape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
                   closedColor: Colors.white,
                   openBuilder: (context, _) => DirectorioPage(user: user),
                   closedBuilder: (context, openContainer) => _DashboardAction(

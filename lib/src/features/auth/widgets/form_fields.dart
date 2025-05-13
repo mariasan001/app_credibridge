@@ -30,11 +30,13 @@ class UsernameField extends StatelessWidget {
         contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
-          borderSide: const BorderSide(color: AppColors.inputBorder),
+                    borderSide:  BorderSide(color: AppColors.inputBorder(context)),
+
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
-          borderSide: const BorderSide(color: AppColors.inputBorder),
+                    borderSide:  BorderSide(color: AppColors.inputBorder(context)),
+
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),

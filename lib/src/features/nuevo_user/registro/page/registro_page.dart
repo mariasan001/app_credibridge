@@ -45,7 +45,7 @@ class _RegistroPageState extends State<RegistroPage> {
         showContainer ? (isKeyboardVisible ? 150.0 : (isTablet ? 300.0 : 180.0)) : 50.0;
 
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor:AppColors.background(context),
       body: Stack(
         children: [
           AnimatedPositioned(

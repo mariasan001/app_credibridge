@@ -14,7 +14,7 @@ class PromocionCardSkeleton extends StatelessWidget {
         borderRadius: BorderRadius.circular(14),
         boxShadow: [
           BoxShadow(
-            color: AppColors.promoShadow,
+            color: AppColors.promoShadow(context),
             blurRadius: 6,
             offset: const Offset(0, 2),
           )

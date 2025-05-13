@@ -40,12 +40,13 @@ class _CorreoPageState extends State<CorreoPage> {
 
     final horizontalPadding = isTablet ? 70.0 : 24.0;
     final verticalPadding = isTablet ? 72.0 : 48.0;
-    final double logoTop = showContainer
-        ? (isKeyboardVisible ? 250.0 : (isTablet ? 450.0 : 180.0))
-        : 50.0;
+    final double logoTop =
+        showContainer
+            ? (isKeyboardVisible ? 250.0 : (isTablet ? 450.0 : 180.0))
+            : 50.0;
 
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: AppColors.background(context),
       body: Stack(
         children: [
           // Logo institucional con animación
@@ -105,18 +106,16 @@ class _CorreoBodyState extends State<_CorreoBody> {
 
     try {
       // Recuperamos el número de servidor previamente almacenado
-      final userId =
-          await const FlutterSecureStorage().read(key: 'registro_userId');
+      final userId = await const FlutterSecureStorage().read(
+        key: 'registro_userId',
+      );
 
       if (userId == null || userId.isEmpty) {
         throw 'No se encontró el número de servidor.';
       }
 
       // Enviamos el token al correo del usuario
-      await CorreoService.enviarTokenPorCorreo(
-        userId: userId,
-        email: correo,
-      );
+      await CorreoService.enviarTokenPorCorreo(userId: userId, email: correo);
 
       if (!mounted) return;
 
@@ -124,9 +123,9 @@ class _CorreoBodyState extends State<_CorreoBody> {
       Navigator.pushNamed(context, '/token');
     } catch (e) {
       if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(e.toString())),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(e.toString())));
     } finally {
       if (mounted) setState(() => _isLoading = false);
     }

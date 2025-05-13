@@ -40,11 +40,12 @@ class _PasswordFieldState extends State<PasswordField> {
         contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
-          borderSide: const BorderSide(color: AppColors.inputBorder),
+                    borderSide:  BorderSide(color: AppColors.inputBorder(context)),
+
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
-          borderSide: const BorderSide(color: AppColors.inputBorder),
+          borderSide:  BorderSide(color: AppColors.inputBorder(context)),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
@@ -54,7 +55,7 @@ class _PasswordFieldState extends State<PasswordField> {
         suffixIcon: IconButton(
           icon: Icon(
             _obscureText ? Icons.visibility : Icons.visibility_off,
-            color: AppColors.inputBorder,
+            color: AppColors.inputBorder(context),
           ),
           onPressed: _toggleVisibility,
         ),

@@ -27,11 +27,12 @@ class CorreoField extends StatelessWidget {
         ),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
-          borderSide: const BorderSide(color: AppColors.inputBorder),
+          borderSide:  BorderSide(color: AppColors.inputBorder(context),
+),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
-          borderSide: const BorderSide(color: AppColors.inputBorder),
+          borderSide:  BorderSide(color: AppColors.inputBorder(context)),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),

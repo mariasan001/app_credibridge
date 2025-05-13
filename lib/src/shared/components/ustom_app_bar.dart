@@ -2,13 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:app_creditos/src/shared/theme/app_colors.dart';
 import 'package:app_creditos/src/features/auth/models/user_model.dart';
 
+// Importas de los componentes
+import 'package:app_creditos/src/shared/components/notification_popup.dart';
+import 'package:app_creditos/src/shared/components/theme_toggle_button.dart';
+import 'package:app_creditos/src/shared/components/options_menu.dart';
+
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final User user;
 
-  const CustomAppBar({
-    super.key,
-    required this.user,
-  });
+  const CustomAppBar({super.key, required this.user});
 
   @override
   Widget build(BuildContext context) {
@@ -38,31 +40,10 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
           ],
         ),
       ),
-      actions: [
-        // Notificaciones
-        Container(
-          margin: const EdgeInsets.only(right: 12),
-          padding: const EdgeInsets.all(8),
-          decoration: BoxDecoration(
-            color: const Color(0xFFF5F0EA), // fondo claro tipo beige
-            shape: BoxShape.circle,
-          ),
-          child: const Icon(
-            Icons.notifications_none,
-            color: Colors.black,
-            size: 25,
-          ),
-        ),
-
-        // Ícono de opciones tipo "grid"
-        Container(
-          margin: const EdgeInsets.only(right: 16),
-          child: const Icon(
-            Icons.grid_view_outlined,
-            color: Colors.black,
-            size: 25,
-          ),
-        ),
+      actions: const [
+        NotificationPopupButton(),
+        ThemeToggleButton(),
+        OptionsMenuButton(),
       ],
     );
   }

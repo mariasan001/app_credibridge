@@ -37,7 +37,7 @@ class _LoginPageState extends State<LoginPage> {
             : 50.0;
 
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor:AppColors.background(context),
       body: Stack(
         children: [
           // LOGO animado

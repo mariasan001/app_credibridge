@@ -39,7 +39,7 @@ class SinPromocionesWidget extends StatelessWidget {
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.w600,
-                color: AppColors.text,
+             color: AppColors.text(context),
               ),
               textAlign: TextAlign.center,
             ),
@@ -62,7 +62,7 @@ class SinPromocionesWidget extends StatelessWidget {
                 icon: const Icon(Icons.refresh, size: 18),
                 label: const Text('Volver a intentar'),
                 style: OutlinedButton.styleFrom(
-                  foregroundColor: AppColors.text,
+                  foregroundColor: AppColors.text(context),
                   side: const BorderSide(color: Color(0xFFE2E8F0)),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10),

@@ -83,7 +83,7 @@ class _PreloaderCAnimatedState extends State<PreloaderCAnimated>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor:AppColors.background(context),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,

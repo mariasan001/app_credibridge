@@ -11,7 +11,7 @@ class AppTextStyles {
     return GoogleFonts.poppins(
       fontSize: _isTablet(context) ? 58 : 36,
       fontWeight: FontWeight.bold,
-      color: AppColors.text,
+      color: AppColors.text(context),
     );
   }
 
@@ -27,7 +27,7 @@ class AppTextStyles {
     return GoogleFonts.poppins(
       fontSize: _isTablet(context) ? 20 : 16,
       fontWeight: FontWeight.w500,
-      color: AppColors.text,
+      color: AppColors.text(context),
     );
   }
 
@@ -58,7 +58,7 @@ class AppTextStyles {
     return GoogleFonts.poppins(
       fontSize: _isTablet(context) ? 14 : 13,
       fontWeight: FontWeight.w500,
-      color: AppColors.text,
+      color: AppColors.text(context),
     );
   }
 
@@ -73,53 +73,52 @@ class AppTextStyles {
     return GoogleFonts.poppins(
       fontSize: _isTablet(context) ? 22 : 18,
       fontWeight: FontWeight.bold,
-      color: AppColors.text,
+      color: AppColors.text(context),
     );
   }
+
   static TextStyle promoTitle(BuildContext context) {
-  return GoogleFonts.poppins(
-    fontSize: _isTablet(context) ? 20 : 18,
-    fontWeight: FontWeight.bold,
-    color: AppColors.text,
-  );
-}
+    return GoogleFonts.poppins(
+      fontSize: _isTablet(context) ? 20 : 18,
+      fontWeight: FontWeight.bold,
+      color: AppColors.text(context),
+    );
+  }
 
-static TextStyle promoBold(BuildContext context) {
-  return GoogleFonts.poppins(
-    fontSize: _isTablet(context) ? 16 : 14,
-    fontWeight: FontWeight.w600,
-    color: AppColors.text,
-  );
-}
+  static TextStyle promoBold(BuildContext context) {
+    return GoogleFonts.poppins(
+      fontSize: _isTablet(context) ? 16 : 14,
+      fontWeight: FontWeight.w600,
+      color: AppColors.text(context),
+    );
+  }
 
-static TextStyle promoBody(BuildContext context) {
-  return GoogleFonts.poppins(
-    fontSize: _isTablet(context) ? 14.5 : 13,
-    color: AppColors.textMuted,
-  );
-}
+  static TextStyle promoBody(BuildContext context) {
+    return GoogleFonts.poppins(
+      fontSize: _isTablet(context) ? 14.5 : 13,
+      color: AppColors.textMuted(context),
+    );
+  }
 
-static TextStyle promoListText(BuildContext context) {
-  return GoogleFonts.poppins(
-    fontSize: _isTablet(context) ? 15 : 13,
-    color: AppColors.text,
-  );
-}
+  static TextStyle promoListText(BuildContext context) {
+    return GoogleFonts.poppins(
+      fontSize: _isTablet(context) ? 15 : 13,
+      color: AppColors.text(context),
+    );
+  }
 
-static TextStyle promoFooterDate(BuildContext context) {
-  return GoogleFonts.poppins(
-    fontSize: _isTablet(context) ? 14 : 13,
-    color: AppColors.textMuted,
-  );
-}
+  static TextStyle promoFooterDate(BuildContext context) {
+    return GoogleFonts.poppins(
+      fontSize: _isTablet(context) ? 14 : 13,
+      color: AppColors.textMuted(context),
+    );
+  }
 
-static TextStyle promoButtonText(BuildContext context) {
-  return GoogleFonts.poppins(
-    fontSize: _isTablet(context) ? 16 : 14,
-    fontWeight: FontWeight.w600,
-    color: AppColors.text,
-  );
-}
-
-
+  static TextStyle promoButtonText(BuildContext context) {
+    return GoogleFonts.poppins(
+      fontSize: _isTablet(context) ? 16 : 14,
+      fontWeight: FontWeight.w600,
+      color: AppColors.text(context),
+    );
+  }
 }

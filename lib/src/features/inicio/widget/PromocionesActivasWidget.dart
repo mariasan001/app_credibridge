@@ -22,11 +22,11 @@ class PromocionCardVisual extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 12),
       decoration: BoxDecoration(
-        color: AppColors.promoCardBackground,
+        color: AppColors.promoCardBackground(context),
         borderRadius: BorderRadius.circular(14),
         boxShadow: [
           BoxShadow(
-            color: AppColors.promoShadow,
+            color: AppColors.promoShadow(context),
             blurRadius: 6,
             offset: const Offset(0, 2),
           ),
@@ -63,7 +63,7 @@ class PromocionCardVisual extends StatelessWidget {
                             style: AppTextStyles.promoTitle(context).copyWith(
                               fontWeight: FontWeight.w700,
                               fontSize: 18,
-                              color: AppColors.text,
+                           color: AppColors.text(context),
                             ),
                           ),
                           const SizedBox(height: 4),
@@ -72,7 +72,7 @@ class PromocionCardVisual extends StatelessWidget {
                             style: AppTextStyles.promoBold(context).copyWith(
                               fontSize: 13,
                               fontWeight: FontWeight.w100,
-                              color: AppColors.textMuted,
+                              color: AppColors.textMuted(context),
                             ),
                           ),
                         ],

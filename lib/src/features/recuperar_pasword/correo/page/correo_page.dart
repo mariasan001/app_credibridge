@@ -62,7 +62,7 @@ class _RcorreoPageState extends State<RcorreoPage> {
         showContainer ? (isKeyboardVisible ? 250.0 : (isTablet ? 450.0 : 180.0)) : 50.0;
 
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor:AppColors.background(context),
       body: Stack(
         children: [
           AnimatedPositioned(
