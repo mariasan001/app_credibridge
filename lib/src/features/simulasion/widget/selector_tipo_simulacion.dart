@@ -1,8 +1,9 @@
-// lib/src/features/simulacion/widgets/selector_tipo_simulacion.dart
-
+import 'package:flutter/material.dart';
 import 'package:app_creditos/src/features/simulasion/model/sim_type_model.dart';
 import 'package:app_creditos/src/features/simulasion/services/simulacion_service.dart';
-import 'package:flutter/material.dart';
+import 'package:app_creditos/src/features/simulasion/utils/text_utils.dart';
+import 'package:app_creditos/src/shared/theme/app_colors.dart';
+import 'package:app_creditos/src/shared/theme/app_text_styles.dart';
 
 class SelectorTipoSimulacion extends StatefulWidget {
   final Function(SimType?)? onChanged;
@@ -36,7 +37,10 @@ class _SelectorTipoSimulacionState extends State<SelectorTipoSimulacion> {
       future: _futureTipos,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return const CircularProgressIndicator();
+          return const Padding(
+            padding: EdgeInsets.symmetric(vertical: 16),
+            child: CircularProgressIndicator(),
+          );
         }
 
         if (snapshot.hasError) {
@@ -45,22 +49,71 @@ class _SelectorTipoSimulacionState extends State<SelectorTipoSimulacion> {
 
         final tipos = snapshot.data ?? [];
 
-        return DropdownButtonFormField<SimType>(
-          value: _selectedTipo,
-          decoration: const InputDecoration(
-            labelText: 'Tipo de Simulación',
-            border: OutlineInputBorder(),
-          ),
-          items: tipos.map((tipo) {
-            return DropdownMenuItem<SimType>(
-              value: tipo,
-              child: Text(tipo.name),
-            );
-          }).toList(),
-          onChanged: (value) {
-            setState(() => _selectedTipo = value);
-            widget.onChanged?.call(value);
-          },
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Tipo de simulación',
+              style: AppTextStyles.inputLabel(context),
+            ),
+            const SizedBox(height: 8),
+            Container(
+              decoration: BoxDecoration(
+                color: const Color.fromARGB(255, 238, 237, 235),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              padding: const EdgeInsets.symmetric(horizontal: 12),
+              child: Theme(
+                data: Theme.of(context).copyWith(
+                  cardTheme: CardTheme(
+                    color: Colors.white,
+                    elevation: 2,
+                    shadowColor: const Color.fromARGB(135, 143, 143, 143).withOpacity(0.08),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                  ),
+                ),
+                child: DropdownButtonHideUnderline(
+                  child: DropdownButton<SimType>(
+                    value: _selectedTipo,
+                    hint: Text(
+                      'Selecciona tu tipo de simulación',
+                      style: AppTextStyles.promoListText(context).copyWith(color: Colors.grey),
+                    ),
+                    isExpanded: true,
+                    icon: const Icon(Icons.keyboard_arrow_down_rounded, color: Colors.grey),
+                    borderRadius: BorderRadius.circular(12),
+                    dropdownColor: Colors.white,
+                    menuMaxHeight: 220,
+                    style: AppTextStyles.promoListText(context),
+                    itemHeight: 48,
+                    onChanged: (value) {
+                      setState(() => _selectedTipo = value);
+                      widget.onChanged?.call(value);
+                    },
+                    items: tipos.map((tipo) {
+                      final isSelected = _selectedTipo?.id == tipo.id;
+                      return DropdownMenuItem<SimType>(
+                        value: tipo,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              capitalizarSoloPrimera(tipo.name),
+                              style: AppTextStyles.promoListText(context),
+                            ),
+                            if (isSelected)
+                              const Icon(Icons.check, size: 16, color: AppColors.primary),
+                          ],
+                        ),
+                      );
+                    }).toList(),
+                  ),
+                ),
+              ),
+            ),
+          ],
         );
       },
     );
