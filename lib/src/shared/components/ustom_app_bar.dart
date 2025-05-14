@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:app_creditos/src/shared/theme/app_colors.dart';
 import 'package:app_creditos/src/features/auth/models/user_model.dart';
 
-// Importas de los componentes
+// Componentes externos
 import 'package:app_creditos/src/shared/components/notification_popup.dart';
 import 'package:app_creditos/src/shared/components/theme_toggle_button.dart';
 import 'package:app_creditos/src/shared/components/options_menu.dart';
@@ -40,10 +40,10 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
           ],
         ),
       ),
-      actions: const [
-        NotificationPopupButton(),
-        ThemeToggleButton(),
-        OptionsMenuButton(),
+      actions: [
+        const NotificationPopupButton(),
+        const ThemeToggleButton(),
+        OptionsMenuButton(user: user), // ✅ Se pasa correctamente
       ],
     );
   }

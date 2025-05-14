@@ -121,4 +121,11 @@ class AppTextStyles {
       color: AppColors.text(context),
     );
   }
+  static TextStyle titleheader(BuildContext context) {
+    return GoogleFonts.poppins(
+      fontSize: _isTablet(context) ? 26 : 24,
+      fontWeight: FontWeight.w800,
+      color: AppColors.text(context),
+    );
+  }
 }

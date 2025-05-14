@@ -11,8 +11,6 @@ import 'package:dio/dio.dart';
 import 'package:app_creditos/src/shared/theme/app_text_styles.dart';
 import 'package:app_creditos/src/features/auth/models/user_model.dart';
 import 'package:app_creditos/src/shared/components/ustom_app_bar.dart';
-import 'package:app_creditos/src/shared/services/session_manager.dart';
-import 'package:app_creditos/src/features/auth/page/login_page.dart';
 import 'package:app_creditos/src/features/inicio/service/descuento_service.dart';
 
 class HomePage extends StatefulWidget {
@@ -140,7 +138,7 @@ class _HomePageState extends State<HomePage> {
                 if (promociones.isEmpty) {
                   return const SinPromocionesWidget();
                 }
-// aqui podras enco
+                // aqui podras enco
                 return ListView.builder(
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
@@ -151,31 +149,6 @@ class _HomePageState extends State<HomePage> {
                   },
                 );
               },
-            ),
-
-            // Botón cerrar sesión
-            Center(
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.redAccent,
-                  foregroundColor: Colors.white,
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 32,
-                    vertical: 12,
-                  ),
-                ),
-                onPressed: () async {
-                  await SessionManager.clearToken();
-                  if (context.mounted) {
-                    Navigator.pushAndRemoveUntil(
-                      context,
-                      MaterialPageRoute(builder: (_) => const LoginPage()),
-                      (route) => false,
-                    );
-                  }
-                },
-                child: const Text('Cerrar sesión'),
-              ),
             ),
           ],
         ),

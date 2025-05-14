@@ -1,13 +1,13 @@
-import 'package:animations/animations.dart';
+import 'package:app_creditos/src/features/directorio/widget/lender_card_menu.dart';
+import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:app_creditos/src/features/auth/models/user_model.dart';
 import 'package:app_creditos/src/features/directorio/services/directorio_service.dart';
 import 'package:app_creditos/src/features/directorio/model/lender_service_model.dart';
-import 'package:app_creditos/src/features/directorio/utils/alphabetical_group_builder.dart';
-import 'package:app_creditos/src/features/directorio/widget/directorio_utils.dart';
 import 'package:app_creditos/src/features/directorio/widget/lender_card_skeleton.dart';
-import 'package:app_creditos/src/features/inicio/page/dashboard_page.dart';
-import 'package:app_creditos/src/shared/theme/app_colors.dart';
-import 'package:flutter/material.dart';
+import 'package:app_creditos/src/shared/components/ustom_app_bar.dart';
+import 'package:app_creditos/src/features/directorio/widget/directorio_utils.dart';
+import 'package:app_creditos/src/shared/theme/app_text_styles.dart';
 
 class DirectorioPage extends StatefulWidget {
   final User user;
@@ -30,34 +30,37 @@ class _DirectorioPageState extends State<DirectorioPage> {
   }
 
   Future<List<LenderServiceGrouped>> _fetchData() async {
-    final data = await DirectorioService.obtenerServiciosActivos();
-    setState(() {
-      _allGrouped = data;
-      _filteredGrouped = data;
-    });
-    return data;
+    try {
+      final data = await DirectorioService.obtenerServiciosActivos();
+      setState(() {
+        _allGrouped = data;
+        _filteredGrouped = data;
+      });
+      return data;
+    } catch (e) {
+      print('Error cargando servicios: $e');
+      rethrow;
+    }
   }
 
   void _onSearchChanged(String query) {
     setState(() {
       _query = query.toLowerCase();
-      _filteredGrouped =
-          _allGrouped
-              .map((group) {
-                final filteredServices =
-                    group.services.where((item) {
-                      final name = item.lender.lenderName.toLowerCase();
-                      final desc = item.serviceDesc.toLowerCase();
-                      return name.contains(_query) || desc.contains(_query);
-                    }).toList();
-                return LenderServiceGrouped(
-                  serviceTypeId: group.serviceTypeId,
-                  serviceTypeDesc: group.serviceTypeDesc,
-                  services: filteredServices,
-                );
-              })
-              .where((group) => group.services.isNotEmpty)
-              .toList();
+      _filteredGrouped = _allGrouped
+          .map((group) {
+            final filteredServices = group.services.where((item) {
+              final name = item.lender.lenderName.toLowerCase();
+              final desc = item.serviceDesc.toLowerCase();
+              return name.contains(_query) || desc.contains(_query);
+            }).toList();
+            return LenderServiceGrouped(
+              serviceTypeId: group.serviceTypeId,
+              serviceTypeDesc: group.serviceTypeDesc,
+              services: filteredServices,
+            );
+          })
+          .where((group) => group.services.isNotEmpty)
+          .toList();
     });
   }
 
@@ -65,129 +68,81 @@ class _DirectorioPageState extends State<DirectorioPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFFCF8F2),
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
-        automaticallyImplyLeading: false,
-        title: RichText(
-          text: TextSpan(
-            children: [
-              TextSpan(
-                text: 'Credi',
-                style: TextStyle(
-                  color: AppColors.primary,
-                  fontWeight: FontWeight.w900,
-                  fontSize: 25,
-                ),
-              ),
-              const TextSpan(
-                text: 'Bring',
-                style: TextStyle(
-                  color: Colors.black,
-                  fontWeight: FontWeight.w900,
-                  fontSize: 25,
-                ),
-              ),
-            ],
-          ),
-        ),
-        actions: [
-          // Notificaciones
-          Container(
-            margin: const EdgeInsets.only(right: 12),
-            padding: const EdgeInsets.all(8),
-            decoration: BoxDecoration(
-              color: const Color(0xFFF5F0EA), // fondo claro tipo beige
-              shape: BoxShape.circle,
-            ),
-            child: const Icon(
-              Icons.notifications_none,
-              color: Colors.black,
-              size: 25,
-            ),
-          ),
-
-          // Ícono de opciones tipo "grid"
-          Container(
-            margin: const EdgeInsets.only(right: 16),
-            child: const Icon(
-              Icons.grid_view_outlined,
-              color: Colors.black,
-              size: 25,
-            ),
-          ),
-        ],
-      ),
+      appBar: CustomAppBar(user: widget.user),
       body: SafeArea(
         child: Column(
           children: [
-            const SizedBox(height: 32),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
+              padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Row(
                     children: [
-                      OpenContainer(
-                        
-                        transitionType: ContainerTransitionType.fadeThrough,
-                        transitionDuration: const Duration(milliseconds: 400),
-                        closedElevation: 0,
-                        closedColor: Colors.transparent,
-                        closedShape: const RoundedRectangleBorder(
-                          borderRadius: BorderRadius.zero,
-                        ),
-                        openBuilder:
-                            (context, _) =>
-                                HomePage(user: widget.user,),
-                        closedBuilder:
-                            (context, openContainer) =>
-                                const Icon(Icons.arrow_back, size: 20),
+                      IconButton(
+                        icon: const Icon(Icons.arrow_back_ios_new),
+                        onPressed: () => Navigator.pop(context),
                       ),
                       const SizedBox(width: 8),
-                      const Text(
-                        'Directorio',
-                        style: TextStyle(
-                          fontSize: 22,
-                          fontWeight: FontWeight.w800,
-                        ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text('Directorio', style: AppTextStyles.titleheader(context)),
+                          Text(
+                            'Consulta servicios disponibles',
+                            style: AppTextStyles.promoListText(context),
+                          ),
+                        ],
                       ),
                     ],
                   ),
-
-                  const SizedBox(height: 16),
+                  const SizedBox(height: 20),
                   TextField(
                     decoration: InputDecoration(
-                      hintText: 'Ingresa servicio o institución',
+                      hintText: 'Buscar servicio o institución',
                       prefixIcon: const Icon(Icons.search),
                       filled: true,
                       fillColor: Colors.white,
-                      contentPadding: const EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 12,
-                      ),
+                      contentPadding:
+                          const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
                       border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
+                        borderRadius: BorderRadius.circular(30),
                         borderSide: BorderSide.none,
                       ),
+                      hintStyle: AppTextStyles.inputHint(context),
                     ),
                     onChanged: _onSearchChanged,
                   ),
                 ],
               ),
             ),
-            const SizedBox(height: 32),
+            const SizedBox(height: 12),
             Expanded(
               child: FutureBuilder<List<LenderServiceGrouped>>(
                 future: _future,
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return ListView.builder(
-                      physics: const BouncingScrollPhysics(),
                       padding: const EdgeInsets.symmetric(horizontal: 16),
                       itemCount: 6,
                       itemBuilder: (_, __) => const LenderCardSkeleton(),
+                    );
+                  }
+
+                  if (snapshot.hasError) {
+                    return Center(
+                      child: Text(
+                        'Ocurrió un error al cargar el directorio',
+                        style: AppTextStyles.linkMuted(context)!
+                            .copyWith(color: Colors.red),
+                      ),
+                    );
+                  }
+
+                  if (!snapshot.hasData || _filteredGrouped.isEmpty) {
+                    return Center(
+                      child: Text('No se encontraron resultados.',
+                          style: AppTextStyles.linkMuted(context)),
                     );
                   }
 
@@ -198,25 +153,128 @@ class _DirectorioPageState extends State<DirectorioPage> {
                     itemBuilder: (context, index) {
                       final group = _filteredGrouped[index];
                       final color = getColorForService(group.serviceTypeDesc);
+
                       return Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
+                          const SizedBox(height: 24),
                           Padding(
-                            padding: const EdgeInsets.only(
-                              top: 16,
-                              bottom: 8,
-                              left: 10,
-                            ),
+                            padding: const EdgeInsets.symmetric(horizontal: 4),
                             child: Text(
-                              group.serviceTypeDesc,
-                              style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                                color: color,
+                              group.serviceTypeDesc.toUpperCase(),
+                              style: AppTextStyles.linkBold(context).copyWith(
+                                fontWeight: FontWeight.w800,
+                                fontSize: 17,
+                                color: Colors.black54,
                               ),
                             ),
                           ),
-                          ...buildAlphabeticalGroups(group: group),
+                          const SizedBox(height: 12),
+                          ...group.services.map(
+                            (service) => Container(
+                              margin: const EdgeInsets.only(bottom: 10),
+                              padding: const EdgeInsets.all(16),
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(16),
+                                boxShadow: [
+                                  BoxShadow(
+                                    // ignore: deprecated_member_use
+                                    color: Colors.black.withOpacity(0.05),
+                                    blurRadius: 5,
+                                    offset: const Offset(0, 2),
+                                  ),
+                                ],
+                              ),
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  CircleAvatar(
+                                    radius: 22,
+                                    // ignore: deprecated_member_use
+                                    backgroundColor: color.withOpacity(0.15),
+                                    child: Text(
+                                      service.lender.lenderName[0],
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        color: color,
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(width: 12),
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Expanded(
+                                              child: Text(
+                                                service.lender.lenderName,
+                                                style:
+                                                    AppTextStyles.promoButtonText(context),
+                                              ),
+                                            ),
+                                            buildLenderCardMenu(
+                                              context: context,
+                                              service: service,
+                                              onPhone: (ctx, phone) async {
+                                                final Uri telUri =
+                                                    Uri.parse('tel:$phone');
+                                                if (await canLaunchUrl(telUri)) {
+                                                  await launchUrl(telUri);
+                                                }
+                                              },
+                                              onEmail: (ctx, email) async {
+                                                final Uri emailUri =
+                                                    Uri(scheme: 'mailto', path: email);
+                                                if (await canLaunchUrl(emailUri)) {
+                                                  await launchUrl(emailUri);
+                                                }
+                                              },
+                                            ),
+                                          ],
+                                        ),
+                                        const SizedBox(height: 6),
+                                        Row(
+                                          children: [
+                                            const Icon(Icons.email,
+                                                size: 14, color: Color.fromARGB(255, 158, 158, 158)),
+                                            const SizedBox(width: 4),
+                                            Expanded(
+                                              child: Text(
+                                                service.lender.lenderEmail ??
+                                                    'correo@desconocido.com',
+                                                style:
+                                                    AppTextStyles.promoBody(context),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        const SizedBox(height: 4),
+                                        Row(
+                                          children: [
+                                            const Icon(Icons.phone,
+                                                size: 14, color: Color.fromARGB(255, 117, 117, 117)),
+                                            const SizedBox(width: 4),
+                                            Text(
+                                              service.lender.lenderPhone,
+                                              style: const TextStyle(
+                                                fontSize: 13,
+                                                color: Color.fromARGB(255, 104, 104, 104),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
                         ],
                       );
                     },
