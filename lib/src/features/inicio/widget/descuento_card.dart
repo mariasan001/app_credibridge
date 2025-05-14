@@ -1,4 +1,5 @@
 import 'package:app_creditos/src/features/inicio/widget/DescuentoCardSkeleton.dart';
+import 'package:app_creditos/src/features/simulasion/page/simulasion_page.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:app_creditos/src/shared/theme/app_colors.dart';
@@ -26,6 +27,7 @@ class DescuentoCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(24),
         boxShadow: [
           BoxShadow(
+            // ignore: deprecated_member_use
             color: Colors.black.withOpacity(0.04),
             blurRadius: 6,
             offset: const Offset(0, 3),
@@ -46,7 +48,10 @@ class DescuentoCard extends StatelessWidget {
             duration: const Duration(milliseconds: 600),
             builder: (context, value, child) {
               return Text(
-                NumberFormat.currency(locale: 'es_MX', symbol: '\$').format(value),
+                NumberFormat.currency(
+                  locale: 'es_MX',
+                  symbol: '\$',
+                ).format(value),
                 style: AppTextStyles.heading(context).copyWith(
                   fontSize: 48,
                   fontWeight: FontWeight.w900,
@@ -75,20 +80,26 @@ class DescuentoCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 _DashboardAction(
-                  icon: Icons.bar_chart,
-                  label: 'consultar',
+                  icon: Icons.timeline_outlined,
+                  label: 'Simular Préstamo',
                   onTap: () {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Función "Consultar" aún no disponible')),
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (_) =>  SimulacionPage(user: user)),
                     );
                   },
                 ),
+
                 _DashboardAction(
                   icon: Icons.swap_horiz,
                   label: 'Movimientos',
                   onTap: () {
                     ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Función "Movimientos" aún no disponible')),
+                      const SnackBar(
+                        content: Text(
+                          'Función "Movimientos" aún no disponible',
+                        ),
+                      ),
                     );
                   },
                 ),
@@ -100,11 +111,12 @@ class DescuentoCard extends StatelessWidget {
                   ),
                   closedColor: Colors.white,
                   openBuilder: (context, _) => DirectorioPage(user: user),
-                  closedBuilder: (context, openContainer) => _DashboardAction(
-                    icon: Icons.book_outlined,
-                    label: 'Directorio',
-                    onTap: openContainer,
-                  ),
+                  closedBuilder:
+                      (context, openContainer) => _DashboardAction(
+                        icon: Icons.book_outlined,
+                        label: 'Directorio',
+                        onTap: openContainer,
+                      ),
                 ),
               ],
             ),
@@ -120,11 +132,7 @@ class _DashboardAction extends StatelessWidget {
   final String label;
   final VoidCallback? onTap;
 
-  const _DashboardAction({
-    required this.icon,
-    required this.label,
-    this.onTap,
-  });
+  const _DashboardAction({required this.icon, required this.label, this.onTap});
 
   @override
   Widget build(BuildContext context) {

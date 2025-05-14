@@ -28,7 +28,7 @@ class User {
   final JobCode? jobCode;
   final PositionStatus? positionStatus;
   final Bank? bank;
-  final UserStatus? userStatus; // ✅ Campo faltante agregado
+  final UserStatus? userStatus; 
   final List<Role> roles;
 
   User({
@@ -43,7 +43,7 @@ class User {
     this.jobCode,
     this.positionStatus,
     this.bank,
-    this.userStatus, // ✅ Constructor actualizado
+    this.userStatus, 
     required this.roles,
   });
 
