@@ -8,6 +8,7 @@ import 'package:app_creditos/src/features/directorio/widget/lender_card_skeleton
 import 'package:app_creditos/src/shared/components/ustom_app_bar.dart';
 import 'package:app_creditos/src/features/directorio/widget/directorio_utils.dart';
 import 'package:app_creditos/src/shared/theme/app_text_styles.dart';
+import 'package:app_creditos/src/shared/theme/app_colors.dart';
 
 class DirectorioPage extends StatefulWidget {
   final User user;
@@ -46,34 +47,38 @@ class _DirectorioPageState extends State<DirectorioPage> {
   void _onSearchChanged(String query) {
     setState(() {
       _query = query.toLowerCase();
-      _filteredGrouped = _allGrouped
-          .map((group) {
-            final filteredServices = group.services.where((item) {
-              final name = item.lender.lenderName.toLowerCase();
-              final desc = item.serviceDesc.toLowerCase();
-              return name.contains(_query) || desc.contains(_query);
-            }).toList();
-            return LenderServiceGrouped(
-              serviceTypeId: group.serviceTypeId,
-              serviceTypeDesc: group.serviceTypeDesc,
-              services: filteredServices,
-            );
-          })
-          .where((group) => group.services.isNotEmpty)
-          .toList();
+      _filteredGrouped =
+          _allGrouped
+              .map((group) {
+                final filteredServices =
+                    group.services.where((item) {
+                      final name = item.lender.lenderName.toLowerCase();
+                      final desc = item.serviceDesc.toLowerCase();
+                      return name.contains(_query) || desc.contains(_query);
+                    }).toList();
+                return LenderServiceGrouped(
+                  serviceTypeId: group.serviceTypeId,
+                  serviceTypeDesc: group.serviceTypeDesc,
+                  services: filteredServices,
+                );
+              })
+              .where((group) => group.services.isNotEmpty)
+              .toList();
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    final isTablet = MediaQuery.of(context).size.width > 600;
+
     return Scaffold(
-      backgroundColor: const Color(0xFFFCF8F2),
+      backgroundColor: AppColors.background(context),
       appBar: CustomAppBar(user: widget.user),
       body: SafeArea(
         child: Column(
           children: [
             Padding(
-              padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
+              padding: EdgeInsets.fromLTRB(16, isTablet ? 24 : 16, 16, 0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -87,7 +92,10 @@ class _DirectorioPageState extends State<DirectorioPage> {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text('Directorio', style: AppTextStyles.titleheader(context)),
+                          Text(
+                            'Directorio',
+                            style: AppTextStyles.titleheader(context),
+                          ),
                           Text(
                             'Consulta servicios disponibles',
                             style: AppTextStyles.promoListText(context),
@@ -102,9 +110,14 @@ class _DirectorioPageState extends State<DirectorioPage> {
                       hintText: 'Buscar servicio o institución',
                       prefixIcon: const Icon(Icons.search),
                       filled: true,
-                      fillColor: Colors.white,
-                      contentPadding:
-                          const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
+                      fillColor:
+                          Theme.of(context).brightness == Brightness.dark
+                              ? const Color(0xFF2A2A2A)
+                              : Colors.white,
+                      contentPadding: const EdgeInsets.symmetric(
+                        horizontal: 20,
+                        vertical: 14,
+                      ),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(30),
                         borderSide: BorderSide.none,
@@ -133,16 +146,19 @@ class _DirectorioPageState extends State<DirectorioPage> {
                     return Center(
                       child: Text(
                         'Ocurrió un error al cargar el directorio',
-                        style: AppTextStyles.linkMuted(context)!
-                            .copyWith(color: Colors.red),
+                        style: AppTextStyles.linkMuted(
+                          context,
+                        ).copyWith(color: Colors.red),
                       ),
                     );
                   }
 
                   if (!snapshot.hasData || _filteredGrouped.isEmpty) {
                     return Center(
-                      child: Text('No se encontraron resultados.',
-                          style: AppTextStyles.linkMuted(context)),
+                      child: Text(
+                        'No se encontraron resultados.',
+                        style: AppTextStyles.linkMuted(context),
+                      ),
                     );
                   }
 
@@ -153,33 +169,37 @@ class _DirectorioPageState extends State<DirectorioPage> {
                     itemBuilder: (context, index) {
                       final group = _filteredGrouped[index];
                       final color = getColorForService(group.serviceTypeDesc);
+                      final isDark =
+                          Theme.of(context).brightness == Brightness.dark;
 
                       return Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const SizedBox(height: 24),
+                          const SizedBox(height: 14),
                           Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 4),
+                            padding: const EdgeInsets.symmetric(horizontal: 2),
                             child: Text(
                               group.serviceTypeDesc.toUpperCase(),
                               style: AppTextStyles.linkBold(context).copyWith(
                                 fontWeight: FontWeight.w800,
-                                fontSize: 17,
-                                color: Colors.black54,
+                                fontSize: 18,
+                                color: isDark ? Colors.white70 : Colors.black54,
                               ),
                             ),
                           ),
-                          const SizedBox(height: 12),
+                          const SizedBox(height: 20),
                           ...group.services.map(
                             (service) => Container(
-                              margin: const EdgeInsets.only(bottom: 10),
-                              padding: const EdgeInsets.all(16),
+                              margin: const EdgeInsets.only(bottom: 16),
+                              padding: const EdgeInsets.all(12),
                               decoration: BoxDecoration(
-                                color: Colors.white,
+                                color:
+                                    isDark
+                                        ? const Color(0xFF2A2A2A)
+                                        : Colors.white,
                                 borderRadius: BorderRadius.circular(16),
                                 boxShadow: [
                                   BoxShadow(
-                                    // ignore: deprecated_member_use
                                     color: Colors.black.withOpacity(0.05),
                                     blurRadius: 5,
                                     offset: const Offset(0, 2),
@@ -191,7 +211,6 @@ class _DirectorioPageState extends State<DirectorioPage> {
                                 children: [
                                   CircleAvatar(
                                     radius: 22,
-                                    // ignore: deprecated_member_use
                                     backgroundColor: color.withOpacity(0.15),
                                     child: Text(
                                       service.lender.lenderName[0],
@@ -204,7 +223,8 @@ class _DirectorioPageState extends State<DirectorioPage> {
                                   const SizedBox(width: 12),
                                   Expanded(
                                     child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
                                         Row(
                                           mainAxisAlignment:
@@ -213,42 +233,60 @@ class _DirectorioPageState extends State<DirectorioPage> {
                                             Expanded(
                                               child: Text(
                                                 service.lender.lenderName,
+                                                maxLines: 1,
+                                                overflow: TextOverflow.ellipsis,
                                                 style:
-                                                    AppTextStyles.promoButtonText(context),
+                                                    AppTextStyles.promoButtonText(
+                                                      context,
+                                                    ),
                                               ),
                                             ),
                                             buildLenderCardMenu(
                                               context: context,
                                               service: service,
                                               onPhone: (ctx, phone) async {
-                                                final Uri telUri =
-                                                    Uri.parse('tel:$phone');
-                                                if (await canLaunchUrl(telUri)) {
+                                                final Uri telUri = Uri.parse(
+                                                  'tel:$phone',
+                                                );
+                                                if (await canLaunchUrl(
+                                                  telUri,
+                                                )) {
                                                   await launchUrl(telUri);
                                                 }
                                               },
                                               onEmail: (ctx, email) async {
-                                                final Uri emailUri =
-                                                    Uri(scheme: 'mailto', path: email);
-                                                if (await canLaunchUrl(emailUri)) {
+                                                final Uri emailUri = Uri(
+                                                  scheme: 'mailto',
+                                                  path: email,
+                                                );
+                                                if (await canLaunchUrl(
+                                                  emailUri,
+                                                )) {
                                                   await launchUrl(emailUri);
                                                 }
                                               },
                                             ),
                                           ],
                                         ),
-                                        const SizedBox(height: 6),
+                                        const SizedBox(height: 0),
                                         Row(
                                           children: [
-                                            const Icon(Icons.email,
-                                                size: 14, color: Color.fromARGB(255, 158, 158, 158)),
+                                            Icon(
+                                              Icons.email,
+                                              size: 14,
+                                              color:
+                                                  isDark
+                                                      ? Colors.white70
+                                                      : Colors.grey,
+                                            ),
                                             const SizedBox(width: 4),
                                             Expanded(
                                               child: Text(
                                                 service.lender.lenderEmail ??
                                                     'correo@desconocido.com',
-                                                style:
-                                                    AppTextStyles.promoBody(context),
+                                                style: AppTextStyles.promoBody(
+                                                  context,
+                                                ),
                                               ),
                                             ),
                                           ],
@@ -256,14 +294,28 @@ class _DirectorioPageState extends State<DirectorioPage> {
                                         const SizedBox(height: 4),
                                         Row(
                                           children: [
-                                            const Icon(Icons.phone,
-                                                size: 14, color: Color.fromARGB(255, 117, 117, 117)),
+                                            Icon(
+                                              Icons.phone,
+                                              size: 15,
+                                              color:
+                                                  isDark
+                                                      ? Colors.white70
+                                                      : Colors.grey,
+                                            ),
                                             const SizedBox(width: 4),
                                             Text(
                                               service.lender.lenderPhone,
-                                              style: const TextStyle(
-                                                fontSize: 13,
-                                                color: Color.fromARGB(255, 104, 104, 104),
+                                              style: TextStyle(
+                                                fontSize: 14,
+                                                color:
+                                                    isDark
+                                                        ? Colors.white70
+                                                        : const Color.fromARGB(
+                                                          255,
+                                                          104,
+                                                          104,
+                                                          104,
+                                                        ),
                                               ),
                                             ),
                                           ],

@@ -8,7 +8,7 @@ class ServidorPublicoRequest {
     required this.userId,
     required this.plaza,
     required this.jobCode,
-    required this.rfc,
+    required this.rfc, 
   });
 
   Map<String, dynamic> toJson() {

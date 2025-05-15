@@ -28,7 +28,12 @@ class _PerfilPageState extends State<PerfilPage> {
     });
   }
 
-  Widget buildField(IconData icon, String label, String value, {bool enabled = false}) {
+  Widget buildField(
+    IconData icon,
+    String label,
+    String value, {
+    bool enabled = false,
+  }) {
     final isStatusField = label == 'Situación';
     return Padding(
       padding: const EdgeInsets.only(bottom: 16),
@@ -63,7 +68,10 @@ class _PerfilPageState extends State<PerfilPage> {
                 ),
                 if (isStatusField && value.toLowerCase().contains('activa'))
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 8,
+                    ),
                     decoration: BoxDecoration(
                       color: Colors.green.shade50,
                       borderRadius: BorderRadius.circular(20),
@@ -115,13 +123,16 @@ class _PerfilPageState extends State<PerfilPage> {
             color: Colors.black.withOpacity(0.05),
             blurRadius: 5,
             offset: const Offset(0, 2),
-          )
+          ),
         ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(title, style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 16)),
+          Text(
+            title,
+            style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 16),
+          ),
           const SizedBox(height: 16),
           ...fields,
         ],
@@ -146,7 +157,9 @@ class _PerfilPageState extends State<PerfilPage> {
         children: [
           CircleAvatar(radius: 18, backgroundColor: Colors.grey[300]),
           const SizedBox(width: 12),
-          Expanded(child: Column(children: [shimmerLine(width: 100), shimmerLine()]))
+          Expanded(
+            child: Column(children: [shimmerLine(width: 100), shimmerLine()]),
+          ),
         ],
       ),
     );
@@ -155,7 +168,10 @@ class _PerfilPageState extends State<PerfilPage> {
       baseColor: Colors.grey.shade300,
       highlightColor: Colors.grey.shade100,
       child: Column(
-        children: List.generate(4, (_) => buildSection("", List.generate(4, (_) => shimmerField()))),
+        children: List.generate(
+          4,
+          (_) => buildSection("", List.generate(4, (_) => shimmerField())),
+        ),
       ),
     );
   }
@@ -163,83 +179,163 @@ class _PerfilPageState extends State<PerfilPage> {
   @override
   Widget build(BuildContext context) {
     final user = widget.user;
+    final screenWidth = MediaQuery.of(context).size.width;
+    final isTablet = screenWidth > 600;
+    final pagePadding = isTablet ? 20.0 : 16.0;
 
     return Scaffold(
-      backgroundColor: const Color(0xFFFCF8F2),
+      backgroundColor: AppColors.background(context), // ✅ Modo oscuro activado
       appBar: CustomAppBar(user: user),
-      body: _isLoading
-          ? Padding(
-              padding: const EdgeInsets.all(20),
-              child: buildSkeletonSection(),
-            )
-          : SingleChildScrollView(
-              padding: const EdgeInsets.all(20),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      IconButton(
-                        icon: const Icon(Icons.arrow_back_ios_new, size: 20),
-                        onPressed: () => Navigator.pop(context),
-                      ),
-                      const SizedBox(width: 4),
-                      Expanded(
-                        child: Text('Mi perfil', style: AppTextStyles.heading(context)),
-                      ),
-                      TextButton(
-                        onPressed: () {
-                          setState(() {
-                            _isEditing = !_isEditing;
-                          });
-                        },
-                        style: TextButton.styleFrom(
-                          backgroundColor: _isEditing
-                              ? const Color.fromARGB(255, 6, 110, 69)
-                              : const Color.fromARGB(255, 17, 27, 93),
-                          foregroundColor: Colors.white,
-                          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8),
+      body:
+          _isLoading
+              ? Padding(
+                padding: EdgeInsets.all(pagePadding),
+                child: buildSkeletonSection(),
+              )
+              : SingleChildScrollView(
+                padding: EdgeInsets.all(pagePadding),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // 🔙 Encabezado con botón y acción
+                    Row(
+                      children: [
+                        IconButton(
+                          icon: const Icon(Icons.arrow_back_ios_new, size: 20),
+                          onPressed: () => Navigator.pop(context),
+                        ),
+                        const SizedBox(width: 4),
+                        Expanded(
+                          child: Text(
+                            'Mi perfil',
+                            style: AppTextStyles.heading(
+                              context,
+                            ).copyWith(fontSize: isTablet ? 20 : 20),
                           ),
                         ),
-                        child: Text(_isEditing ? 'Guardar' : 'Actualizar información'),
-                      )
-                    ],
-                  ),
-                  const SizedBox(height: 4),
-                  Text('Consulta y edita tus datos', style: AppTextStyles.bodySmall(context)),
-                  const SizedBox(height: 24),
+                        TextButton(
+                          onPressed: () {
+                            setState(() {
+                              _isEditing = !_isEditing;
+                            });
+                          },
+                          style: TextButton.styleFrom(
+                            backgroundColor:
+                                _isEditing
+                                    ? const Color.fromARGB(255, 6, 110, 69)
+                                    : const Color.fromARGB(255, 17, 27, 93),
+                            foregroundColor: Colors.white,
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 16,
+                              vertical: 10,
+                            ),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                          ),
+                          child: Text(
+                            _isEditing ? 'Guardar' : 'Actualizar información',
+                          ),
+                        ),
+                      ],
+                    ),
 
-                  buildSection("Datos Personales", [
-                    buildField(Icons.person, 'Nombre completo', user.name, enabled: _isEditing),
-                    buildField(Icons.perm_identity, 'CURP', user.curp ?? '', enabled: _isEditing),
-                    buildField(Icons.fingerprint, 'RFC', user.rfc ?? '', enabled: _isEditing),
-                    buildField(Icons.badge, 'Número de Servidor Público', user.userId),
-                  ]),
+                    const SizedBox(height: 4),
+                
+                    const SizedBox(height: 24),
 
-                  buildSection("Contacto", [
-                    buildField(Icons.email, 'Correo electrónico', user.email ?? '', enabled: _isEditing),
-                    buildField(Icons.phone, 'Teléfono', user.phone ?? '', enabled: _isEditing),
-                  ]),
+                    // 🧾 Secciones
+                    buildSection("Datos Personales", [
+                      buildField(
+                        Icons.person,
+                        'Nombre completo',
+                        user.name,
+                        enabled: _isEditing,
+                      ),
+                      buildField(
+                        Icons.perm_identity,
+                        'CURP',
+                        user.curp ?? '',
+                        enabled: _isEditing,
+                      ),
+                      buildField(
+                        Icons.fingerprint,
+                        'RFC',
+                        user.rfc ?? '',
+                        enabled: _isEditing,
+                      ),
+                      buildField(
+                        Icons.badge,
+                        'Número de Servidor Público',
+                        user.userId,
+                      ),
+                    ]),
 
-                  buildSection("Datos Laborales", [
-                    buildField(Icons.apartment, 'Dependencia', user.workUnit?.desc ?? ''),
-                    buildField(Icons.credit_card, 'Nómina', user.bank?.desc ?? ''),
-                    buildField(Icons.work_outline, 'Puesto', user.jobCode?.desc ?? ''),
-                    buildField(Icons.date_range, 'Fecha de ocupación', user.occupationDate ?? ''),
-                    buildField(Icons.verified, 'Situación', user.positionStatus?.desc ?? ''),
-                    buildField(Icons.security, 'Estatus de usuario', user.userStatus?.desc ?? ''),
-                  ]),
+                    buildSection("Contacto", [
+                      buildField(
+                        Icons.email,
+                        'Correo electrónico',
+                        user.email ?? '',
+                        enabled: _isEditing,
+                      ),
+                      buildField(
+                        Icons.phone,
+                        'Teléfono',
+                        user.phone ?? '',
+                        enabled: _isEditing,
+                      ),
+                    ]),
 
-                  buildSection("Roles", user.roles.isNotEmpty
-                      ? user.roles
-                          .map((rol) => buildField(Icons.check_circle, 'Rol asignado', rol.description))
-                          .toList()
-                      : [buildField(Icons.info, 'Rol asignado', 'Sin rol')]),
-                ],
+                    buildSection("Datos Laborales", [
+                      buildField(
+                        Icons.apartment,
+                        'Dependencia',
+                        user.workUnit?.desc ?? '',
+                      ),
+                      buildField(
+                        Icons.credit_card,
+                        'Nómina',
+                        user.bank?.desc ?? '',
+                      ),
+                      buildField(
+                        Icons.work_outline,
+                        'Puesto',
+                        user.jobCode?.desc ?? '',
+                      ),
+                      buildField(
+                        Icons.date_range,
+                        'Fecha de ocupación',
+                        user.occupationDate ?? '',
+                      ),
+                      buildField(
+                        Icons.verified,
+                        'Situación',
+                        user.positionStatus?.desc ?? '',
+                      ),
+                      buildField(
+                        Icons.security,
+                        'Estatus de usuario',
+                        user.userStatus?.desc ?? '',
+                      ),
+                    ]),
+
+                    buildSection(
+                      "Roles",
+                      user.roles.isNotEmpty
+                          ? user.roles
+                              .map(
+                                (rol) => buildField(
+                                  Icons.check_circle,
+                                  'Rol asignado',
+                                  rol.description,
+                                ),
+                              )
+                              .toList()
+                          : [buildField(Icons.info, 'Rol asignado', 'Sin rol')],
+                    ),
+                  ],
+                ),
               ),
-            ),
     );
   }
 }

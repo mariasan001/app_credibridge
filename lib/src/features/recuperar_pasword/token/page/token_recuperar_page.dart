@@ -78,10 +78,10 @@ class _TokenRecuperarPageState extends State<TokenRecuperarPage> {
   Widget build(BuildContext context) {
     final isKeyboardVisible = MediaQuery.of(context).viewInsets.bottom > 0;
     final screenWidth = MediaQuery.of(context).size.width;
-    final isTablet = screenWidth > 300;
+    final isTablet = screenWidth > 600;
 
-    final horizontalPadding = isTablet ? 70.0 : 24.0;
-    final verticalPadding = isTablet ? 72.0 : 48.0;
+    final horizontalPadding = isTablet ? 70.0 : 14.0;
+    final verticalPadding = isTablet ? 72.0 : 58.0;
     final double logoTop =
         showContainer ? (isKeyboardVisible ? 190.0 : (isTablet ? 350.0 : 180.0)) : 50.0;
 
@@ -124,10 +124,11 @@ class _TokenRecuperarPageState extends State<TokenRecuperarPage> {
                     titlePrefix: 'Revisa tu',
                     titleHighlight: 'correo electrónico',
                     titleSuffix: 'e ingresa tu código',
+                    
                     subtitle:
                         'Te enviamos un token de verificación. Por seguridad, este token fue enviado a tu correo registrado.',
                   ),
-                  const SizedBox(height: 42),
+                  const SizedBox(height:35),
 
                   // Campo OTP para ingresar los 6 dígitos del código
                   OtpInput(
@@ -138,7 +139,7 @@ class _TokenRecuperarPageState extends State<TokenRecuperarPage> {
                     },
                   ),
 
-                  const SizedBox(height: 64),
+                  const SizedBox(height: 40),
 
                   // Botón para validar el token ingresado
                   SizedBox(

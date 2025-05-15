@@ -39,7 +39,7 @@ class WelcomeText extends StatelessWidget {
         RichText(
           text: TextSpan(
             style: AppTextStyles.heading(context).copyWith(
-              fontSize: isTablet ? 36 : 28,
+              fontSize: isTablet ? 36 : 27.5,
               fontWeight: FontWeight.w700,
               height: 1,
             ),
@@ -48,7 +48,7 @@ class WelcomeText extends StatelessWidget {
               TextSpan(
                 text: titleHighlight,
                 style: AppTextStyles.logoHighlight(context).copyWith(
-                  fontSize: isTablet ? 36 : 28,
+                  fontSize: isTablet ? 36 : 27.5,
                   fontWeight: FontWeight.w900,
                 ),
               ),

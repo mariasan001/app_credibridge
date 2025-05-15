@@ -54,7 +54,7 @@ class _PasswordFieldState extends State<PasswordField> {
         // Botón para alternar la visibilidad
         suffixIcon: IconButton(
           icon: Icon(
-            _obscureText ? Icons.visibility : Icons.visibility_off,
+            _obscureText ? Icons.visibility_off : Icons.visibility,
             color: AppColors.inputBorder(context),
           ),
           onPressed: _toggleVisibility,

@@ -124,10 +124,10 @@ class _FormularioSimulacionState extends State<FormularioSimulacion> {
           (context, _) => ResultadosSimulacionPage(resultados: _resultados, user: widget.user, ),
       closedBuilder: (context, openContainer) {
         return Container(
-          padding: const EdgeInsets.all(20),
+          padding: const EdgeInsets.all(12),
           decoration: BoxDecoration(
             color: Colors.white,
-            borderRadius: BorderRadius.circular(16),
+            borderRadius: BorderRadius.circular(8),
             boxShadow: [
               BoxShadow(
                 color: Colors.black.withOpacity(0.05),

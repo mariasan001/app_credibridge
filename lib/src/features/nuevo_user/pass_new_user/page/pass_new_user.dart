@@ -79,9 +79,9 @@ class _ContrasenaPageState extends State<ContrasenaPage> {
   Widget build(BuildContext context) {
     final isKeyboardVisible = MediaQuery.of(context).viewInsets.bottom > 0;
     final screenWidth = MediaQuery.of(context).size.width;
-    final isTablet = screenWidth > 300;
+    final isTablet = screenWidth > 600;
 
-    final horizontalPadding = isTablet ? 70.0 : 24.0;
+    final horizontalPadding = isTablet ? 70.0 : 14.0;
     final verticalPadding = isTablet ? 72.0 : 48.0;
     final double logoTop = showContainer
         ? (isKeyboardVisible ? 190.0 : (isTablet ? 350.0 : 180.0))

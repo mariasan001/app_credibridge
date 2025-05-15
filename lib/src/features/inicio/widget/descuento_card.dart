@@ -1,12 +1,12 @@
-import 'package:app_creditos/src/features/inicio/widget/DescuentoCardSkeleton.dart';
-import 'package:app_creditos/src/features/simulasion/page/simulasion_page.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:app_creditos/src/shared/theme/app_colors.dart';
-import 'package:app_creditos/src/shared/theme/app_text_styles.dart';
 import 'package:animations/animations.dart';
 import 'package:app_creditos/src/features/auth/models/user_model.dart';
+import 'package:app_creditos/src/features/simulasion/page/simulasion_page.dart';
 import 'package:app_creditos/src/features/directorio/page/directorio_page.dart';
+import 'package:app_creditos/src/shared/theme/app_colors.dart';
+import 'package:app_creditos/src/shared/theme/app_text_styles.dart';
+import 'package:app_creditos/src/features/inicio/widget/DescuentoCardSkeleton.dart';
 
 class DescuentoCard extends StatelessWidget {
   final double? descuento;
@@ -16,18 +16,18 @@ class DescuentoCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (descuento == null) {
-      return const DescuentoCardSkeleton();
-    }
+    final double screenWidth = MediaQuery.of(context).size.width;
+    final bool isTablet = screenWidth > 600;
+
+    if (descuento == null) return const DescuentoCardSkeleton();
 
     return Container(
-      padding: const EdgeInsets.all(24),
+      padding: EdgeInsets.all(isTablet ? 24 : 16),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(24),
         boxShadow: [
           BoxShadow(
-            // ignore: deprecated_member_use
             color: Colors.black.withOpacity(0.04),
             blurRadius: 6,
             offset: const Offset(0, 3),
@@ -38,11 +38,13 @@ class DescuentoCard extends StatelessWidget {
         children: [
           Text(
             'Total de descuento disponible',
-            style: AppTextStyles.heading(context).copyWith(fontSize: 18),
+            style: AppTextStyles.heading(
+              context,
+            ).copyWith(fontSize: isTablet ? 18 : 16),
           ),
           const SizedBox(height: 16),
 
-          /// Animación de entrada del valor
+          /// Monto animado
           TweenAnimationBuilder<double>(
             tween: Tween(begin: 0, end: descuento!),
             duration: const Duration(milliseconds: 600),
@@ -53,7 +55,7 @@ class DescuentoCard extends StatelessWidget {
                   symbol: '\$',
                 ).format(value),
                 style: AppTextStyles.heading(context).copyWith(
-                  fontSize: 48,
+                  fontSize: isTablet ? 48 : 45,
                   fontWeight: FontWeight.w900,
                   color: AppColors.primary,
                 ),
@@ -62,11 +64,15 @@ class DescuentoCard extends StatelessWidget {
           ),
 
           const SizedBox(height: 12),
+
           Text(
             'Se muestra el monto que puede descontarse de tu nómina.',
             textAlign: TextAlign.center,
-            style: AppTextStyles.bodySmall(context),
+            style: AppTextStyles.bodySmall(
+              context,
+            ).copyWith(fontSize: isTablet ? 14 : 12),
           ),
+
           const SizedBox(height: 24),
 
           /// Acciones
@@ -76,54 +82,69 @@ class DescuentoCard extends StatelessWidget {
               color: const Color(0xFFFCF8F2),
               borderRadius: BorderRadius.circular(16),
             ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                _DashboardAction(
-                  icon: Icons.timeline_outlined,
-                  label: 'Simular Préstamo',
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (_) =>  SimulacionPage(user: user)),
-                    );
-                  },
-                ),
-
-                _DashboardAction(
-                  icon: Icons.swap_horiz,
-                  label: 'Movimientos',
-                  onTap: () {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text(
-                          'Función "Movimientos" aún no disponible',
-                        ),
-                      ),
-                    );
-                  },
-                ),
-                OpenContainer(
-                  transitionType: ContainerTransitionType.fadeThrough,
-                  closedElevation: 0,
-                  closedShape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  closedColor: Colors.white,
-                  openBuilder: (context, _) => DirectorioPage(user: user),
-                  closedBuilder:
-                      (context, openContainer) => _DashboardAction(
-                        icon: Icons.book_outlined,
-                        label: 'Directorio',
-                        onTap: openContainer,
-                      ),
-                ),
-              ],
-            ),
+            child:
+                isTablet
+                    ? Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: _buildDashboardActions(context),
+                    )
+                    : Wrap(
+                      spacing: 12,
+                      runSpacing: 12,
+                      alignment: WrapAlignment.center,
+                      children: _buildDashboardActions(context),
+                    ),
           ),
         ],
       ),
     );
+  }
+
+  List<Widget> _buildDashboardActions(BuildContext context) {
+    return [
+      OpenContainer(
+        transitionType: ContainerTransitionType.fadeThrough,
+        closedElevation: 0,
+        closedShape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+        ),
+        closedColor: Colors.white,
+        openBuilder: (context, _) => SimulacionPage(user: user),
+        closedBuilder:
+            (context, openContainer) => _DashboardAction(
+              icon: Icons.timeline_outlined,
+              label: 'Simular',
+              onTap: openContainer,
+            ),
+      ),
+
+      _DashboardAction(
+        icon: Icons.swap_horiz,
+        label: 'Movimientos',
+        onTap: () {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Función "Movimientos" aún no disponible'),
+            ),
+          );
+        },
+      ),
+      OpenContainer(
+        transitionType: ContainerTransitionType.fadeThrough,
+        closedElevation: 0,
+        closedShape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+        ),
+        closedColor: Colors.white,
+        openBuilder: (context, _) => DirectorioPage(user: user),
+        closedBuilder:
+            (context, openContainer) => _DashboardAction(
+              icon: Icons.book_outlined,
+              label: 'Directorio',
+              onTap: openContainer,
+            ),
+      ),
+    ];
   }
 }
 
@@ -139,7 +160,8 @@ class _DashboardAction extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        width: 100,
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(12),
@@ -152,14 +174,16 @@ class _DashboardAction extends StatelessWidget {
           ],
         ),
         child: Column(
+          mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(icon, size: 26, color: Colors.black87),
+            Icon(icon, size: 25, color: Colors.black87),
             const SizedBox(height: 6),
             Text(
               label,
+              textAlign: TextAlign.center,
               style: AppTextStyles.bodySmall(context).copyWith(
                 fontWeight: FontWeight.w600,
-                fontSize: 13,
+                fontSize: 12,
                 color: Colors.black87,
               ),
             ),

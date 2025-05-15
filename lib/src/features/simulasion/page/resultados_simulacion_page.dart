@@ -37,7 +37,7 @@ body: resultados.isEmpty
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // 🔙 Título, subtítulo y botón regresar
+            // Título, subtítulo y botón regresar
             Align(
               alignment: Alignment.centerLeft,
               child: Column(
@@ -69,9 +69,9 @@ body: resultados.isEmpty
 
             const SizedBox(height: 24),
 
-            // 🔒 Tarjeta fija (mejor opción)
+            //  Tarjeta fija (mejor opción)
             Container(
-              padding: const EdgeInsets.all(20),
+              padding: const EdgeInsets.all(8),
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(16),
@@ -94,7 +94,7 @@ body: resultados.isEmpty
 
             // 🔽 Lista del resto
             Container(
-              padding: const EdgeInsets.all(20),
+              padding: const EdgeInsets.all(8),
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(16),

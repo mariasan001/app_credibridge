@@ -18,38 +18,53 @@ class ResultadoSimulacionCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final backgroundColor = isTopOption ? const Color(0xFFE6F4EA) : Colors.white;
-    final borderColor = isTopOption ? const Color(0xFF22C55E) : const Color(0xFFE5E5E5);
+    final isTablet       = MediaQuery.of(context).size.width > 600;
+    final paddingValue   = isTablet ? 24.0 : 14.0;
+    final labelFontSize  = isTablet ? 14.0 : 10.0;
+    final valueFontSize  = isTablet ? 16.0 : 14.0;
+
+    final backgroundColor = isTopOption
+        ? const Color(0xFFE6F4EA)
+        : Theme.of(context).brightness == Brightness.dark
+            ? const Color(0xFF2A2A2A)
+            : Colors.white;
+
+    final borderColor = isTopOption
+        ? const Color(0xFF22C55E)
+        : Theme.of(context).brightness == Brightness.dark
+            ? Colors.white12
+            : const Color(0xFFE5E5E5);
+
     final buttonColor = isTopOption ? const Color(0xFF22C55E) : Colors.grey.shade400;
-    final icon = isTopOption ? Icons.emoji_events_outlined : Icons.account_balance;
-    final iconColor = isTopOption ? const Color(0xFF22C55E) : AppColors.primary;
+    final icon        = isTopOption ? Icons.emoji_events_outlined : Icons.account_balance;
+    final iconColor   = isTopOption ? const Color(0xFF22C55E) : AppColors.primary;
+
     final formatCurrency = NumberFormat.currency(locale: 'es_MX', symbol: '\$', decimalDigits: 2);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        if (isTopOption) ...[
+        if (isTopOption)
           Padding(
-            padding: const EdgeInsets.only(bottom: 8),
+            padding: const EdgeInsets.only(bottom: 12),
             child: Text(
               '🥇 La mejor opción para ti',
-              style: AppTextStyles.titleheader(context).copyWith(fontSize: 20),
+              style: AppTextStyles.titleheader(context).copyWith(fontSize: isTablet ? 22 : 16),
             ),
-          ),
-        ] else if (ranking == 2) ...[
+          )
+        else if (ranking == 2)
           Padding(
-            padding: const EdgeInsets.only(top: 32, bottom: 12),
+            padding: const EdgeInsets.only(top: 12, bottom: 12),
             child: Text(
               'Otras opciones',
-              style: AppTextStyles.titleheader(context).copyWith(fontSize: 20),
+              style: AppTextStyles.titleheader(context).copyWith(fontSize: isTablet ? 22 : 16),
             ),
           ),
-        ],
         Container(
           decoration: BoxDecoration(
             color: backgroundColor,
             borderRadius: BorderRadius.circular(16),
-            border: Border.all(color: borderColor, width: 1.4),
+            border: Border.all(color: borderColor, width: 1),
             boxShadow: [
               BoxShadow(
                 color: Colors.black.withOpacity(0.03),
@@ -58,7 +73,7 @@ class ResultadoSimulacionCard extends StatelessWidget {
               ),
             ],
           ),
-          padding: const EdgeInsets.all(20),
+          padding: EdgeInsets.all(paddingValue),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -76,38 +91,52 @@ class ResultadoSimulacionCard extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          crossAxisAlignment: CrossAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Expanded(
                               child: Text(
                                 result.lenderName,
-                                style: AppTextStyles.promoBold(context),
+                                maxLines: 2,
                                 overflow: TextOverflow.ellipsis,
+                                style: AppTextStyles.promoBold(context).copyWith(
+                                  fontSize: isTablet ? 16 : 12,
+                                ),
                               ),
                             ),
-                            const SizedBox(width: 12),
-                            ElevatedButton(
-                              onPressed: () {},
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: buttonColor,
-                                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(12),
+                            const SizedBox(width: 150),
+                            Flexible(
+                              child: ElevatedButton(
+                                onPressed: () {},
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: buttonColor,
+                                  padding: EdgeInsets.symmetric(
+                                    horizontal: isTablet ? 14 : 4,
+                                    vertical: isTablet ? 12 : 1,
+                                  ),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                
                                 ),
-                                elevation: isTopOption ? 2 : 0,
-                              ),
-                              child: Text(
-                                'Solicitar Crédito',
-                                style: AppTextStyles.buttonText(context).copyWith(fontSize: 13),
+                                child: FittedBox(
+                                  child: Text(
+                                    'Solicitar ',
+                                    style: AppTextStyles.buttonText(context).copyWith(
+                                      fontSize: isTablet ? 14 : 12,
+                                    ),
+                                  ),
+                                ),
                               ),
                             ),
                           ],
                         ),
-                        const SizedBox(height: 2),
+                        const SizedBox(height: 0),
                         Text(
                           result.serviceTypeDesc.toUpperCase(),
-                          style: AppTextStyles.bodySmall(context).copyWith(letterSpacing: 0.3),
+                          style: AppTextStyles.bodySmall(context).copyWith(
+                            fontSize: labelFontSize,
+                            letterSpacing: 1,
+                          ),
                         ),
                       ],
                     ),
@@ -115,46 +144,54 @@ class ResultadoSimulacionCard extends StatelessWidget {
                 ],
               ),
               const SizedBox(height: 16),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              Wrap(
+                spacing: 25,
+                runSpacing: 1,
                 children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text('Capital', style: AppTextStyles.bodySmall(context)),
-                      const SizedBox(height: 2),
-                      Text(
-                        '${formatCurrency.format(result.capital)} MXN',
-                        style: AppTextStyles.promoBold(context).copyWith(fontSize: 16),
-                      ),
-                    ],
+                  _buildDato(
+                    context,
+                    label: 'Capital',
+                    value: '${formatCurrency.format(result.capital)} MXN',
+                    labelFontSize: labelFontSize,
+                    valueFontSize: valueFontSize,
                   ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text('Tasa Anual', style: AppTextStyles.bodySmall(context)),
-                      const SizedBox(height: 2),
-                      Text(
-                        '${result.effectiveAnnualRate.toStringAsFixed(2)}%',
-                        style: AppTextStyles.promoBold(context).copyWith(fontSize: 16),
-                      ),
-                    ],
+                  _buildDato(
+                    context,
+                    label: 'Tasa Anual',
+                    value: '${result.effectiveAnnualRate.toStringAsFixed(2)}%',
+                    labelFontSize: labelFontSize,
+                    valueFontSize: valueFontSize,
                   ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text('Tasa x Periodo', style: AppTextStyles.bodySmall(context)),
-                      const SizedBox(height: 2),
-                      Text(
-                        '${result.effectivePeriodRate.toStringAsFixed(2)}%',
-                        style: AppTextStyles.promoBold(context).copyWith(fontSize: 16),
-                      ),
-                    ],
+                  _buildDato(
+                    context,
+                    label: 'Tasa x Periodo',
+                    value: '${result.effectivePeriodRate.toStringAsFixed(2)}%',
+                    labelFontSize: labelFontSize,
+                    valueFontSize: valueFontSize,
                   ),
                 ],
               ),
             ],
           ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildDato(BuildContext context, {
+    required String label,
+    required String value,
+    required double labelFontSize,
+    required double valueFontSize,
+  }) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(label, style: AppTextStyles.bodySmall(context).copyWith(fontSize: labelFontSize)),
+        const SizedBox(height: 2),
+        Text(
+          value,
+          style: AppTextStyles.promoBold(context).copyWith(fontSize: valueFontSize),
         ),
       ],
     );

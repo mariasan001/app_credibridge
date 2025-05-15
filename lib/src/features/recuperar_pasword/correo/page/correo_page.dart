@@ -42,9 +42,9 @@ class _RcorreoPageState extends State<RcorreoPage> {
       Navigator.pushNamed(context, '/token_recuperar');
     } catch (e) {
       if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(e.toString())),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(e.toString())));
     } finally {
       if (mounted) setState(() => _isLoading = false);
     }
@@ -54,15 +54,18 @@ class _RcorreoPageState extends State<RcorreoPage> {
   Widget build(BuildContext context) {
     final isKeyboardVisible = MediaQuery.of(context).viewInsets.bottom > 0;
     final screenWidth = MediaQuery.of(context).size.width;
-    final isTablet = screenWidth > 300;
+    final isTablet = screenWidth > 600;
 
-    final horizontalPadding = isTablet ? 70.0 : 24.0;
-    final verticalPadding = isTablet ? 72.0 : 48.0;
+    final horizontalPadding = isTablet ? 70.0 : 14.0;
+    final verticalPadding = isTablet ? 72.0 : 58.0;
+
     final double logoTop =
-        showContainer ? (isKeyboardVisible ? 250.0 : (isTablet ? 450.0 : 180.0)) : 50.0;
+        showContainer
+            ? (isKeyboardVisible ? 250.0 : (isTablet ? 180.0 : 190.0))
+            : 10.0;
 
     return Scaffold(
-      backgroundColor:AppColors.background(context),
+      backgroundColor: AppColors.background(context),
       body: Stack(
         children: [
           AnimatedPositioned(
@@ -99,7 +102,8 @@ class _RcorreoPageState extends State<RcorreoPage> {
                       titlePrefix: '¿Olvidaste tu',
                       titleHighlight: 'contraseña?',
                       titleSuffix: '',
-                      subtitle: 'Ingresa el correo asociado a tu cuenta para enviarte un token de recuperación.',
+                      subtitle:
+                          'Ingresa el correo asociado a tu cuenta para enviarte un token de recuperación.',
                     ),
                     const SizedBox(height: 32),
                     CorreoField(controller: _correoController),

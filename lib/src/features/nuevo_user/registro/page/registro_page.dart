@@ -37,12 +37,12 @@ class _RegistroPageState extends State<RegistroPage> {
   Widget build(BuildContext context) {
     final isKeyboardVisible = MediaQuery.of(context).viewInsets.bottom > 0;
     final screenWidth = MediaQuery.of(context).size.width;
-    final isTablet = screenWidth > 300;
+    final isTablet = screenWidth > 600;
 
     final horizontalPadding = isTablet ? 70.0 : 24.0;
     final verticalPadding = isTablet ? 72.0 : 48.0;
     final double logoTop =
-        showContainer ? (isKeyboardVisible ? 150.0 : (isTablet ? 300.0 : 180.0)) : 50.0;
+        showContainer ? (isKeyboardVisible ? 150.0 : (isTablet ? 300.0 : 10.0)) : 50.0;
 
     return Scaffold(
       backgroundColor:AppColors.background(context),

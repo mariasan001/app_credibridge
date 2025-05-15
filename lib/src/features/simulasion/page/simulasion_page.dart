@@ -19,7 +19,7 @@ class SimulacionPage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            const SizedBox(height: 30),
+            const SizedBox(height: 20),
 
             //  Icono de regreso y título
             Align(
@@ -33,7 +33,7 @@ class SimulacionPage extends StatelessWidget {
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        const Icon(Icons.arrow_back_ios_new_rounded, size: 18),
+                        const Icon(Icons.arrow_back_ios_new_rounded, size: 20),
                         const SizedBox(width: 4),
                         Text(
                           'Simulación',
@@ -50,11 +50,11 @@ class SimulacionPage extends StatelessWidget {
                 ],
               ),
             ),
-            const SizedBox(height: 30),
+            const SizedBox(height: 40),
 
             // 🔻 Formulario
             FormularioSimulacion(user: user),
-            const SizedBox(height: 62),
+            const SizedBox(height: 40),
 
             // 🔻 Texto informativo CAT
             Container(
@@ -77,7 +77,7 @@ class SimulacionPage extends StatelessWidget {
                     TextSpan(
                       style: AppTextStyles.bodySmall(
                         context,
-                      ).copyWith(height: 1.5),
+                      ).copyWith(height:1.1),
                       children: [
                         TextSpan(
                           text: 'Costo Anual Total ',

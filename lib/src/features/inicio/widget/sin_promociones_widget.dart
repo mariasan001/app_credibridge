@@ -49,7 +49,7 @@ class SinPromocionesWidget extends StatelessWidget {
             Text(
               'Vuelve pronto para descubrir nuevas oportunidades exclusivas.',
               style: TextStyle(
-                fontSize: 14,
+                fontSize: 12,
                 color: Colors.grey.shade500,
               ),
               textAlign: TextAlign.center,

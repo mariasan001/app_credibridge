@@ -6,6 +6,7 @@ import 'package:app_creditos/src/features/inicio/widget/PromocionesActivasWidget
 import 'package:app_creditos/src/features/inicio/widget/descuento_card.dart';
 import 'package:app_creditos/src/features/inicio/widget/nombre_formateado.dart';
 import 'package:app_creditos/src/features/inicio/widget/sin_promociones_widget.dart';
+import 'package:app_creditos/src/shared/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 import 'package:app_creditos/src/shared/theme/app_text_styles.dart';
@@ -57,102 +58,122 @@ class _HomePageState extends State<HomePage> {
       );
     }
   }
+@override
+Widget build(BuildContext context) {
+  final screenWidth = MediaQuery.of(context).size.width;
+  final isTablet    = screenWidth > 600;
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 255, 251, 245),
-      appBar: CustomAppBar(user: widget.user),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Saludo
-            Container(
-              width: double.infinity,
-              padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 20),
+  final horizontalPadding = isTablet ? 48.0 : 2.0;
+  final verticalPadding   = isTablet ? 24.0 : 1.0;
+  final headingFontSize   = isTablet ? 26.0 : 20.0;
 
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  RichText(
-                    text: TextSpan(
-                      style: AppTextStyles.heading(context),
-                      children: [
-                        const TextSpan(text: 'Bienvenido '),
-                        TextSpan(
-                          text: '${obtenerNombreFormateado(widget.user.name)} ',
-                          style: AppTextStyles.heading(
-                            context,
-                          ).copyWith(fontWeight: FontWeight.w900),
-                        ),
-                        const TextSpan(text: '👋'),
-                      ],
+  return Scaffold(
+    backgroundColor: AppColors.background(context), 
+    appBar: CustomAppBar(user: widget.user),
+    body: SingleChildScrollView(
+      padding: EdgeInsets.symmetric(
+        horizontal: horizontalPadding,
+        vertical: verticalPadding,
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // 👋 Saludo
+          Container(
+            width: double.infinity,
+            padding: EdgeInsets.symmetric(
+              vertical: isTablet ? 32 : 30,
+              horizontal: isTablet ? 28 : 12,
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                RichText(
+                  text: TextSpan(
+                    style: AppTextStyles.heading(context).copyWith(
+                      fontSize: headingFontSize,
                     ),
+                    children: [
+                      const TextSpan(text: 'Bienvenido '),
+                      TextSpan(
+                        text: '${obtenerNombreFormateado(widget.user.name)} ',
+                        style: AppTextStyles.heading(context).copyWith(
+                          fontSize: headingFontSize,
+                          fontWeight: FontWeight.w900,
+                        ),
+                      ),
+                      const TextSpan(text: '👋'),
+                    ],
                   ),
-                  const SizedBox(height: 8),
-                  Text(
-                    'Gestiona tu cuenta de manera rápida y sencilla.',
-                    style: AppTextStyles.bodySmall(context),
-                  ),
-                ],
+                ),
+                const SizedBox(height: 3),
+                Text(
+                  'Gestiona tu cuenta de manera rápida y sencilla.',
+                  style: AppTextStyles.bodySmall(context),
+                ),
+              ],
+            ),
+          ),
+
+          const SizedBox(height: 24),
+
+          // 🎯 Tarjeta de descuento
+          descuento == null
+              ? const DescuentoCardSkeleton()
+              : DescuentoCard(descuento: descuento!, user: widget.user),
+
+          const SizedBox(height: 30),
+
+          // 📌 Título
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              'Promociones',
+              style: AppTextStyles.heading(context).copyWith(
+                fontSize: headingFontSize,
               ),
             ),
+          ),
+          const SizedBox(height: 10),
 
-            const SizedBox(height: 24),
-
-            // Tarjeta de descuento
-            descuento == null
-                ? const DescuentoCardSkeleton()
-                : DescuentoCard(descuento: descuento!, user: widget.user),
-
-            const SizedBox(height: 42),
-
-            // Título de promociones
-            Text(
-              'Promociones',
-              style: AppTextStyles.heading(context).copyWith(fontSize: 20),
-            ),
-            const SizedBox(height: 16),
-
-            FutureBuilder<List<Promotion>>(
-              future: PromotionService.obtenerPromocionesActivas(),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return Column(
-                    children: const [
-                      PromocionCardSkeleton(),
-                      PromocionCardSkeleton(),
-                      PromocionCardSkeleton(),
-                    ],
-                  );
-                }
-
-                if (snapshot.hasError) {
-                  return Center(child: Text('Error: ${snapshot.error}'));
-                }
-
-                final promociones = snapshot.data ?? [];
-
-                if (promociones.isEmpty) {
-                  return const SinPromocionesWidget();
-                }
-                // aqui podras enco
-                return ListView.builder(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemCount: promociones.length,
-                  itemBuilder: (context, index) {
-                    final promo = promociones[index];
-                    return PromocionCardVisual(promo: promo);
-                  },
+          //  Lista de promociones
+          FutureBuilder<List<Promotion>>(
+            future: PromotionService.obtenerPromocionesActivas(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return Column(
+                  children: const [
+                    PromocionCardSkeleton(),
+                    PromocionCardSkeleton(),
+                    PromocionCardSkeleton(),
+                  ],
                 );
-              },
-            ),
-          ],
-        ),
+              }
+
+              if (snapshot.hasError) {
+                return Center(child: Text('Error: ${snapshot.error}'));
+              }
+
+              final promociones = snapshot.data ?? [];
+
+              if (promociones.isEmpty) {
+                return const SinPromocionesWidget();
+              }
+
+              return ListView.builder(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: promociones.length,
+                itemBuilder: (context, index) {
+                  final promo = promociones[index];
+                  return PromocionCardVisual(promo: promo);
+                },
+              );
+            },
+          ),
+        ],
       ),
-    );
-  }
+    ),
+  );
+}
 }

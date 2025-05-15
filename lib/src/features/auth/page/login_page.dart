@@ -1,10 +1,11 @@
-// lib/src/features/auth/pages/login_page.dart
 import 'package:flutter/material.dart';
 import 'package:app_creditos/src/shared/theme/app_colors.dart';
 import '../widgets/login_form.dart';
 import '../widgets/logo_title.dart';
 import '../../../shared/components/welcome_text.dart';
 
+/// Página de inicio de sesión con animación de entrada del logo y formulario.
+/// Se adapta a pantallas tipo tablet y detecta visibilidad del teclado.
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
 
@@ -18,6 +19,8 @@ class _LoginPageState extends State<LoginPage> {
   @override
   void initState() {
     super.initState();
+
+    // Retardo para animación inicial del contenedor
     Future.delayed(const Duration(milliseconds: 400), () {
       setState(() => showContainer = true);
     });
@@ -25,19 +28,19 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    final isKeyboardVisible = MediaQuery.of(context).viewInsets.bottom > 0;
-    final screenWidth = MediaQuery.of(context).size.width;
-    final isTablet = screenWidth > 600;
+    // Variables responsivas y de teclado
+    final bool   isKeyboardVisible  = MediaQuery.of(context).viewInsets.bottom > 0;
+    final double screenWidth        = MediaQuery.of(context).size.width;
+    final bool   isTablet           = screenWidth > 600;
 
-    final horizontalPadding = isTablet ? 70.0 : 24.0;
-    final verticalPadding = isTablet ? 72.0 : 48.0;
-    final double logoTop =
-        showContainer
-            ? (isKeyboardVisible ? 80.0 : (isTablet ? 300.0 : 180.0))
-            : 50.0;
+    final double horizontalPadding  = isTablet ? 70.0 : 20.0;
+    final double verticalPadding    = isTablet ? 72.0 : 10.0;
+    final double logoTop            = showContainer
+        ? (isKeyboardVisible ? 80.0 : (isTablet ? 300.0 : 150.0))
+        : 50.0;
 
     return Scaffold(
-      backgroundColor:AppColors.background(context),
+      backgroundColor: AppColors.background(context),
       body: Stack(
         children: [
           // LOGO animado
@@ -50,7 +53,7 @@ class _LoginPageState extends State<LoginPage> {
             child: const Center(child: LogoTitle()),
           ),
 
-          // FORMULARIO
+          // FORMULARIO animado
           AnimatedPositioned(
             duration: const Duration(milliseconds: 800),
             curve: Curves.easeOut,
@@ -76,6 +79,7 @@ class _LoginPageState extends State<LoginPage> {
   }
 }
 
+/// Contenido interno del formulario de login
 class _LoginBody extends StatelessWidget {
   const _LoginBody();
 
@@ -86,12 +90,11 @@ class _LoginBody extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         const WelcomeText(
-          titlePrefix: 'Bienvenidos a',
-          titleHighlight: 'CrediBridge',
-          titleSuffix: 'toma el control de tus finanzas',
-          subtitle: 'Introduce tu información y descubre tus opciones de crédito.',
+          titlePrefix:   'Bienvenidos a',
+          titleHighlight:'CrediBridge',
+          titleSuffix:   'toma el control de tus finanzas',
+          subtitle:      'Introduce tu información y descubre tus opciones de crédito.',
         ),
-
         const SizedBox(height: 24),
         const LoginForm(),
         const SizedBox(height: 24),
