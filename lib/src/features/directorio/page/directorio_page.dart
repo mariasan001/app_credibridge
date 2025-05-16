@@ -282,8 +282,7 @@ class _DirectorioPageState extends State<DirectorioPage> {
                                             const SizedBox(width: 4),
                                             Expanded(
                                               child: Text(
-                                                service.lender.lenderEmail ??
-                                                    'correo@desconocido.com',
+                                                service.lender.lenderEmail ,
                                                 style: AppTextStyles.promoBody(
                                                   context,
                                                 ),

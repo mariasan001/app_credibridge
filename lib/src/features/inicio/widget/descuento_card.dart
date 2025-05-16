@@ -109,7 +109,7 @@ class DescuentoCard extends StatelessWidget {
           borderRadius: BorderRadius.circular(12),
         ),
         closedColor: Colors.white,
-        openBuilder: (context, _) => SimulacionPage(user: user),
+        openBuilder: (context, _) => SimulacionPage(user: user, descuento: descuento!, ),
         closedBuilder:
             (context, openContainer) => _DashboardAction(
               icon: Icons.timeline_outlined,

@@ -38,7 +38,7 @@ class AppColors {
   static const Color buttonForeground = Colors.white;
   static const Color buttonDisabled = Colors.grey;
 
-  static const Color promoBackground = Color(0xFFFFFDF9);
+  static const Color promoBackground = Color.fromARGB(255, 255, 255, 255);
   static const Color promoYellow = Color(0xFFFFF0C2);
   static const Color promoButton = Color(0xFFFFE7A0);
   static const Color promoButtonIcon = Color(0xFFD19500);

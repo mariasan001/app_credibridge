@@ -7,7 +7,9 @@ import 'package:app_creditos/src/shared/components/ustom_app_bar.dart';
 
 class SimulacionPage extends StatelessWidget {
   final User user;
-  const SimulacionPage({super.key, required this.user});
+    final double? descuento;
+
+  const SimulacionPage({super.key, required this.user, required this.descuento  });
 
   @override
   Widget build(BuildContext context) {
@@ -53,7 +55,7 @@ class SimulacionPage extends StatelessWidget {
             const SizedBox(height: 40),
 
             // 🔻 Formulario
-            FormularioSimulacion(user: user),
+            FormularioSimulacion(user: user, descuento: descuento! ),
             const SizedBox(height: 40),
 
             // 🔻 Texto informativo CAT

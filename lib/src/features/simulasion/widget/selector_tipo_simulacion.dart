@@ -1,3 +1,4 @@
+import 'package:app_creditos/src/features/simulasion/models/solicitud_credito_data.dart';
 import 'package:flutter/material.dart';
 import 'package:app_creditos/src/features/simulasion/model/sim_type_model.dart';
 import 'package:app_creditos/src/features/simulasion/services/simulacion_service.dart';
@@ -8,9 +9,11 @@ import 'package:app_creditos/src/shared/theme/app_text_styles.dart';
 class SelectorTipoSimulacion extends StatefulWidget {
   final Function(SimType?)? onChanged;
   final SimType? initialValue;
+  final SolicitudCreditoData solicitudData;
 
   const SelectorTipoSimulacion({
     super.key,
+    required this.solicitudData,
     this.onChanged,
     this.initialValue,
   });
@@ -54,12 +57,12 @@ class _SelectorTipoSimulacionState extends State<SelectorTipoSimulacion> {
           children: [
             Text(
               'Tipo de simulación',
-              style: AppTextStyles.inputLabel(context),
+              style: AppTextStyles.heading(context).copyWith(fontSize: 18),
             ),
             const SizedBox(height: 8),
             Container(
               decoration: BoxDecoration(
-                color: const Color.fromARGB(255, 238, 237, 235),
+                color: const Color.fromARGB(255, 246, 246, 246),
                 borderRadius: BorderRadius.circular(12),
               ),
               padding: const EdgeInsets.symmetric(horizontal: 12),
@@ -84,13 +87,16 @@ class _SelectorTipoSimulacionState extends State<SelectorTipoSimulacion> {
                     isExpanded: true,
                     icon: const Icon(Icons.keyboard_arrow_down_rounded, color: Colors.grey),
                     borderRadius: BorderRadius.circular(12),
-                    dropdownColor: Colors.white,
+                    dropdownColor: const Color.fromARGB(255, 255, 255, 255),
                     menuMaxHeight: 220,
                     style: AppTextStyles.promoListText(context),
                     itemHeight: 48,
                     onChanged: (value) {
-                      setState(() => _selectedTipo = value);
-                      widget.onChanged?.call(value);
+                      setState(() {
+                        _selectedTipo = value;
+                        widget.solicitudData.tipoSimulacion = value;
+                        widget.onChanged?.call(value);
+                      });
                     },
                     items: tipos.map((tipo) {
                       final isSelected = _selectedTipo?.id == tipo.id;
@@ -101,7 +107,7 @@ class _SelectorTipoSimulacionState extends State<SelectorTipoSimulacion> {
                           children: [
                             Text(
                               capitalizarSoloPrimera(tipo.name),
-                              style: AppTextStyles.promoListText(context),
+                              style: AppTextStyles.bodySmall(context),
                             ),
                             if (isSelected)
                               const Icon(Icons.check, size: 16, color: AppColors.primary),
