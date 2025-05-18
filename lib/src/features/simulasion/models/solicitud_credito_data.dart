@@ -19,9 +19,13 @@ class SolicitudCreditoData {
   int? lenderId;
   String? lenderName;
 
-
+  // Capital ofrecido
   double? capital;
 
+ 
+  double? descuento;
+
+  // Constructor actualizado
   SolicitudCreditoData({
     this.userId,
     this.tipoSimulacion,
@@ -32,15 +36,15 @@ class SolicitudCreditoData {
     this.lenderId,
     this.lenderName,
     this.capital,
+    this.descuento, 
   });
 
   Map<String, dynamic> toJson() {
     return {
       'userId': userId,
       'tipoSimulacion': tipoSimulacion != null
-    ? {'id': tipoSimulacion!.id, 'name': tipoSimulacion!.name}
-    : null,
-
+          ? {'id': tipoSimulacion!.id, 'name': tipoSimulacion!.name}
+          : null,
       'monto': monto,
       'plazo': plazo,
       'tasaAnual': tasaAnual,
@@ -48,6 +52,7 @@ class SolicitudCreditoData {
       'lenderId': lenderId,
       'lenderName': lenderName,
       'capital': capital,
+      'descuento': descuento,
     };
   }
 

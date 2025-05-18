@@ -1,59 +1,38 @@
-class Contract {
-  final String userId;
-  final int lenderServiceId;
+class ContratoModel {
   final int lenderId;
-  final int documentation;
+  final String userId;
   final int contractType;
   final int installments;
   final double amount;
-  final double monthlyDeductionAmount;
+  final int monthlyDeductionAmount;
   final double effectiveRate;
+  final double effectiveAnnualRate;
   final String phone;
-  final int contractStatusId;
-  final int creditId;
-  final double annualRate;
-  final int termMonths;
-  final String startDate;
-  final String endAt;
-  final String paymentFrequency;
 
-  Contract({
-    required this.userId,
-    required this.lenderServiceId,
+  ContratoModel({
     required this.lenderId,
-    required this.documentation,
+    required this.userId,
     required this.contractType,
     required this.installments,
     required this.amount,
     required this.monthlyDeductionAmount,
     required this.effectiveRate,
+    required this.effectiveAnnualRate,
     required this.phone,
-    required this.contractStatusId,
-    required this.creditId,
-    required this.annualRate,
-    required this.termMonths,
-    required this.startDate,
-    required this.endAt,
-    required this.paymentFrequency,
   });
 
-  Map<String, dynamic> toJson() => {
+Map<String, dynamic> toJson() {
+  return {
+    "lenderId": lenderId, 
     "userId": userId,
-    "lenderServiceId": lenderServiceId,
-    "lenderId": lenderId,
-    "documentation": documentation,
     "contractType": contractType,
     "installments": installments,
     "amount": amount,
     "monthlyDeductionAmount": monthlyDeductionAmount,
     "effectiveRate": effectiveRate,
+    "effectiveAnnualRate": effectiveAnnualRate,
     "phone": phone,
-    "contractStatusId": contractStatusId,
-    "creditId": creditId,
-    "annualRate": annualRate,
-    "termMonths": termMonths,
-    "startDate": startDate,
-    "endAt": endAt,
-    "paymentFrequency": paymentFrequency,
   };
+}
+
 }

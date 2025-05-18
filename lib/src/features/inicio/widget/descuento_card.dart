@@ -22,7 +22,7 @@ class DescuentoCard extends StatelessWidget {
     if (descuento == null) return const DescuentoCardSkeleton();
 
     return Container(
-      padding: EdgeInsets.all(isTablet ? 24 : 16),
+      padding: EdgeInsets.all(isTablet ? 24 : 12),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(24),
@@ -38,11 +38,11 @@ class DescuentoCard extends StatelessWidget {
         children: [
           Text(
             'Total de descuento disponible',
-            style: AppTextStyles.heading(
-              context,
-            ).copyWith(fontSize: isTablet ? 18 : 16),
+            style: AppTextStyles.heading(context).copyWith(
+              fontSize: isTablet ? 18 : 16,
+            ),
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 11),
 
           /// Monto animado
           TweenAnimationBuilder<double>(
@@ -55,7 +55,7 @@ class DescuentoCard extends StatelessWidget {
                   symbol: '\$',
                 ).format(value),
                 style: AppTextStyles.heading(context).copyWith(
-                  fontSize: isTablet ? 48 : 45,
+                  fontSize: isTablet ? 48 : 50,
                   fontWeight: FontWeight.w900,
                   color: AppColors.primary,
                 ),
@@ -63,37 +63,31 @@ class DescuentoCard extends StatelessWidget {
             },
           ),
 
-          const SizedBox(height: 12),
+          const SizedBox(height: 8),
 
           Text(
             'Se muestra el monto que puede descontarse de tu nómina.',
             textAlign: TextAlign.center,
-            style: AppTextStyles.bodySmall(
-              context,
-            ).copyWith(fontSize: isTablet ? 14 : 12),
+            style: AppTextStyles.bodySmall(context).copyWith(
+              fontSize: isTablet ? 14 : 10,
+            ),
           ),
 
-          const SizedBox(height: 24),
+          const SizedBox(height: 20),
 
-          /// Acciones
+          /// Acciones responsivas
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
             decoration: BoxDecoration(
               color: const Color(0xFFFCF8F2),
               borderRadius: BorderRadius.circular(16),
             ),
-            child:
-                isTablet
-                    ? Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: _buildDashboardActions(context),
-                    )
-                    : Wrap(
-                      spacing: 12,
-                      runSpacing: 12,
-                      alignment: WrapAlignment.center,
-                      children: _buildDashboardActions(context),
-                    ),
+            child: Wrap(
+              spacing: 10,
+              runSpacing: 10,
+              alignment: WrapAlignment.spaceEvenly,
+              children: _buildDashboardActions(context),
+            ),
           ),
         ],
       ),
@@ -109,15 +103,14 @@ class DescuentoCard extends StatelessWidget {
           borderRadius: BorderRadius.circular(12),
         ),
         closedColor: Colors.white,
-        openBuilder: (context, _) => SimulacionPage(user: user, descuento: descuento!, ),
-        closedBuilder:
-            (context, openContainer) => _DashboardAction(
-              icon: Icons.timeline_outlined,
-              label: 'Simular',
-              onTap: openContainer,
-            ),
+        openBuilder: (context, _) =>
+            SimulacionPage(user: user, descuento: descuento!),
+        closedBuilder: (context, openContainer) => _DashboardAction(
+          icon: Icons.timeline_outlined,
+          label: 'Simular',
+          onTap: openContainer,
+        ),
       ),
-
       _DashboardAction(
         icon: Icons.swap_horiz,
         label: 'Movimientos',
@@ -137,12 +130,11 @@ class DescuentoCard extends StatelessWidget {
         ),
         closedColor: Colors.white,
         openBuilder: (context, _) => DirectorioPage(user: user),
-        closedBuilder:
-            (context, openContainer) => _DashboardAction(
-              icon: Icons.book_outlined,
-              label: 'Directorio',
-              onTap: openContainer,
-            ),
+        closedBuilder: (context, openContainer) => _DashboardAction(
+          icon: Icons.book_outlined,
+          label: 'Directorio',
+          onTap: openContainer,
+        ),
       ),
     ];
   }
@@ -153,15 +145,19 @@ class _DashboardAction extends StatelessWidget {
   final String label;
   final VoidCallback? onTap;
 
-  const _DashboardAction({required this.icon, required this.label, this.onTap});
+  const _DashboardAction({
+    required this.icon,
+    required this.label,
+    this.onTap,
+  });
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        width: 100,
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+        constraints: const BoxConstraints(minWidth: 90, maxWidth: 140),
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(12),
@@ -183,7 +179,7 @@ class _DashboardAction extends StatelessWidget {
               textAlign: TextAlign.center,
               style: AppTextStyles.bodySmall(context).copyWith(
                 fontWeight: FontWeight.w600,
-                fontSize: 12,
+                fontSize: 11,
                 color: Colors.black87,
               ),
             ),

@@ -4,7 +4,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 enum Environment { casa, oficina, prod }
 
 class ApiService {
-  static const Environment currentEnv = Environment.oficina;
+  static const Environment currentEnv = Environment.casa;
 
   static String _getBaseUrl() {
     switch (currentEnv) {

@@ -63,9 +63,9 @@ Widget build(BuildContext context) {
   final screenWidth = MediaQuery.of(context).size.width;
   final isTablet    = screenWidth > 600;
 
-  final horizontalPadding = isTablet ? 48.0 : 2.0;
+  final horizontalPadding = isTablet ? 48.0 : 1.0;
   final verticalPadding   = isTablet ? 24.0 : 1.0;
-  final headingFontSize   = isTablet ? 26.0 : 20.0;
+  final headingFontSize   = isTablet ? 26.0 : 18.0;
 
   return Scaffold(
     backgroundColor: AppColors.background(context), 
@@ -82,7 +82,7 @@ Widget build(BuildContext context) {
           Container(
             width: double.infinity,
             padding: EdgeInsets.symmetric(
-              vertical: isTablet ? 32 : 30,
+              vertical: isTablet ? 32 : 20,
               horizontal: isTablet ? 28 : 12,
             ),
             child: Column(
@@ -115,14 +115,14 @@ Widget build(BuildContext context) {
             ),
           ),
 
-          const SizedBox(height: 24),
+          const SizedBox(height: 10),
 
           // 🎯 Tarjeta de descuento
           descuento == null
               ? const DescuentoCardSkeleton()
               : DescuentoCard(descuento: descuento!, user: widget.user),
 
-          const SizedBox(height: 30),
+          const SizedBox(height: 20),
 
           // 📌 Título
           Padding(
@@ -134,7 +134,7 @@ Widget build(BuildContext context) {
               ),
             ),
           ),
-          const SizedBox(height: 10),
+          const SizedBox(height: 3),
 
           //  Lista de promociones
           FutureBuilder<List<Promotion>>(

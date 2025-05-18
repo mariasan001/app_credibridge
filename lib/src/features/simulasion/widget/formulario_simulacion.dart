@@ -15,6 +15,7 @@ import 'package:flutter_masked_text2/flutter_masked_text2.dart';
 class FormularioSimulacion extends StatefulWidget {
   final User user;
   final double? descuento;
+
   const FormularioSimulacion({
     super.key,
     required this.user,
@@ -48,6 +49,7 @@ class _FormularioSimulacionState extends State<FormularioSimulacion> {
 
   Future<void> _handleSimular(Function openContainer) async {
     if (!_formKey.currentState!.validate()) return;
+
     if (_tipoSeleccionado == null) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Selecciona un tipo de simulación')),
@@ -55,6 +57,7 @@ class _FormularioSimulacionState extends State<FormularioSimulacion> {
       return;
     }
 
+    // Validación de descuento si el tipo es "por descuento"
     if (_tipoSeleccionado!.id == 2 &&
         widget.descuento != null &&
         _montoController.numberValue > widget.descuento!) {
@@ -75,10 +78,12 @@ class _FormularioSimulacionState extends State<FormularioSimulacion> {
       paymentAmount: _montoController.numberValue,
     );
 
-    solicitud
-      ..tipoSimulacion = _tipoSeleccionado
-      ..monto = _montoController.numberValue
-      ..plazo = int.tryParse(_plazoController.text);
+    // ✅ Guardar datos en el modelo de solicitud, incluyendo el descuento
+solicitud
+  ..tipoSimulacion = _tipoSeleccionado
+  ..monto = _montoController.numberValue
+  ..plazo = int.tryParse(_plazoController.text)
+  ..descuento = widget.descuento; // ✅ ACTIVA esta línea
 
     try {
       final resultados = await _service.simularPrestamo(request);
@@ -122,12 +127,11 @@ class _FormularioSimulacionState extends State<FormularioSimulacion> {
         borderRadius: BorderRadius.circular(8),
       ),
       closedColor: Colors.transparent,
-      openBuilder:
-          (context, _) => ResultadosSimulacionPage(
-            user: widget.user,
-            resultados: _resultados,
-            solicitud: solicitud,
-          ),
+      openBuilder: (context, _) => ResultadosSimulacionPage(
+        user: widget.user,
+        resultados: _resultados,
+        solicitud: solicitud,
+      ),
       closedBuilder: (context, openContainer) {
         return AnimatedContainer(
           duration: const Duration(milliseconds: 300),
@@ -172,7 +176,7 @@ class _FormularioSimulacionState extends State<FormularioSimulacion> {
                   Padding(
                     padding: const EdgeInsets.only(bottom: 8),
                     child: Text(
-                      'Tu límite maximo de descuento es: \$${widget.descuento!.toStringAsFixed(2)}',
+                      'Tu límite máximo de descuento es: \$${widget.descuento!.toStringAsFixed(2)}',
                       style: AppTextStyles.bodySmall(context).copyWith(
                         color: AppColors.primary,
                         fontWeight: FontWeight.bold,
@@ -211,7 +215,7 @@ class _FormularioSimulacionState extends State<FormularioSimulacion> {
                     hint: 'Número de plazos',
                     icon: const Icon(Icons.calendar_today_outlined),
                   ),
-                   style: AppTextStyles.linkMuted(context),
+                  style: AppTextStyles.linkMuted(context),
                   validator: (value) {
                     final plazo = int.tryParse(value ?? '');
                     if (plazo == null || plazo < 1 || plazo > 96) {
@@ -233,20 +237,19 @@ class _FormularioSimulacionState extends State<FormularioSimulacion> {
                         borderRadius: BorderRadius.circular(16),
                       ),
                     ),
-                    child:
-                        _loading
-                            ? const SizedBox(
-                              height: 22,
-                              width: 22,
-                              child: CircularProgressIndicator(
-                                strokeWidth: 2,
-                                color: Colors.white,
-                              ),
-                            )
-                            : Text(
-                              'Simular Préstamo',
-                              style: AppTextStyles.buttonText(context),
+                    child: _loading
+                        ? const SizedBox(
+                            height: 22,
+                            width: 22,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 2,
+                              color: Colors.white,
                             ),
+                          )
+                        : Text(
+                            'Simular Préstamo',
+                            style: AppTextStyles.buttonText(context),
+                          ),
                   ),
                 ),
               ],

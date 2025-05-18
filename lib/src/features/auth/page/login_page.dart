@@ -33,10 +33,10 @@ class _LoginPageState extends State<LoginPage> {
     final double screenWidth        = MediaQuery.of(context).size.width;
     final bool   isTablet           = screenWidth > 600;
 
-    final double horizontalPadding  = isTablet ? 70.0 : 20.0;
-    final double verticalPadding    = isTablet ? 72.0 : 10.0;
+    final double horizontalPadding  = isTablet ? 70.0 : 16.0;
+    final double verticalPadding    = isTablet ? 72.0 : 5.0;
     final double logoTop            = showContainer
-        ? (isKeyboardVisible ? 80.0 : (isTablet ? 300.0 : 150.0))
+        ? (isKeyboardVisible ? 80.0 : (isTablet ? 300.0 : 105.0))
         : 50.0;
 
     return Scaffold(
