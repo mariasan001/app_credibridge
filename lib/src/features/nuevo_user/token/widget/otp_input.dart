@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-/// Widget para ingresar un código de 6 caracteres alfanuméricos.
-/// Cada carácter se ingresa en un campo separado y se notifica cuando se completa.
 class OtpInput extends StatefulWidget {
   final void Function(String) onCompleted;
 
@@ -12,7 +12,6 @@ class OtpInput extends StatefulWidget {
 }
 
 class _OtpInputState extends State<OtpInput> {
-  // Lista de controladores y focusNodes para los 6 campos
   final List<FocusNode> _focusNodes = List.generate(6, (_) => FocusNode());
   final List<TextEditingController> _controllers =
       List.generate(6, (_) => TextEditingController());
@@ -28,24 +27,25 @@ class _OtpInputState extends State<OtpInput> {
     super.dispose();
   }
 
-  /// Maneja el cambio en cada campo individual
   void _onChanged(String value, int index) {
-    // Validar que solo se permita un carácter alfanumérico
-    if (!RegExp(r'^[a-zA-Z0-9]?$').hasMatch(value)) {
+    if (!RegExp(r'^[a-zA-Z0-9]$').hasMatch(value)) {
       _controllers[index].clear();
       return;
     }
 
-    // Avanzar automáticamente al siguiente campo si no es el último
     if (value.isNotEmpty && index < 5) {
       _focusNodes[index + 1].requestFocus();
     }
 
-    // Construir el código completo
     final code = _controllers.map((c) => c.text).join();
-
-    // Notificar a la página padre
     widget.onCompleted(code);
+  }
+
+  void _onBackspace(int index) {
+    if (_controllers[index].text.isEmpty && index > 0) {
+      _focusNodes[index - 1].requestFocus();
+      _controllers[index - 1].clear();
+    }
   }
 
   @override
@@ -54,9 +54,9 @@ class _OtpInputState extends State<OtpInput> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: List.generate(6, (i) {
         return Container(
-          width: 50,
-          height: 50,
-          margin: const EdgeInsets.symmetric(horizontal: 6),
+          width: 48.w,
+          height: 56.h,
+          margin: EdgeInsets.symmetric(horizontal: 6.w),
           child: TextField(
             controller: _controllers[i],
             focusNode: _focusNodes[i],
@@ -64,8 +64,8 @@ class _OtpInputState extends State<OtpInput> {
             maxLength: 1,
             keyboardType: TextInputType.text,
             textInputAction: TextInputAction.next,
-            style: const TextStyle(
-              fontSize: 20,
+            style: TextStyle(
+              fontSize: 22.sp,
               fontWeight: FontWeight.bold,
               letterSpacing: 1.5,
             ),
@@ -73,22 +73,32 @@ class _OtpInputState extends State<OtpInput> {
               counterText: '',
               contentPadding: EdgeInsets.zero,
               enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(25),
+                borderRadius: BorderRadius.circular(20.r),
                 borderSide: BorderSide(color: Colors.grey.shade400),
               ),
               focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(25),
+                borderRadius: BorderRadius.circular(20.r),
                 borderSide: const BorderSide(color: Colors.teal, width: 2),
               ),
             ),
             onChanged: (value) {
-              // Convertir cualquier entrada a mayúsculas
-              final uppercaseValue = value.toUpperCase();
+              final upper = value.toUpperCase();
               _controllers[i].value = TextEditingValue(
-                text: uppercaseValue,
-                selection: TextSelection.collapsed(offset: uppercaseValue.length),
+                text: upper,
+                selection: TextSelection.collapsed(offset: upper.length),
               );
-              _onChanged(uppercaseValue, i);
+              _onChanged(upper, i);
+            },
+            inputFormatters: [
+              FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z0-9]')),
+            ],
+            onTapOutside: (_) => FocusScope.of(context).unfocus(),
+            onEditingComplete: () {},
+            onSubmitted: (_) {
+              if (i == 5) {
+                final code = _controllers.map((c) => c.text).join();
+                widget.onCompleted(code);
+              }
             },
           ),
         );

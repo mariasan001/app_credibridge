@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:app_creditos/src/shared/theme/app_colors.dart';
 import 'package:app_creditos/src/features/auth/models/user_model.dart';
 
 // Componentes externos
 import 'package:app_creditos/src/shared/components/notification_popup.dart';
 import 'package:app_creditos/src/shared/components/theme_toggle_button.dart';
-import 'package:app_creditos/src/shared/components/options_menu.dart';
+import 'package:app_creditos/src/shared/components/options_menu_button.dart'; // Asegúrate de tenerlo
 
+/// AppBar personalizado con logo, notificaciones y menú de usuario.
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final User user;
 
@@ -26,15 +28,15 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
               style: TextStyle(
                 color: AppColors.primary,
                 fontWeight: FontWeight.w900,
-                fontSize: 25,
+                fontSize: 24.sp, // Escalado responsivo
               ),
             ),
-            const TextSpan(
-              text: 'Bring',
+            TextSpan(
+              text: 'Bridge',
               style: TextStyle(
                 color: Colors.black,
                 fontWeight: FontWeight.w900,
-                fontSize: 25,
+                fontSize: 24.sp,
               ),
             ),
           ],
@@ -43,11 +45,11 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       actions: [
         const NotificationPopupButton(),
         const ThemeToggleButton(),
-        OptionsMenuButton(user: user), // ✅ Se pasa correctamente
+        OptionsMenuButton(user: user), // ✅ Aquí ya sí aparece
       ],
     );
   }
 
   @override
-  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
+  Size get preferredSize => Size.fromHeight(kToolbarHeight);
 }

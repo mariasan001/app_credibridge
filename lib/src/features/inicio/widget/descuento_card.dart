@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:animations/animations.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:app_creditos/src/features/auth/models/user_model.dart';
 import 'package:app_creditos/src/features/simulasion/page/simulasion_page.dart';
 import 'package:app_creditos/src/features/directorio/page/directorio_page.dart';
@@ -12,155 +13,130 @@ class DescuentoCard extends StatelessWidget {
   final double? descuento;
   final User user;
 
-  const DescuentoCard({super.key, required this.descuento, required this.user});
+  const DescuentoCard({
+    super.key,
+    required this.descuento,
+    required this.user,
+  });
 
   @override
   Widget build(BuildContext context) {
-    final double screenWidth = MediaQuery.of(context).size.width;
-    final bool isTablet = screenWidth > 600;
-
+    // Skeleton si no hay datos aún
     if (descuento == null) return const DescuentoCardSkeleton();
 
-    return Container(
-      padding: EdgeInsets.all(isTablet ? 24 : 12),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(24),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.04),
-            blurRadius: 6,
-            offset: const Offset(0, 3),
-          ),
-        ],
-      ),
-      child: Column(
-        children: [
-          Text(
-            'Total de descuento disponible',
-            style: AppTextStyles.heading(context).copyWith(
-              fontSize: isTablet ? 18 : 16,
+    return AnimatedOpacity(
+      duration: const Duration(milliseconds: 300),
+      opacity: descuento != null ? 1.0 : 0.0,
+      child: Container(
+        padding: EdgeInsets.all(20.r),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(24.r),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.04),
+              blurRadius: 6,
+              offset: const Offset(0, 3),
             ),
-          ),
-          const SizedBox(height: 11),
-
-          /// Monto animado
-          TweenAnimationBuilder<double>(
-            tween: Tween(begin: 0, end: descuento!),
-            duration: const Duration(milliseconds: 600),
-            builder: (context, value, child) {
-              return Text(
-                NumberFormat.currency(
-                  locale: 'es_MX',
-                  symbol: '\$',
-                ).format(value),
-                style: AppTextStyles.heading(context).copyWith(
-                  fontSize: isTablet ? 48 : 50,
-                  fontWeight: FontWeight.w900,
-                  color: AppColors.primary,
-                ),
-              );
-            },
-          ),
-
-          const SizedBox(height: 8),
-
-          Text(
-            'Se muestra el monto que puede descontarse de tu nómina.',
-            textAlign: TextAlign.center,
-            style: AppTextStyles.bodySmall(context).copyWith(
-              fontSize: isTablet ? 14 : 10,
+          ],
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Text(
+              'Total de descuento disponible',
+              style: AppTextStyles.heading(context).copyWith(fontSize: 16.sp),
             ),
-          ),
+            SizedBox(height: 10.h),
 
-          const SizedBox(height: 20),
+            /// Animación suave con easing personalizado
+            TweenAnimationBuilder<double>(
+              tween: Tween(begin: 0, end: descuento!),
+              duration: const Duration(milliseconds: 900),
+              curve: Curves.easeOutCubic,
+              builder: (_, value, __) {
+                return Text(
+                  NumberFormat.currency(locale: 'es_MX', symbol: '\$').format(value),
+                  style: AppTextStyles.heading(context).copyWith(
+                    fontSize: 42.sp,
+                    fontWeight: FontWeight.w900,
+                    color: AppColors.primary,
+                  ),
+                );
+              },
+            ),
 
-          /// Acciones responsivas
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-            decoration: BoxDecoration(
-              color: const Color(0xFFFCF8F2),
-              borderRadius: BorderRadius.circular(16),
+            SizedBox(height: 8.h),
+            Text(
+              'Se muestra el monto que puede descontarse de tu nómina.',
+              textAlign: TextAlign.center,
+              style: AppTextStyles.bodySmall(context).copyWith(fontSize: 12.sp),
             ),
-            child: Wrap(
-              spacing: 10,
-              runSpacing: 10,
-              alignment: WrapAlignment.spaceEvenly,
-              children: _buildDashboardActions(context),
+            SizedBox(height: 20.h),
+
+            /// Acciones
+            Container(
+              padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 10.h),
+              decoration: BoxDecoration(
+                color: const Color(0xFFFCF8F2),
+                borderRadius: BorderRadius.circular(16.r),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: _buildDashboardActions(context),
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
 
   List<Widget> _buildDashboardActions(BuildContext context) {
     return [
-      OpenContainer(
-        transitionType: ContainerTransitionType.fadeThrough,
-        closedElevation: 0,
-        closedShape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
-        ),
-        closedColor: Colors.white,
-        openBuilder: (context, _) =>
-            SimulacionPage(user: user, descuento: descuento!),
-        closedBuilder: (context, openContainer) => _DashboardAction(
-          icon: Icons.timeline_outlined,
-          label: 'Simular',
-          onTap: openContainer,
+      _buildActionContainer(
+        context: context,
+        icon: Icons.timeline_outlined,
+        label: 'Simular',
+        onTap: () => Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (_) => SimulacionPage(user: user, descuento: descuento!),
+          ),
         ),
       ),
-      _DashboardAction(
+      _buildActionContainer(
+        context: context,
         icon: Icons.swap_horiz,
         label: 'Movimientos',
-        onTap: () {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('Función "Movimientos" aún no disponible'),
-            ),
-          );
-        },
-      ),
-      OpenContainer(
-        transitionType: ContainerTransitionType.fadeThrough,
-        closedElevation: 0,
-        closedShape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
+        onTap: () => ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Función "Movimientos" aún no disponible')),
         ),
-        closedColor: Colors.white,
-        openBuilder: (context, _) => DirectorioPage(user: user),
-        closedBuilder: (context, openContainer) => _DashboardAction(
-          icon: Icons.book_outlined,
-          label: 'Directorio',
-          onTap: openContainer,
+      ),
+      _buildActionContainer(
+        context: context,
+        icon: Icons.book_outlined,
+        label: 'Directorio',
+        onTap: () => Navigator.of(context).push(
+          MaterialPageRoute(builder: (_) => DirectorioPage(user: user)),
         ),
       ),
     ];
   }
-}
 
-class _DashboardAction extends StatelessWidget {
-  final IconData icon;
-  final String label;
-  final VoidCallback? onTap;
-
-  const _DashboardAction({
-    required this.icon,
-    required this.label,
-    this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
+  Widget _buildActionContainer({
+    required BuildContext context,
+    required IconData icon,
+    required String label,
+    required VoidCallback onTap,
+  }) {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        constraints: const BoxConstraints(minWidth: 90, maxWidth: 140),
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+        constraints: BoxConstraints(minWidth: 90.w, maxWidth: 120.w),
+        padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 12.h),
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(12.r),
           boxShadow: [
             BoxShadow(
               color: Colors.black.withOpacity(0.05),
@@ -170,16 +146,14 @@ class _DashboardAction extends StatelessWidget {
           ],
         ),
         child: Column(
-          mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(icon, size: 25, color: Colors.black87),
-            const SizedBox(height: 6),
+            Icon(icon, size: 25.sp, color: Colors.black87),
+            SizedBox(height: 6.h),
             Text(
               label,
-              textAlign: TextAlign.center,
               style: AppTextStyles.bodySmall(context).copyWith(
                 fontWeight: FontWeight.w600,
-                fontSize: 11,
+                fontSize: 11.sp,
                 color: Colors.black87,
               ),
             ),

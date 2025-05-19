@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class NotificationPopupButton extends StatefulWidget {
   const NotificationPopupButton({super.key});
@@ -19,35 +20,30 @@ class _NotificationPopupButtonState extends State<NotificationPopupButton> {
     _overlayEntry = OverlayEntry(
       builder: (context) => Stack(
         children: [
-          /// Fondo transparente que cierra el popup al tocar fuera
           GestureDetector(
-            onTap: () {
-              _overlayEntry?.remove();
-              _overlayEntry = null;
-            },
+            onTap: _closePopup,
             behavior: HitTestBehavior.translucent,
             child: Container(color: Colors.transparent),
           ),
 
-          /// Tarjeta emergente
           Positioned(
-            left: offset.dx - 240 + size.width / 2,
-            top:  offset.dy + size.height + 6,
+            left: offset.dx - 200.w + size.width / 2,
+            top: offset.dy + size.height + 6.h,
             child: Material(
               color: Colors.transparent,
               child: Container(
-                width: 350,
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+                width: 320.w,
+                padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 20.h),
                 decoration: BoxDecoration(
                   color: Theme.of(context).brightness == Brightness.dark
                       ? const Color(0xFF2A2A2A)
                       : Colors.white,
-                  borderRadius: BorderRadius.circular(18),
+                  borderRadius: BorderRadius.circular(18.r),
                   boxShadow: [
                     BoxShadow(
                       color: Colors.black.withOpacity(0.06),
-                      blurRadius: 14,
-                      offset: const Offset(0, 4),
+                      blurRadius: 14.r,
+                      offset: Offset(0, 4.h),
                     ),
                   ],
                 ),
@@ -55,7 +51,7 @@ class _NotificationPopupButtonState extends State<NotificationPopupButton> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Container(
-                      padding: const EdgeInsets.all(12),
+                      padding: EdgeInsets.all(12.r),
                       decoration: BoxDecoration(
                         color: Theme.of(context).brightness == Brightness.dark
                             ? Colors.grey.shade800
@@ -64,29 +60,29 @@ class _NotificationPopupButtonState extends State<NotificationPopupButton> {
                       ),
                       child: Icon(
                         Icons.notifications_off_outlined,
-                        size: 28,
+                        size: 28.sp,
                         color: Theme.of(context).brightness == Brightness.dark
                             ? Colors.white60
                             : Colors.black54,
                       ),
                     ),
-                    const SizedBox(height: 14),
+                    SizedBox(height: 14.h),
                     Text(
                       'Sin notificaciones',
                       style: TextStyle(
-                        fontSize: 15,
+                        fontSize: 15.sp,
                         fontWeight: FontWeight.w600,
                         color: Theme.of(context).brightness == Brightness.dark
                             ? Colors.white
                             : Colors.black87,
                       ),
                     ),
-                    const SizedBox(height: 6),
+                    SizedBox(height: 6.h),
                     Text(
                       'Vuelve pronto para revisar tus actualizaciones.',
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                        fontSize: 13,
+                        fontSize: 13.sp,
                         color: Theme.of(context).brightness == Brightness.dark
                             ? Colors.white54
                             : Colors.grey,
@@ -104,6 +100,11 @@ class _NotificationPopupButtonState extends State<NotificationPopupButton> {
     Overlay.of(context).insert(_overlayEntry!);
   }
 
+  void _closePopup() {
+    _overlayEntry?.remove();
+    _overlayEntry = null;
+  }
+
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
@@ -112,6 +113,7 @@ class _NotificationPopupButtonState extends State<NotificationPopupButton> {
       key: _notifKey,
       icon: Icon(
         Icons.notifications_none,
+        size: 24.sp,
         color: isDark ? Colors.white : Colors.black,
       ),
       onPressed: _showPopup,

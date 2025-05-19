@@ -1,17 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:app_creditos/src/shared/theme/app_colors.dart';
 import 'package:app_creditos/src/shared/theme/app_text_styles.dart';
 
-/// Campo de texto personalizado para capturar el número de servidor público.
-/// Este campo es obligatorio y sólo permite números.
+/// Número de Servidor Público
 class NumeroServidorField extends StatelessWidget {
   final TextEditingController controller;
 
-  const NumeroServidorField({
-    super.key,
-    required this.controller,
-  });
+  const NumeroServidorField({super.key, required this.controller});
 
   @override
   Widget build(BuildContext context) {
@@ -24,22 +21,17 @@ class NumeroServidorField extends StatelessWidget {
         floatingLabelBehavior: FloatingLabelBehavior.always,
         labelStyle: AppTextStyles.inputLabel(context),
         hintStyle: AppTextStyles.inputHint(context),
-        contentPadding: const EdgeInsets.symmetric(
-          horizontal: 16,
-          vertical: 14,
-        ),
+        contentPadding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 14.h),
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
-                    borderSide:  BorderSide(color: AppColors.inputBorder(context)),
-
+          borderRadius: BorderRadius.circular(8.r),
+          borderSide: BorderSide(color: AppColors.inputBorder(context)),
         ),
         enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
-                    borderSide:  BorderSide(color: AppColors.inputBorder(context)),
-
+          borderRadius: BorderRadius.circular(8.r),
+          borderSide: BorderSide(color: AppColors.inputBorder(context)),
         ),
         focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: BorderRadius.circular(8.r),
           borderSide: const BorderSide(color: AppColors.primary, width: 2),
         ),
       ),
@@ -52,6 +44,8 @@ class NumeroServidorField extends StatelessWidget {
     );
   }
 }
+
+/// Plaza
 class PlazaField extends StatelessWidget {
   final TextEditingController controller;
 
@@ -67,19 +61,17 @@ class PlazaField extends StatelessWidget {
         floatingLabelBehavior: FloatingLabelBehavior.always,
         labelStyle: AppTextStyles.inputLabel(context),
         hintStyle: AppTextStyles.inputHint(context),
-        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+        contentPadding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 14.h),
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
-                    borderSide:  BorderSide(color: AppColors.inputBorder(context)),
-
+          borderRadius: BorderRadius.circular(8.r),
+          borderSide: BorderSide(color: AppColors.inputBorder(context)),
         ),
         enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
-                    borderSide:  BorderSide(color: AppColors.inputBorder(context)),
-
+          borderRadius: BorderRadius.circular(8.r),
+          borderSide: BorderSide(color: AppColors.inputBorder(context)),
         ),
         focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: BorderRadius.circular(8.r),
           borderSide: const BorderSide(color: AppColors.primary, width: 2),
         ),
       ),
@@ -92,6 +84,8 @@ class PlazaField extends StatelessWidget {
     );
   }
 }
+
+/// Código de Puesto
 class JobCodeField extends StatelessWidget {
   final TextEditingController controller;
 
@@ -107,19 +101,17 @@ class JobCodeField extends StatelessWidget {
         floatingLabelBehavior: FloatingLabelBehavior.always,
         labelStyle: AppTextStyles.inputLabel(context),
         hintStyle: AppTextStyles.inputHint(context),
-        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+        contentPadding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 14.h),
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
-                    borderSide:  BorderSide(color: AppColors.inputBorder(context)),
-
+          borderRadius: BorderRadius.circular(8.r),
+          borderSide: BorderSide(color: AppColors.inputBorder(context)),
         ),
         enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
-                    borderSide:  BorderSide(color: AppColors.inputBorder(context)),
-
+          borderRadius: BorderRadius.circular(8.r),
+          borderSide: BorderSide(color: AppColors.inputBorder(context)),
         ),
         focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: BorderRadius.circular(8.r),
           borderSide: const BorderSide(color: AppColors.primary, width: 2),
         ),
       ),
@@ -133,6 +125,7 @@ class JobCodeField extends StatelessWidget {
   }
 }
 
+/// RFC
 class RfcField extends StatelessWidget {
   final TextEditingController controller;
 
@@ -149,19 +142,17 @@ class RfcField extends StatelessWidget {
         floatingLabelBehavior: FloatingLabelBehavior.always,
         labelStyle: AppTextStyles.inputLabel(context),
         hintStyle: AppTextStyles.inputHint(context),
-        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+        contentPadding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 14.h),
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
-                    borderSide:  BorderSide(color: AppColors.inputBorder(context)),
-
+          borderRadius: BorderRadius.circular(8.r),
+          borderSide: BorderSide(color: AppColors.inputBorder(context)),
         ),
         enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
-                    borderSide:  BorderSide(color: AppColors.inputBorder(context)),
-
+          borderRadius: BorderRadius.circular(8.r),
+          borderSide: BorderSide(color: AppColors.inputBorder(context)),
         ),
         focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: BorderRadius.circular(8.r),
           borderSide: const BorderSide(color: AppColors.primary, width: 2),
         ),
       ),

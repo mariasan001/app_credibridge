@@ -32,18 +32,21 @@ class AppColors {
           ? Colors.black26
           : const Color(0x11000000);
 
-  // 🎨 Constantes (no cambian)
+  // 🎨 Constantes globales (colores base)
   static const Color primary = Color(0xFFFF944D);
+  static const Color accent = Color(0xFFFFE7A0);
+  static const Color backgroundLight = Color(0xFFFFFFFF);
   static const Color inputFocus = primary;
   static const Color buttonForeground = Colors.white;
   static const Color buttonDisabled = Colors.grey;
 
-  static const Color promoBackground = Color.fromARGB(255, 255, 255, 255);
+  // 🟡 Promociones y botones
   static const Color promoYellow = Color(0xFFFFF0C2);
   static const Color promoButton = Color(0xFFFFE7A0);
   static const Color promoButtonIcon = Color(0xFFD19500);
-  static const Color successCheck = Color(0xFF22C55E);
 
-  static const Color iconBgLight = Color.fromARGB(255, 242, 254, 224);
-  static const Color iconColorStrong = Color.fromARGB(255, 22, 116, 38);
+  // ✅ Iconos, validaciones
+  static const Color successCheck = Color(0xFF22C55E);
+  static const Color iconBgLight = Color(0xFFF2FEE0);
+  static const Color iconColorStrong = Color(0xFF167426);
 }

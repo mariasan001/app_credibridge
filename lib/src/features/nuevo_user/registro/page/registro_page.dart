@@ -1,20 +1,16 @@
-import 'package:app_creditos/src/features/nuevo_user/registro/model/servidor_publico_request.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
-// THEME & WIDGETS COMPARTIDOS
 import 'package:app_creditos/src/shared/theme/app_colors.dart';
 import 'package:app_creditos/src/shared/components/login_button.dart';
 import 'package:app_creditos/src/shared/components/welcome_text.dart';
 import 'package:app_creditos/src/features/auth/widgets/logo_title.dart';
 
-// COMPONENTES DE REGISTRO
 import 'package:app_creditos/src/features/nuevo_user/registro/widgets/numero_servidor_field.dart';
-
-// SERVICIOS Y MODELOS
+import 'package:app_creditos/src/features/nuevo_user/registro/model/servidor_publico_request.dart';
 import 'package:app_creditos/src/features/nuevo_user/registro/services/registro_service.dart';
 
-/// Página principal del registro de nuevos usuarios
 class RegistroPage extends StatefulWidget {
   const RegistroPage({super.key});
 
@@ -36,16 +32,12 @@ class _RegistroPageState extends State<RegistroPage> {
   @override
   Widget build(BuildContext context) {
     final isKeyboardVisible = MediaQuery.of(context).viewInsets.bottom > 0;
-    final screenWidth = MediaQuery.of(context).size.width;
-    final isTablet = screenWidth > 600;
-
-    final horizontalPadding = isTablet ? 70.0 : 24.0;
-    final verticalPadding = isTablet ? 72.0 : 48.0;
-    final double logoTop =
-        showContainer ? (isKeyboardVisible ? 150.0 : (isTablet ? 300.0 : 10.0)) : 50.0;
+    final double logoTop = showContainer
+        ? (isKeyboardVisible ? 120.h : 120.h)
+        : 60.h;
 
     return Scaffold(
-      backgroundColor:AppColors.background(context),
+      backgroundColor: AppColors.background(context),
       body: Stack(
         children: [
           AnimatedPositioned(
@@ -59,18 +51,15 @@ class _RegistroPageState extends State<RegistroPage> {
           AnimatedPositioned(
             duration: const Duration(milliseconds: 800),
             curve: Curves.easeOut,
-            bottom: showContainer ? 0 : -600,
+            bottom: showContainer ? 0 : -600.h,
             left: 0,
             right: 0,
             child: Container(
               width: double.infinity,
-              padding: EdgeInsets.symmetric(
-                horizontal: horizontalPadding,
-                vertical: verticalPadding,
-              ),
-              decoration: const BoxDecoration(
+              padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 32.h),
+              decoration: BoxDecoration(
                 color: Colors.white,
-                borderRadius: BorderRadius.vertical(top: Radius.circular(32)),
+                borderRadius: BorderRadius.vertical(top: Radius.circular(32.r)),
               ),
               child: const _RegistroBody(),
             ),
@@ -81,7 +70,6 @@ class _RegistroPageState extends State<RegistroPage> {
   }
 }
 
-/// Contenido del formulario de registro
 class _RegistroBody extends StatefulWidget {
   const _RegistroBody();
 
@@ -147,15 +135,15 @@ class _RegistroBodyState extends State<_RegistroBody> {
             titleSuffix: 'aquí',
             subtitle: 'Ingresa tus datos laborales para continuar.',
           ),
-          const SizedBox(height: 12),
+          SizedBox(height: 24.h),
           NumeroServidorField(controller: _numeroController),
-          const SizedBox(height: 12),
+          SizedBox(height: 16.h),
           PlazaField(controller: _plazaController),
-          const SizedBox(height: 12),
+          SizedBox(height: 16.h),
           JobCodeField(controller: _jobCodeController),
-          const SizedBox(height: 12),
+          SizedBox(height: 16.h),
           RfcField(controller: _rfcController),
-          const SizedBox(height: 24),
+          SizedBox(height: 28.h),
           SizedBox(
             width: double.infinity,
             child: PrimaryButton(
@@ -164,11 +152,11 @@ class _RegistroBodyState extends State<_RegistroBody> {
               onPressed: _buscarServidor,
             ),
           ),
-          const SizedBox(height: 24),
+          SizedBox(height: 20.h),
           Center(
             child: Text(
               'Aviso de privacidad',
-              style: Theme.of(context).textTheme.labelSmall,
+              style: Theme.of(context).textTheme.labelSmall?.copyWith(fontSize: 10.sp),
             ),
           ),
         ],

@@ -1,5 +1,7 @@
 import 'package:app_creditos/src/features/simulasion/models/solicitud_credito_data.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 import 'package:app_creditos/src/features/simulasion/model/sim_type_model.dart';
 import 'package:app_creditos/src/features/simulasion/services/simulacion_service.dart';
 import 'package:app_creditos/src/features/simulasion/utils/text_utils.dart';
@@ -40,14 +42,20 @@ class _SelectorTipoSimulacionState extends State<SelectorTipoSimulacion> {
       future: _futureTipos,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Padding(
-            padding: EdgeInsets.symmetric(vertical: 16),
-            child: CircularProgressIndicator(),
+          return Padding(
+            padding: EdgeInsets.symmetric(vertical: 16.h),
+            child: const Center(child: CircularProgressIndicator()),
           );
         }
 
         if (snapshot.hasError) {
-          return Text('Error al cargar tipos: ${snapshot.error}');
+          return Padding(
+            padding: EdgeInsets.symmetric(vertical: 8.h),
+            child: Text(
+              'Error al cargar tipos de simulación',
+              style: AppTextStyles.bodySmall(context).copyWith(color: Colors.red),
+            ),
+          );
         }
 
         final tipos = snapshot.data ?? [];
@@ -57,65 +65,48 @@ class _SelectorTipoSimulacionState extends State<SelectorTipoSimulacion> {
           children: [
             Text(
               'Tipo de simulación',
-              style: AppTextStyles.heading(context).copyWith(fontSize: 18),
+              style: AppTextStyles.heading(context).copyWith(fontSize: 16.sp),
             ),
-            const SizedBox(height: 8),
+            SizedBox(height: 8.h),
             Container(
+              padding: EdgeInsets.symmetric(horizontal: 12.w),
               decoration: BoxDecoration(
-                color: const Color.fromARGB(255, 246, 246, 246),
-                borderRadius: BorderRadius.circular(12),
+                color: const Color(0xFFF6F6F6),
+                borderRadius: BorderRadius.circular(12.r),
               ),
-              padding: const EdgeInsets.symmetric(horizontal: 12),
-              child: Theme(
-                data: Theme.of(context).copyWith(
-                  cardTheme: CardTheme(
-                    color: Colors.white,
-                    elevation: 2,
-                    shadowColor: const Color.fromARGB(135, 143, 143, 143).withOpacity(0.08),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
+              child: DropdownButtonHideUnderline(
+                child: DropdownButton<SimType>(
+                  value: _selectedTipo,
+                  hint: Text(
+                    'Selecciona tu tipo de simulación',
+                    style: AppTextStyles.inputHint(context),
                   ),
-                ),
-                child: DropdownButtonHideUnderline(
-                  child: DropdownButton<SimType>(
-                    value: _selectedTipo,
-                    hint: Text(
-                      'Selecciona tu tipo de simulación',
-                      style: AppTextStyles.promoListText(context).copyWith(color: Colors.grey),
-                    ),
-                    isExpanded: true,
-                    icon: const Icon(Icons.keyboard_arrow_down_rounded, color: Colors.grey),
-                    borderRadius: BorderRadius.circular(12),
-                    dropdownColor: const Color.fromARGB(255, 255, 255, 255),
-                    menuMaxHeight: 220,
-                    style: AppTextStyles.promoListText(context),
-                    itemHeight: 48,
-                    onChanged: (value) {
-                      setState(() {
-                        _selectedTipo = value;
-                        widget.solicitudData.tipoSimulacion = value;
-                        widget.onChanged?.call(value);
-                      });
-                    },
-                    items: tipos.map((tipo) {
-                      final isSelected = _selectedTipo?.id == tipo.id;
-                      return DropdownMenuItem<SimType>(
-                        value: tipo,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              capitalizarSoloPrimera(tipo.name),
-                              style: AppTextStyles.bodySmall(context),
-                            ),
-                            if (isSelected)
-                              const Icon(Icons.check, size: 16, color: AppColors.primary),
-                          ],
-                        ),
-                      );
-                    }).toList(),
-                  ),
+                  isExpanded: true,
+                  icon: const Icon(Icons.keyboard_arrow_down_rounded, color: Colors.grey),
+                  borderRadius: BorderRadius.circular(12.r),
+                  dropdownColor: Colors.white,
+                  itemHeight: 52.h,
+                  style: AppTextStyles.bodySmall(context),
+                  onChanged: (value) {
+                    setState(() {
+                      _selectedTipo = value;
+                      widget.solicitudData.tipoSimulacion = value;
+                      widget.onChanged?.call(value);
+                    });
+                  },
+                  items: tipos.map((tipo) {
+                    return DropdownMenuItem<SimType>(
+                      value: tipo,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(capitalizarSoloPrimera(tipo.name)),
+                          if (_selectedTipo?.id == tipo.id)
+                            const Icon(Icons.check, size: 16, color: AppColors.primary),
+                        ],
+                      ),
+                    );
+                  }).toList(),
                 ),
               ),
             ),

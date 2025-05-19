@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shimmer/shimmer.dart';
 
 class LenderCardSkeleton extends StatelessWidget {
@@ -10,11 +11,11 @@ class LenderCardSkeleton extends StatelessWidget {
       baseColor: Colors.grey.shade300,
       highlightColor: Colors.grey.shade100,
       child: Container(
-        margin: const EdgeInsets.only(bottom: 12),
-        padding: const EdgeInsets.all(16),
+        margin: EdgeInsets.only(bottom: 12.h),
+        padding: EdgeInsets.all(16.w),
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(16.r),
           boxShadow: [
             BoxShadow(
               color: Colors.black.withOpacity(0.05),
@@ -28,14 +29,14 @@ class LenderCardSkeleton extends StatelessWidget {
           children: [
             // Avatar shimmer
             Container(
-              width: 44,
-              height: 44,
+              width: 44.w,
+              height: 44.w,
               decoration: BoxDecoration(
                 color: Colors.grey,
                 shape: BoxShape.circle,
               ),
             ),
-            const SizedBox(width: 16),
+            SizedBox(width: 16.w),
 
             // Column shimmer
             Expanded(
@@ -44,31 +45,33 @@ class LenderCardSkeleton extends StatelessWidget {
                 children: [
                   // Línea título
                   Container(
-                    height: 14,
-                    width: MediaQuery.of(context).size.width * 0.5,
+                    height: 14.h,
+                    width: 0.5.sw,
                     decoration: BoxDecoration(
                       color: Colors.grey,
-                      borderRadius: BorderRadius.circular(4),
+                      borderRadius: BorderRadius.circular(4.r),
                     ),
                   ),
-                  const SizedBox(height: 8),
+                  SizedBox(height: 8.h),
+
                   // Línea correo
                   Container(
-                    height: 12,
-                    width: MediaQuery.of(context).size.width * 0.35,
+                    height: 12.h,
+                    width: 0.35.sw,
                     decoration: BoxDecoration(
                       color: Colors.grey,
-                      borderRadius: BorderRadius.circular(4),
+                      borderRadius: BorderRadius.circular(4.r),
                     ),
                   ),
-                  const SizedBox(height: 6),
+                  SizedBox(height: 6.h),
+
                   // Línea teléfono
                   Container(
-                    height: 12,
-                    width: 100,
+                    height: 12.h,
+                    width: 100.w,
                     decoration: BoxDecoration(
                       color: Colors.grey,
-                      borderRadius: BorderRadius.circular(4),
+                      borderRadius: BorderRadius.circular(4.r),
                     ),
                   ),
                 ],

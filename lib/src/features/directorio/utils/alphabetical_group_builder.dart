@@ -1,5 +1,6 @@
 import 'package:app_creditos/src/features/directorio/utils/lender_card.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:app_creditos/src/features/directorio/model/lender_service_model.dart';
 
 List<Widget> buildAlphabeticalGroups({
@@ -23,13 +24,20 @@ List<Widget> buildAlphabeticalGroups({
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: const EdgeInsets.only(top: 12, bottom: 4),
+          padding: EdgeInsets.only(top: 12.h, bottom: 4.h),
           child: Text(
             letra,
-            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.grey),
+            style: TextStyle(
+              fontSize: 16.sp,
+              fontWeight: FontWeight.bold,
+              color: Colors.grey,
+            ),
           ),
         ),
-        ...servicios.map((service) => LenderCard(service: service, serviceType: group.serviceTypeDesc)).toList(),
+        ...servicios.map((service) => LenderCard(
+          service: service,
+          serviceType: group.serviceTypeDesc,
+        )).toList(),
       ],
     );
   }).toList();

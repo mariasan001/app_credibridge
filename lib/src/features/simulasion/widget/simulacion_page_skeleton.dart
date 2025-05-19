@@ -1,19 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shimmer/shimmer.dart';
 
 class SimulacionPageSkeleton extends StatelessWidget {
   const SimulacionPageSkeleton({super.key});
 
-  Widget _shimmerBox({double height = 48, double width = double.infinity, double radius = 12}) {
+  Widget _shimmerBox({
+    double height = 48,
+    double width = double.infinity,
+    double radius = 12,
+  }) {
     return Shimmer.fromColors(
       baseColor: Colors.grey.shade300,
       highlightColor: Colors.grey.shade100,
       child: Container(
-        height: height,
-        width: width,
+        height: height.h,
+        width: width == double.infinity ? width : width.w,
         decoration: BoxDecoration(
           color: Colors.grey[300],
-          borderRadius: BorderRadius.circular(radius),
+          borderRadius: BorderRadius.circular(radius.r),
         ),
       ),
     );
@@ -24,46 +29,46 @@ class SimulacionPageSkeleton extends StatelessWidget {
     final isTablet = MediaQuery.of(context).size.width > 600;
 
     return SingleChildScrollView(
-      padding: const EdgeInsets.all(16),
+      padding: EdgeInsets.all(16.w),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const SizedBox(height: 24),
+          SizedBox(height: 24.h),
 
           // Título y subtítulo
           _shimmerBox(height: 24, width: 180),
-          const SizedBox(height: 8),
+          SizedBox(height: 8.h),
           _shimmerBox(height: 16, width: 260),
 
-          const SizedBox(height: 32),
+          SizedBox(height: 32.h),
 
           // Selector tipo simulación
           _shimmerBox(height: isTablet ? 56 : 48),
-          const SizedBox(height: 24),
+          SizedBox(height: 24.h),
 
           // Monto deseado
           _shimmerBox(height: 16, width: 200),
-          const SizedBox(height: 8),
+          SizedBox(height: 8.h),
           _shimmerBox(),
 
-          const SizedBox(height: 24),
+          SizedBox(height: 24.h),
 
           // Plazo
           _shimmerBox(height: 16, width: 180),
-          const SizedBox(height: 8),
+          SizedBox(height: 8.h),
           _shimmerBox(),
 
-          const SizedBox(height: 24),
+          SizedBox(height: 24.h),
 
           // Botón simular
           _shimmerBox(height: 48),
 
-          const SizedBox(height: 32),
+          SizedBox(height: 32.h),
 
           // Contenedor CAT
           _shimmerBox(height: 200, radius: 16),
 
-          const SizedBox(height: 24),
+          SizedBox(height: 24.h),
         ],
       ),
     );

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:app_creditos/src/features/auth/models/user_model.dart';
 import 'package:app_creditos/src/features/simulasion/models/simulacion_result.dart';
@@ -27,7 +28,7 @@ class ResultadosSimulacionPage extends StatelessWidget {
       appBar: CustomAppBar(user: user),
       body: resultados.isEmpty
           ? Padding(
-              padding: const EdgeInsets.all(24),
+              padding: EdgeInsets.all(24.w),
               child: Center(
                 child: Text(
                   'No se encontraron resultados disponibles para tu simulación.',
@@ -37,12 +38,11 @@ class ResultadosSimulacionPage extends StatelessWidget {
               ),
             )
           : SingleChildScrollView(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
+              padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 24.h),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Título, subtítulo y botón regresar
+                  // 🔙 Encabezado
                   Align(
                     alignment: Alignment.centerLeft,
                     child: Column(
@@ -50,13 +50,12 @@ class ResultadosSimulacionPage extends StatelessWidget {
                       children: [
                         InkWell(
                           onTap: () => Navigator.pop(context),
-                          borderRadius: BorderRadius.circular(8),
+                          borderRadius: BorderRadius.circular(8.r),
                           child: Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              const Icon(Icons.arrow_back_ios_new_rounded,
-                                  size: 18),
-                              const SizedBox(width: 4),
+                              Icon(Icons.arrow_back_ios_new_rounded, size: 18.sp),
+                              SizedBox(width: 4.w),
                               Text(
                                 'Simulación',
                                 style: AppTextStyles.titleheader(context),
@@ -64,7 +63,7 @@ class ResultadosSimulacionPage extends StatelessWidget {
                             ],
                           ),
                         ),
-                        const SizedBox(height: 4),
+                        SizedBox(height: 4.h),
                         Text(
                           'Gestiona tu cuenta de manera rápida y sencilla.',
                           style: AppTextStyles.bodySmall(context),
@@ -73,19 +72,19 @@ class ResultadosSimulacionPage extends StatelessWidget {
                     ),
                   ),
 
-                  const SizedBox(height: 24),
+                  SizedBox(height: 24.h),
 
-                  // 🥇 Tarjeta mejor opción
+                  // 🥇 Mejor opción
                   Container(
-                    padding: const EdgeInsets.all(8),
+                    padding: EdgeInsets.all(8.w),
                     decoration: BoxDecoration(
                       color: Colors.white,
-                      borderRadius: BorderRadius.circular(16),
+                      borderRadius: BorderRadius.circular(16.r),
                       boxShadow: [
                         BoxShadow(
                           color: Colors.black.withOpacity(0.04),
-                          blurRadius: 8,
-                          offset: const Offset(0, 4),
+                          blurRadius: 8.r,
+                          offset: Offset(0, 4.h),
                         ),
                       ],
                     ),
@@ -98,19 +97,19 @@ class ResultadosSimulacionPage extends StatelessWidget {
                     ),
                   ),
 
-                  const SizedBox(height: 24),
+                  SizedBox(height: 24.h),
 
                   // 🔽 Lista del resto
                   Container(
-                    padding: const EdgeInsets.all(8),
+                    padding: EdgeInsets.all(8.w),
                     decoration: BoxDecoration(
                       color: Colors.white,
-                      borderRadius: BorderRadius.circular(16),
+                      borderRadius: BorderRadius.circular(16.r),
                       boxShadow: [
                         BoxShadow(
                           color: Colors.black.withOpacity(0.04),
-                          blurRadius: 8,
-                          offset: const Offset(0, 4),
+                          blurRadius: 8.r,
+                          offset: Offset(0, 4.h),
                         ),
                       ],
                     ),
@@ -118,7 +117,7 @@ class ResultadosSimulacionPage extends StatelessWidget {
                       children: List.generate(
                         resultados.length - 1,
                         (i) => Padding(
-                          padding: const EdgeInsets.only(bottom: 16),
+                          padding: EdgeInsets.only(bottom: 16.h),
                           child: ResultadoSimulacionCard(
                             result: resultados[i + 1],
                             ranking: i + 2,

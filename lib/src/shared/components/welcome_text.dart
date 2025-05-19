@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:app_creditos/src/shared/theme/app_text_styles.dart';
 
-/// Widget que muestra un encabezado de bienvenida dinámico y responsivo.
-/// Se puede reutilizar en diferentes pantallas como login, registro, recuperación, etc.
+/// Encabezado reutilizable con bienvenida, título y subtítulo.
+/// Perfecto para login, registro, recuperación, etc.
 class WelcomeText extends StatelessWidget {
-  final String titlePrefix;      // Ej: "Bienvenidos a"
-  final String titleHighlight;  // Ej: "CrediBridge"
-  final String titleSuffix;     // Ej: "toma el control de tus finanzas"
-  final String subtitle;        // Ej: "Introduce tu información y descubre tus opciones..."
+  final String titlePrefix;
+  final String titleHighlight;
+  final String titleSuffix;
+  final String subtitle;
 
   const WelcomeText({
     super.key,
@@ -19,27 +20,25 @@ class WelcomeText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isTablet = MediaQuery.of(context).size.width > 600;
-
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // Texto fijo de saludo
+        // 🟡 Texto superior de saludo
         Text(
           'Buenos días 👋',
           style: AppTextStyles.bodySmall(context).copyWith(
-            fontSize: isTablet ? 18 : 16,
+            fontSize: 16.sp,
             fontWeight: FontWeight.w300,
             color: const Color.fromARGB(255, 79, 79, 79),
           ),
         ),
-        const SizedBox(height: 10),
+        SizedBox(height: 10.h),
 
-        // Título principal dinámico
+        // 🔵 Título con estilo destacado
         RichText(
           text: TextSpan(
             style: AppTextStyles.heading(context).copyWith(
-              fontSize: isTablet ? 36 : 27.5,
+              fontSize: 27.sp,
               fontWeight: FontWeight.w700,
               height: 1,
             ),
@@ -48,7 +47,7 @@ class WelcomeText extends StatelessWidget {
               TextSpan(
                 text: titleHighlight,
                 style: AppTextStyles.logoHighlight(context).copyWith(
-                  fontSize: isTablet ? 36 : 27.5,
+                  fontSize: 27.sp,
                   fontWeight: FontWeight.w900,
                 ),
               ),
@@ -56,16 +55,16 @@ class WelcomeText extends StatelessWidget {
             ],
           ),
         ),
-        const SizedBox(height: 4),
+        SizedBox(height: 4.h),
 
-        // Subtítulo personalizado
+        // 🔹 Subtítulo explicativo
         Text(
           subtitle,
           style: AppTextStyles.bodySmall(context).copyWith(
-            fontSize: isTablet ? 16 : 14,
+            fontSize: 14.sp,
           ),
         ),
-        const SizedBox(height: 20),
+        SizedBox(height: 20.h),
       ],
     );
   }

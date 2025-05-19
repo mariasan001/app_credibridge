@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:app_creditos/src/shared/theme/app_colors.dart';
 
 class PromocionCardSkeleton extends StatelessWidget {
@@ -7,111 +8,94 @@ class PromocionCardSkeleton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final baseColor = isDark ? Colors.grey.shade700 : Colors.grey.shade200;
+    final highlightColor = isDark ? Colors.grey.shade500 : Colors.grey.shade100;
+
     return Container(
-      margin: const EdgeInsets.symmetric(vertical: 12),
+      margin: EdgeInsets.symmetric(vertical: 12.h),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(14),
+        borderRadius: BorderRadius.circular(14.r),
         boxShadow: [
           BoxShadow(
             color: AppColors.promoShadow(context),
-            blurRadius: 6,
-            offset: const Offset(0, 2),
-          )
+            blurRadius: 6.r,
+            offset: Offset(0, 2.h),
+          ),
         ],
       ),
       child: Shimmer.fromColors(
-        baseColor: Colors.grey.shade200,
-        highlightColor: Colors.grey.shade100,
+        baseColor: baseColor,
+        highlightColor: highlightColor,
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Padding(
-              padding: const EdgeInsets.all(16),
+              padding: EdgeInsets.all(16.w),
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Título + financiera
+                  /// Header con logo
                   Row(
                     children: [
                       Container(
-                        width: 40,
-                        height: 40,
-                        decoration: BoxDecoration(
+                        width: 40.w,
+                        height: 40.w,
+                        decoration: const BoxDecoration(
                           color: Colors.white,
                           shape: BoxShape.circle,
                         ),
                       ),
-                      const SizedBox(width: 12),
+                      SizedBox(width: 12.w),
                       Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Container(
-                              height: 14,
-                              width: double.infinity,
-                              color: Colors.white,
-                            ),
-                            const SizedBox(height: 6),
-                            Container(
-                              height: 10,
-                              width: 120,
-                              color: Colors.white,
-                            ),
+                            Container(height: 14.h, width: double.infinity, color: Colors.white),
+                            SizedBox(height: 6.h),
+                            Container(height: 10.h, width: 120.w, color: Colors.white),
                           ],
                         ),
                       ),
                     ],
                   ),
 
-                  const SizedBox(height: 16),
+                  SizedBox(height: 16.h),
 
-                  // Descripción
-                  Container(
-                    height: 12,
-                    width: double.infinity,
-                    color: Colors.white,
-                  ),
-                  const SizedBox(height: 6),
-                  Container(
-                    height: 12,
-                    width: double.infinity,
-                    color: Colors.white,
-                  ),
-                  const SizedBox(height: 6),
-                  Container(
-                    height: 12,
-                    width: 200,
-                    color: Colors.white,
-                  ),
+                  /// Descripción
+                  Container(height: 12.h, width: double.infinity, color: Colors.white),
+                  SizedBox(height: 6.h),
+                  Container(height: 12.h, width: double.infinity, color: Colors.white),
+                  SizedBox(height: 6.h),
+                  Container(height: 12.h, width: 200.w, color: Colors.white),
 
-                  const SizedBox(height: 16),
+                  SizedBox(height: 16.h),
 
-                  // Beneficios fake
+                  /// Beneficios fake
                   for (int i = 0; i < 3; i++) ...[
                     Row(
                       children: [
-                        const Icon(Icons.circle, size: 16, color: Colors.white),
-                        const SizedBox(width: 8),
-                        Container(
-                          height: 10,
-                          width: 200,
-                          color: Colors.white,
-                        ),
+                        Icon(Icons.circle, size: 12.sp, color: Colors.white),
+                        SizedBox(width: 8.w),
+                        Container(height: 10.h, width: 180.w, color: Colors.white),
                       ],
                     ),
-                    const SizedBox(height: 6),
+                    SizedBox(height: 6.h),
                   ],
                 ],
               ),
             ),
 
-            // Footer
+            /// Footer decorativo
             Container(
-              height: 48,
-              decoration: const BoxDecoration(
+              height: 48.h,
+              width: double.infinity,
+              decoration: BoxDecoration(
                 color: AppColors.promoYellow,
                 borderRadius: BorderRadius.only(
-                  bottomLeft: Radius.circular(14),
-                  bottomRight: Radius.circular(14),
+                  bottomLeft: Radius.circular(14.r),
+                  bottomRight: Radius.circular(14.r),
                 ),
               ),
             ),

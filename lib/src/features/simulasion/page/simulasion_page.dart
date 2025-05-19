@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 import 'package:app_creditos/src/features/auth/models/user_model.dart';
 import 'package:app_creditos/src/features/simulasion/widget/formulario_simulacion.dart';
 import 'package:app_creditos/src/shared/theme/app_colors.dart';
@@ -7,9 +9,13 @@ import 'package:app_creditos/src/shared/components/ustom_app_bar.dart';
 
 class SimulacionPage extends StatelessWidget {
   final User user;
-    final double? descuento;
+  final double? descuento;
 
-  const SimulacionPage({super.key, required this.user, required this.descuento  });
+  const SimulacionPage({
+    super.key,
+    required this.user,
+    required this.descuento,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -17,13 +23,13 @@ class SimulacionPage extends StatelessWidget {
       backgroundColor: AppColors.background(context),
       appBar: CustomAppBar(user: user),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16),
+        padding: EdgeInsets.all(16.w),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            const SizedBox(height: 20),
+            SizedBox(height: 20.h),
 
-            //  Icono de regreso y título
+            // 🔙 Encabezado
             Align(
               alignment: Alignment.centerLeft,
               child: Column(
@@ -31,12 +37,12 @@ class SimulacionPage extends StatelessWidget {
                 children: [
                   InkWell(
                     onTap: () => Navigator.pop(context),
-                    borderRadius: BorderRadius.circular(8),
+                    borderRadius: BorderRadius.circular(8.r),
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        const Icon(Icons.arrow_back_ios_new_rounded, size: 20),
-                        const SizedBox(width: 4),
+                        Icon(Icons.arrow_back_ios_new_rounded, size: 20.sp),
+                        SizedBox(width: 4.w),
                         Text(
                           'Simulación',
                           style: AppTextStyles.titleheader(context),
@@ -44,7 +50,7 @@ class SimulacionPage extends StatelessWidget {
                       ],
                     ),
                   ),
-                  const SizedBox(height: 4),
+                  SizedBox(height: 4.h),
                   Text(
                     'Gestiona tu cuenta de manera rápida y sencilla.',
                     style: AppTextStyles.bodySmall(context),
@@ -52,23 +58,24 @@ class SimulacionPage extends StatelessWidget {
                 ],
               ),
             ),
-            const SizedBox(height: 40),
 
-            // 🔻 Formulario
-            FormularioSimulacion(user: user, descuento: descuento! ),
-            const SizedBox(height: 40),
+            SizedBox(height: 40.h),
 
-            // 🔻 Texto informativo CAT
+            // 📝 Formulario
+            FormularioSimulacion(user: user, descuento: descuento!),
+            SizedBox(height: 40.h),
+
+            // ℹ️ Información CAT
             Container(
-              padding: const EdgeInsets.all(16),
+              padding: EdgeInsets.all(16.w),
               decoration: BoxDecoration(
                 color: Colors.white,
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(12.r),
                 boxShadow: [
                   BoxShadow(
                     color: Colors.black.withOpacity(0.03),
-                    blurRadius: 4,
-                    offset: const Offset(0, 2),
+                    blurRadius: 4.r,
+                    offset: Offset(0, 2.h),
                   ),
                 ],
               ),
@@ -77,9 +84,7 @@ class SimulacionPage extends StatelessWidget {
                 children: [
                   Text.rich(
                     TextSpan(
-                      style: AppTextStyles.bodySmall(
-                        context,
-                      ).copyWith(height:1.1),
+                      style: AppTextStyles.bodySmall(context).copyWith(height: 1.3),
                       children: [
                         TextSpan(
                           text: 'Costo Anual Total ',
@@ -128,15 +133,16 @@ class SimulacionPage extends StatelessWidget {
                     ),
                     textAlign: TextAlign.center,
                   ),
-                  const SizedBox(height: 12),
 
-                  // 🔗 Enlaces centrados
+                  SizedBox(height: 12.h),
+
+                  // 🌐 Links
                   Center(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         _buildLink(context, 'www.buro.gob.mx'),
-                        const SizedBox(height: 6),
+                        SizedBox(height: 6.h),
                         _buildLink(context, 'www.condusef.gob.mx'),
                       ],
                     ),
@@ -144,7 +150,8 @@ class SimulacionPage extends StatelessWidget {
                 ],
               ),
             ),
-            const SizedBox(height: 24),
+
+            SizedBox(height: 24.h),
           ],
         ),
       ),
@@ -155,12 +162,13 @@ class SimulacionPage extends StatelessWidget {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        const Icon(Icons.link, size: 16, color: Colors.orange),
-        const SizedBox(width: 6),
+        Icon(Icons.link, size: 16.sp, color: Colors.orange),
+        SizedBox(width: 6.w),
         Text(
           url,
           style: AppTextStyles.linkMuted(context).copyWith(
             fontWeight: FontWeight.w600,
+            fontSize: 12.sp,
             color: Colors.orange,
             decoration: TextDecoration.underline,
           ),

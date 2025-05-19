@@ -1,5 +1,6 @@
 import 'package:app_creditos/src/shared/components/alertas.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:app_creditos/src/features/auth/services/auth_service.dart';
 import 'package:app_creditos/src/features/auth/widgets/form_fields.dart';
 import 'package:app_creditos/src/shared/components/login_button.dart';
@@ -16,8 +17,6 @@ class LoginForm extends StatefulWidget {
   State<LoginForm> createState() => _LoginFormState();
 }
 
-
-
 class _LoginFormState extends State<LoginForm> {
   final _formKey = GlobalKey<FormState>();
   final _usernameController = TextEditingController();
@@ -26,51 +25,44 @@ class _LoginFormState extends State<LoginForm> {
   bool _isLoading = false;
   bool _obscurePassword = true;
 
- Future<void> _submit() async {
-  if (!_formKey.currentState!.validate()) return;
+  Future<void> _submit() async {
+    if (!_formKey.currentState!.validate()) return;
 
-  setState(() => _isLoading = true);
+    setState(() => _isLoading = true);
 
-  try {
-    final result = await AuthService.login(
-      _usernameController.text.trim(),
-      _passwordController.text.trim(),
-    );
+    try {
+      final result = await AuthService.login(
+        _usernameController.text.trim(),
+        _passwordController.text.trim(),
+      );
 
-    if (!mounted) return;
+      if (!mounted) return;
 
-    if (result == null) {
-      showCustomSnackBar(context, 'Usuario o contraseña incorrectos', isError: true);
-      return;
-    }
+      if (result == null) {
+        showCustomSnackBar(context, 'Usuario o contraseña incorrectos', isError: true);
+        return;
+      }
 
-    showCustomSnackBar(context, 'Inicio de sesión exitoso');
+      showCustomSnackBar(context, 'Inicio de sesión exitoso');
 
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(
-        builder: (context) => HomePage(user: result), // ✅ Cambio clave aquí
-      ),
-    );
-  } catch (e) {
-    if (!mounted) return;
-    showCustomSnackBar(context, e.toString(), isError: true);
-  } finally {
-    if (mounted) {
-      setState(() => _isLoading = false);
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => HomePage(user: result),
+        ),
+      );
+    } catch (e) {
+      if (!mounted) return;
+      showCustomSnackBar(context, e.toString(), isError: true);
+    } finally {
+      if (mounted) {
+        setState(() => _isLoading = false);
+      }
     }
   }
-}
-
 
   @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
-    final bool isTablet = screenWidth > 600;
-
-    final double fieldSpacing = isTablet ? 46 : 32;
-    final double bottomSpacing = isTablet ? 16 : 12;
-
     return Form(
       key: _formKey,
       child: Column(
@@ -78,15 +70,15 @@ class _LoginFormState extends State<LoginForm> {
         children: [
           UsernameField(controller: _usernameController),
 
-          SizedBox(height: fieldSpacing),
+          SizedBox(height: 32.h),
 
           buildPasswordField(),
 
-          const SizedBox(height: 8),
+          SizedBox(height: 8.h),
 
           const RecoveryLink(),
 
-          SizedBox(height: bottomSpacing),
+          SizedBox(height: 16.h),
 
           PrimaryButton(
             label: 'Enviar',
@@ -94,7 +86,7 @@ class _LoginFormState extends State<LoginForm> {
             onPressed: _submit,
           ),
 
-          SizedBox(height: bottomSpacing),
+          SizedBox(height: 16.h),
 
           const RegisterLink(),
         ],
@@ -112,10 +104,7 @@ class _LoginFormState extends State<LoginForm> {
         floatingLabelBehavior: FloatingLabelBehavior.always,
         labelStyle: AppTextStyles.inputLabel(context),
         hintStyle: AppTextStyles.inputHint(context),
-        contentPadding: const EdgeInsets.symmetric(
-          horizontal: 16,
-          vertical: 14,
-        ),
+        contentPadding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 14.h),
         suffixIcon: IconButton(
           icon: Icon(
             _obscurePassword ? Icons.visibility_off : Icons.visibility,
@@ -123,25 +112,20 @@ class _LoginFormState extends State<LoginForm> {
           onPressed: () => setState(() => _obscurePassword = !_obscurePassword),
         ),
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
-                    borderSide:  BorderSide(color: AppColors.inputBorder(context)),
-
+          borderRadius: BorderRadius.circular(8.r),
+          borderSide: BorderSide(color: AppColors.inputBorder(context)),
         ),
         enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
-                    borderSide:  BorderSide(color: AppColors.inputBorder(context)),
-
+          borderRadius: BorderRadius.circular(8.r),
+          borderSide: BorderSide(color: AppColors.inputBorder(context)),
         ),
         focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: BorderRadius.circular(8.r),
           borderSide: const BorderSide(color: AppColors.primary, width: 2),
         ),
       ),
-      validator:
-          (value) =>
-              value == null || value.isEmpty
-                  ? 'Por favor ingresa tu contraseña'
-                  : null,
+      validator: (value) =>
+          value == null || value.isEmpty ? 'Por favor ingresa tu contraseña' : null,
     );
   }
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:app_creditos/src/shared/theme/app_colors.dart';
 
 class SinPromocionesWidget extends StatelessWidget {
@@ -10,16 +11,16 @@ class SinPromocionesWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: Container(
-        margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 32),
-        padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 30),
+        margin: EdgeInsets.symmetric(horizontal: 12.w, vertical: 32.h),
+        padding: EdgeInsets.symmetric(horizontal: 18.w, vertical: 30.h),
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.circular(20),
-          boxShadow: const [
+          borderRadius: BorderRadius.circular(20.r),
+          boxShadow: [
             BoxShadow(
-              color: Color.fromARGB(31, 156, 156, 156),
-              blurRadius: 8,
-              offset: Offset(0, 4),
+              color: const Color.fromARGB(31, 156, 156, 156),
+              blurRadius: 8.r,
+              offset: Offset(0, 4.h),
             ),
           ],
         ),
@@ -27,45 +28,52 @@ class SinPromocionesWidget extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Text(
+            // Icono Emoji
+            Text(
               '🛍️',
-              style: TextStyle(fontSize: 48),
+              style: TextStyle(fontSize: 48.sp),
             ),
 
-            const SizedBox(height: 20),
+            SizedBox(height: 20.h),
 
+            // Título
             Text(
               'No hay promociones activas',
               style: TextStyle(
-                fontSize: 18,
+                fontSize: 18.sp,
                 fontWeight: FontWeight.w600,
-             color: AppColors.text(context),
+                color: AppColors.text(context),
               ),
               textAlign: TextAlign.center,
             ),
 
-            const SizedBox(height: 8),
+            SizedBox(height: 8.h),
 
+            // Subtítulo
             Text(
               'Vuelve pronto para descubrir nuevas oportunidades exclusivas.',
               style: TextStyle(
-                fontSize: 12,
+                fontSize: 13.sp,
                 color: Colors.grey.shade500,
               ),
               textAlign: TextAlign.center,
             ),
 
+            // Botón de recarga si aplica
             if (onAccionNueva != null) ...[
-              const SizedBox(height: 24),
+              SizedBox(height: 24.h),
               OutlinedButton.icon(
                 onPressed: onAccionNueva,
-                icon: const Icon(Icons.refresh, size: 18),
-                label: const Text('Volver a intentar'),
+                icon: Icon(Icons.refresh, size: 18.sp),
+                label: Text(
+                  'Volver a intentar',
+                  style: TextStyle(fontSize: 13.sp),
+                ),
                 style: OutlinedButton.styleFrom(
                   foregroundColor: AppColors.text(context),
                   side: const BorderSide(color: Color(0xFFE2E8F0)),
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
+                    borderRadius: BorderRadius.circular(10.r),
                   ),
                 ),
               ),
