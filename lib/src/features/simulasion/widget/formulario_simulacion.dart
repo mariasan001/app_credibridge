@@ -1,8 +1,4 @@
 import 'package:animations/animations.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_masked_text2/flutter_masked_text2.dart';
-
 import 'package:app_creditos/src/features/auth/models/user_model.dart';
 import 'package:app_creditos/src/features/simulasion/model/sim_type_model.dart';
 import 'package:app_creditos/src/features/simulasion/models/simulacion_request.dart';
@@ -13,6 +9,9 @@ import 'package:app_creditos/src/features/simulasion/services/simulacion_service
 import 'package:app_creditos/src/features/simulasion/widget/selector_tipo_simulacion.dart';
 import 'package:app_creditos/src/shared/theme/app_colors.dart';
 import 'package:app_creditos/src/shared/theme/app_text_styles.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_masked_text2/flutter_masked_text2.dart';
 
 class FormularioSimulacion extends StatefulWidget {
   final User user;
@@ -32,12 +31,11 @@ class _FormularioSimulacionState extends State<FormularioSimulacion> {
   final _formKey = GlobalKey<FormState>();
   late MoneyMaskedTextController _montoController;
   late TextEditingController _plazoController;
-  final SimulacionService _service = SimulacionService();
-  final SolicitudCreditoData solicitud = SolicitudCreditoData();
-
   SimType? _tipoSeleccionado;
   bool _loading = false;
   List<SimulacionResult> _resultados = [];
+  final SimulacionService _service = SimulacionService();
+  final SolicitudCreditoData solicitud = SolicitudCreditoData();
 
   @override
   void initState() {
@@ -64,7 +62,9 @@ class _FormularioSimulacionState extends State<FormularioSimulacion> {
         widget.descuento != null &&
         _montoController.numberValue > widget.descuento!) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('El monto excede tu límite disponible')),
+        const SnackBar(
+          content: Text('El monto excede tu límite de descuento disponible.'),
+        ),
       );
       return;
     }
@@ -90,9 +90,9 @@ class _FormularioSimulacionState extends State<FormularioSimulacion> {
       setState(() => _resultados = resultados);
       openContainer();
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error al simular: $e')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Error al simular: $e')));
     } finally {
       setState(() => _loading = false);
     }
@@ -103,18 +103,30 @@ class _FormularioSimulacionState extends State<FormularioSimulacion> {
     Widget? icon,
     String? suffix,
   }) {
-    return InputDecoration(
-      hintText: hint,
-      filled: true,
-      fillColor: const Color(0xFFF7F7F7),
-      prefixIcon: icon,
-      suffixText: suffix,
-      contentPadding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 18.h),
-      border: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(16.r),
-        borderSide: BorderSide.none,
-      ),
-    );
+return InputDecoration(
+  hintText: hint,
+  hintStyle: AppTextStyles.bodySmall(context).copyWith(
+    color: AppColors.text(context),
+  ),
+  filled: true,
+  fillColor: AppColors.inputBackground(context),
+  prefixIcon: icon != null
+      ? IconTheme(
+          data: IconThemeData(color: AppColors.text(context)),
+          child: icon,
+        )
+      : null,
+  suffixText: suffix,
+  suffixStyle: AppTextStyles.inputLabel(context),
+  contentPadding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 18.h),
+  border: OutlineInputBorder(
+    borderRadius: BorderRadius.circular(16.r),
+    borderSide: BorderSide(
+      color:AppColors.backgroundLight
+    ),
+  ),
+);
+
   }
 
   @override
@@ -126,25 +138,29 @@ class _FormularioSimulacionState extends State<FormularioSimulacion> {
         borderRadius: BorderRadius.circular(8.r),
       ),
       closedColor: Colors.transparent,
-      openBuilder: (context, _) => ResultadosSimulacionPage(
-        user: widget.user,
-        resultados: _resultados,
-        solicitud: solicitud,
-      ),
+      openBuilder:
+          (context, _) => ResultadosSimulacionPage(
+            user: widget.user,
+            resultados: _resultados,
+            solicitud: solicitud,
+          ),
       closedBuilder: (context, openContainer) {
         return AnimatedContainer(
           duration: const Duration(milliseconds: 300),
           padding: EdgeInsets.all(20.w),
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: AppColors.promoCardBackground(context),
             borderRadius: BorderRadius.circular(20.r),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black12,
-                blurRadius: 10,
-                offset: Offset(0, 4.h),
-              ),
-            ],
+            boxShadow:
+                Theme.of(context).brightness == Brightness.light
+                    ? [
+                      BoxShadow(
+                        color: const Color.fromARGB(31, 238, 238, 238),
+                        blurRadius: 10,
+                        offset: Offset(0, 4.h),
+                      ),
+                    ]
+                    : [],
           ),
           child: Form(
             key: _formKey,
@@ -175,7 +191,7 @@ class _FormularioSimulacionState extends State<FormularioSimulacion> {
                   Padding(
                     padding: EdgeInsets.only(bottom: 8.h),
                     child: Text(
-                      'Límite de descuento: \$${widget.descuento!.toStringAsFixed(2)}',
+                      'Tu límite máximo de descuento es: \$${widget.descuento!.toStringAsFixed(2)}',
                       style: AppTextStyles.bodySmall(context).copyWith(
                         color: AppColors.primary,
                         fontWeight: FontWeight.bold,
@@ -190,13 +206,15 @@ class _FormularioSimulacionState extends State<FormularioSimulacion> {
                     icon: const Icon(Icons.attach_money_rounded),
                     suffix: 'MXN',
                   ),
-                  style: AppTextStyles.linkMuted(context),
+                  style: AppTextStyles.inputHint(
+                    context,
+                  ).copyWith(color: AppColors.text(context)),
                   validator: (value) {
                     final amount = _montoController.numberValue;
                     if (amount == 0) return 'Ingresa un monto válido';
                     if (_tipoSeleccionado?.id == 2 &&
                         amount > widget.descuento!) {
-                      return 'Supera tu límite de descuento';
+                      return 'Supera tu límite de descuento disponible';
                     }
                     return null;
                   },
@@ -214,11 +232,13 @@ class _FormularioSimulacionState extends State<FormularioSimulacion> {
                     hint: 'Número de plazos',
                     icon: const Icon(Icons.calendar_today_outlined),
                   ),
-                  style: AppTextStyles.linkMuted(context),
+                  style: AppTextStyles.inputHint(
+                    context,
+                  ).copyWith(color: AppColors.text(context)),
                   validator: (value) {
                     final plazo = int.tryParse(value ?? '');
                     if (plazo == null || plazo < 1 || plazo > 96) {
-                      return 'Debe ser entre 1 y 96 meses';
+                      return 'El plazo debe ser entre 1 y 96 meses';
                     }
                     return null;
                   },
@@ -236,17 +256,20 @@ class _FormularioSimulacionState extends State<FormularioSimulacion> {
                         borderRadius: BorderRadius.circular(16.r),
                       ),
                     ),
-                    child: _loading
-                        ? SizedBox(
-                            height: 22.h,
-                            width: 22.w,
-                            child: const CircularProgressIndicator(
-                              strokeWidth: 2,
-                              color: Colors.white,
+                    child:
+                        _loading
+                            ? SizedBox(
+                              height: 22.h,
+                              width: 22.w,
+                              child: const CircularProgressIndicator(
+                                strokeWidth: 2,
+                                color: Colors.white,
+                              ),
+                            )
+                            : Text(
+                              'Simular Préstamo',
+                              style: AppTextStyles.buttonText(context),
                             ),
-                          )
-                        : Text('Simular Préstamo',
-                            style: AppTextStyles.buttonText(context)),
                   ),
                 ),
               ],

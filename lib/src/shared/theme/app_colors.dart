@@ -2,6 +2,22 @@ import 'package:flutter/material.dart';
 
 class AppColors {
   // 🌞🌚 Dependientes del tema
+
+  static Color inputBackground(BuildContext context) =>
+      Theme.of(context).brightness == Brightness.dark
+          ? const Color(0xFF2A2A2A)
+          : const Color(0xFFF6F6F6);
+
+  static Color cardBackground(BuildContext context) =>
+      Theme.of(context).brightness == Brightness.dark
+          ? const Color(0xFF1E1E1E)
+          : Colors.white;
+
+  static Color textPrimary(BuildContext context) =>
+      Theme.of(context).brightness == Brightness.dark
+          ? Colors.white
+          : Colors.black;
+
   static Color background(BuildContext context) =>
       Theme.of(context).brightness == Brightness.dark
           ? const Color(0xFF1E1E1E)
@@ -21,6 +37,11 @@ class AppColors {
       Theme.of(context).brightness == Brightness.dark
           ? Colors.white24
           : Colors.black26;
+
+  static Color borderBotton(BuildContext context) =>
+      Theme.of(context).brightness == Brightness.dark
+          ? Colors.black26
+          : const Color.fromARGB(255, 255, 255, 255);
 
   static Color promoCardBackground(BuildContext context) =>
       Theme.of(context).brightness == Brightness.dark

@@ -1,10 +1,42 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-
 import 'package:app_creditos/src/shared/theme/app_colors.dart';
 import 'package:app_creditos/src/shared/theme/app_text_styles.dart';
 
-/// Número de Servidor Público
+/// 🎨 Decoración base adaptada para modo oscuro
+InputDecoration buildInputDecoration(
+  BuildContext context, {
+  required String label,
+  required String hint,
+}) {
+  final isDark = Theme.of(context).brightness == Brightness.dark;
+
+  return InputDecoration(
+    labelText: label,
+    hintText: hint,
+    floatingLabelBehavior: FloatingLabelBehavior.always,
+    labelStyle: AppTextStyles.inputLabel(context),
+    hintStyle: AppTextStyles.inputHint(context).copyWith(
+      color: isDark ? Colors.white70 : AppColors.textMuted(context),
+    ),
+    contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+    filled: true,
+    fillColor: isDark ? const Color(0xFF2A2A2A) : const Color(0xFFF9F9F9),
+    border: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(8),
+      borderSide: BorderSide(color: AppColors.inputBorder(context)),
+    ),
+    enabledBorder: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(8),
+      borderSide: BorderSide(color: AppColors.inputBorder(context)),
+    ),
+    focusedBorder: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(8),
+      borderSide: const BorderSide(color: AppColors.primary, width: 2),
+    ),
+  );
+}
+
+/// 📌 Campo: Número de Servidor Público
 class NumeroServidorField extends StatelessWidget {
   final TextEditingController controller;
 
@@ -15,25 +47,10 @@ class NumeroServidorField extends StatelessWidget {
     return TextFormField(
       controller: controller,
       keyboardType: TextInputType.number,
-      decoration: InputDecoration(
-        labelText: 'Número de Servidor Público *',
-        hintText: 'Ej. 123456',
-        floatingLabelBehavior: FloatingLabelBehavior.always,
-        labelStyle: AppTextStyles.inputLabel(context),
-        hintStyle: AppTextStyles.inputHint(context),
-        contentPadding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 14.h),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8.r),
-          borderSide: BorderSide(color: AppColors.inputBorder(context)),
-        ),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8.r),
-          borderSide: BorderSide(color: AppColors.inputBorder(context)),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8.r),
-          borderSide: const BorderSide(color: AppColors.primary, width: 2),
-        ),
+      decoration: buildInputDecoration(
+        context,
+        label: 'Número de Servidor Público *',
+        hint: 'Ej. 123456',
       ),
       validator: (value) {
         if (value == null || value.isEmpty) {
@@ -45,35 +62,20 @@ class NumeroServidorField extends StatelessWidget {
   }
 }
 
-/// Plaza
-class PlazaField extends StatelessWidget {
+/// 📌 Campo: Unidad Administrativa (workUnit)
+class WorkUnitField extends StatelessWidget {
   final TextEditingController controller;
 
-  const PlazaField({super.key, required this.controller});
+  const WorkUnitField({super.key, required this.controller});
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
       controller: controller,
-      decoration: InputDecoration(
-        labelText: 'Plaza *',
-        hintText: 'Ej. 000000000000000',
-        floatingLabelBehavior: FloatingLabelBehavior.always,
-        labelStyle: AppTextStyles.inputLabel(context),
-        hintStyle: AppTextStyles.inputHint(context),
-        contentPadding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 14.h),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8.r),
-          borderSide: BorderSide(color: AppColors.inputBorder(context)),
-        ),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8.r),
-          borderSide: BorderSide(color: AppColors.inputBorder(context)),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8.r),
-          borderSide: const BorderSide(color: AppColors.primary, width: 2),
-        ),
+      decoration: buildInputDecoration(
+        context,
+        label: 'Unidad Administrativa *',
+        hint: 'Ej. SEyGEM000000000000',
       ),
       validator: (value) {
         if (value == null || value.isEmpty) {
@@ -85,7 +87,7 @@ class PlazaField extends StatelessWidget {
   }
 }
 
-/// Código de Puesto
+/// 📌 Campo: Código de Puesto
 class JobCodeField extends StatelessWidget {
   final TextEditingController controller;
 
@@ -95,25 +97,10 @@ class JobCodeField extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextFormField(
       controller: controller,
-      decoration: InputDecoration(
-        labelText: 'Código de Puesto *',
-        hintText: 'Ej. A0A00A00A',
-        floatingLabelBehavior: FloatingLabelBehavior.always,
-        labelStyle: AppTextStyles.inputLabel(context),
-        hintStyle: AppTextStyles.inputHint(context),
-        contentPadding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 14.h),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8.r),
-          borderSide: BorderSide(color: AppColors.inputBorder(context)),
-        ),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8.r),
-          borderSide: BorderSide(color: AppColors.inputBorder(context)),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8.r),
-          borderSide: const BorderSide(color: AppColors.primary, width: 2),
-        ),
+      decoration: buildInputDecoration(
+        context,
+        label: 'Código de Puesto *',
+        hint: 'Ej. A0A00A00A',
       ),
       validator: (value) {
         if (value == null || value.isEmpty) {
@@ -125,7 +112,7 @@ class JobCodeField extends StatelessWidget {
   }
 }
 
-/// RFC
+/// 📌 Campo: RFC
 class RfcField extends StatelessWidget {
   final TextEditingController controller;
 
@@ -136,25 +123,10 @@ class RfcField extends StatelessWidget {
     return TextFormField(
       controller: controller,
       textCapitalization: TextCapitalization.characters,
-      decoration: InputDecoration(
-        labelText: 'RFC *',
-        hintText: 'Ej. 0A0A0A0A0A',
-        floatingLabelBehavior: FloatingLabelBehavior.always,
-        labelStyle: AppTextStyles.inputLabel(context),
-        hintStyle: AppTextStyles.inputHint(context),
-        contentPadding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 14.h),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8.r),
-          borderSide: BorderSide(color: AppColors.inputBorder(context)),
-        ),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8.r),
-          borderSide: BorderSide(color: AppColors.inputBorder(context)),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8.r),
-          borderSide: const BorderSide(color: AppColors.primary, width: 2),
-        ),
+      decoration: buildInputDecoration(
+        context,
+        label: 'RFC *',
+        hint: 'Ej. 0A0A0A0A0A',
       ),
       validator: (value) {
         if (value == null || value.isEmpty) {

@@ -1,14 +1,17 @@
+import 'package:app_creditos/src/features/nuevo_user/registro/model/servidor_publico_request.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
+// THEME & WIDGETS COMPARTIDOS
 import 'package:app_creditos/src/shared/theme/app_colors.dart';
 import 'package:app_creditos/src/shared/components/login_button.dart';
 import 'package:app_creditos/src/shared/components/welcome_text.dart';
 import 'package:app_creditos/src/features/auth/widgets/logo_title.dart';
 
+// COMPONENTES DE REGISTRO
 import 'package:app_creditos/src/features/nuevo_user/registro/widgets/numero_servidor_field.dart';
-import 'package:app_creditos/src/features/nuevo_user/registro/model/servidor_publico_request.dart';
+
+// SERVICIOS Y MODELOS
 import 'package:app_creditos/src/features/nuevo_user/registro/services/registro_service.dart';
 
 class RegistroPage extends StatefulWidget {
@@ -32,9 +35,13 @@ class _RegistroPageState extends State<RegistroPage> {
   @override
   Widget build(BuildContext context) {
     final isKeyboardVisible = MediaQuery.of(context).viewInsets.bottom > 0;
-    final double logoTop = showContainer
-        ? (isKeyboardVisible ? 120.h : 120.h)
-        : 60.h;
+    final screenWidth = MediaQuery.of(context).size.width;
+    final isTablet = screenWidth > 600;
+
+    final horizontalPadding = isTablet ? 70.0 : 24.0;
+    final verticalPadding = isTablet ? 72.0 : 48.0;
+    final double logoTop =
+        showContainer ? (isKeyboardVisible ? 150.0 : (isTablet ? 300.0 : 10.0)) : 50.0;
 
     return Scaffold(
       backgroundColor: AppColors.background(context),
@@ -51,15 +58,18 @@ class _RegistroPageState extends State<RegistroPage> {
           AnimatedPositioned(
             duration: const Duration(milliseconds: 800),
             curve: Curves.easeOut,
-            bottom: showContainer ? 0 : -600.h,
+            bottom: showContainer ? 0 : -600,
             left: 0,
             right: 0,
             child: Container(
               width: double.infinity,
-              padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 32.h),
+              padding: EdgeInsets.symmetric(
+                horizontal: horizontalPadding,
+                vertical: verticalPadding,
+              ),
               decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.vertical(top: Radius.circular(32.r)),
+                color: AppColors.promoCardBackground(context),
+                borderRadius: const BorderRadius.vertical(top: Radius.circular(32)),
               ),
               child: const _RegistroBody(),
             ),
@@ -81,7 +91,7 @@ class _RegistroBodyState extends State<_RegistroBody> {
   final _formKey = GlobalKey<FormState>();
 
   final _numeroController = TextEditingController();
-  final _plazaController = TextEditingController();
+  final _workUnitController = TextEditingController(); // ✅ usado correctamente
   final _jobCodeController = TextEditingController();
   final _rfcController = TextEditingController();
 
@@ -92,7 +102,7 @@ class _RegistroBodyState extends State<_RegistroBody> {
 
     final request = ServidorPublicoRequest(
       userId: _numeroController.text.trim(),
-      plaza: _plazaController.text.trim(),
+      workUnit: _workUnitController.text.trim(),
       jobCode: _jobCodeController.text.trim(),
       rfc: _rfcController.text.trim(),
     );
@@ -135,15 +145,15 @@ class _RegistroBodyState extends State<_RegistroBody> {
             titleSuffix: 'aquí',
             subtitle: 'Ingresa tus datos laborales para continuar.',
           ),
-          SizedBox(height: 24.h),
+          const SizedBox(height: 12),
           NumeroServidorField(controller: _numeroController),
-          SizedBox(height: 16.h),
-          PlazaField(controller: _plazaController),
-          SizedBox(height: 16.h),
+          const SizedBox(height: 12),
+          WorkUnitField(controller: _workUnitController), // ✅ nombre correcto
+          const SizedBox(height: 12),
           JobCodeField(controller: _jobCodeController),
-          SizedBox(height: 16.h),
+          const SizedBox(height: 12),
           RfcField(controller: _rfcController),
-          SizedBox(height: 28.h),
+          const SizedBox(height: 24),
           SizedBox(
             width: double.infinity,
             child: PrimaryButton(
@@ -152,11 +162,11 @@ class _RegistroBodyState extends State<_RegistroBody> {
               onPressed: _buscarServidor,
             ),
           ),
-          SizedBox(height: 20.h),
+          const SizedBox(height: 24),
           Center(
             child: Text(
               'Aviso de privacidad',
-              style: Theme.of(context).textTheme.labelSmall?.copyWith(fontSize: 10.sp),
+              style: Theme.of(context).textTheme.labelSmall,
             ),
           ),
         ],

@@ -53,7 +53,9 @@ class _SelectorTipoSimulacionState extends State<SelectorTipoSimulacion> {
             padding: EdgeInsets.symmetric(vertical: 8.h),
             child: Text(
               'Error al cargar tipos de simulación',
-              style: AppTextStyles.bodySmall(context).copyWith(color: Colors.red),
+              style: AppTextStyles.bodySmall(
+                context,
+              ).copyWith(color: Colors.red),
             ),
           );
         }
@@ -71,7 +73,7 @@ class _SelectorTipoSimulacionState extends State<SelectorTipoSimulacion> {
             Container(
               padding: EdgeInsets.symmetric(horizontal: 12.w),
               decoration: BoxDecoration(
-                color: const Color(0xFFF6F6F6),
+                color: AppColors.background(context),
                 borderRadius: BorderRadius.circular(12.r),
               ),
               child: DropdownButtonHideUnderline(
@@ -79,14 +81,28 @@ class _SelectorTipoSimulacionState extends State<SelectorTipoSimulacion> {
                   value: _selectedTipo,
                   hint: Text(
                     'Selecciona tu tipo de simulación',
-                    style: AppTextStyles.inputHint(context),
+                    style: AppTextStyles.inputHint(context).copyWith(
+                      color:
+                          Theme.of(context).brightness == Brightness.dark
+                              ? Colors.grey[400]
+                              : Colors.grey[700],
+                    ),
                   ),
+
                   isExpanded: true,
-                  icon: const Icon(Icons.keyboard_arrow_down_rounded, color: Colors.grey),
+                  icon: Icon(
+                    Icons.keyboard_arrow_down_rounded,
+                    color:
+                        Theme.of(context).brightness == Brightness.dark
+                            ? Colors.grey[300]
+                            : Colors.grey[600],
+                  ),
                   borderRadius: BorderRadius.circular(12.r),
-                  dropdownColor: Colors.white,
+                  dropdownColor: AppColors.cardBackground(context),
                   itemHeight: 52.h,
-                  style: AppTextStyles.bodySmall(context),
+                  style: AppTextStyles.bodySmall(
+                    context,
+                  ).copyWith(color: AppColors.textPrimary(context)),
                   onChanged: (value) {
                     setState(() {
                       _selectedTipo = value;
@@ -94,19 +110,29 @@ class _SelectorTipoSimulacionState extends State<SelectorTipoSimulacion> {
                       widget.onChanged?.call(value);
                     });
                   },
-                  items: tipos.map((tipo) {
-                    return DropdownMenuItem<SimType>(
-                      value: tipo,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(capitalizarSoloPrimera(tipo.name)),
-                          if (_selectedTipo?.id == tipo.id)
-                            const Icon(Icons.check, size: 16, color: AppColors.primary),
-                        ],
-                      ),
-                    );
-                  }).toList(),
+                  items:
+                      tipos.map((tipo) {
+                        return DropdownMenuItem<SimType>(
+                          value: tipo,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                capitalizarSoloPrimera(tipo.name),
+                                style: TextStyle(
+                                  color: AppColors.textPrimary(context),
+                                ),
+                              ),
+                              if (_selectedTipo?.id == tipo.id)
+                                Icon(
+                                  Icons.check,
+                                  size: 16,
+                                  color: AppColors.primary,
+                                ),
+                            ],
+                          ),
+                        );
+                      }).toList(),
                 ),
               ),
             ),

@@ -69,31 +69,37 @@ class SimulacionPage extends StatelessWidget {
             Container(
               padding: EdgeInsets.all(16.w),
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: AppColors.cardBackground(context),
                 borderRadius: BorderRadius.circular(12.r),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.03),
-                    blurRadius: 4.r,
-                    offset: Offset(0, 2.h),
-                  ),
-                ],
+                boxShadow:
+                    Theme.of(context).brightness == Brightness.light
+                        ? [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.03),
+                            blurRadius: 4.r,
+                            offset: Offset(0, 2.h),
+                          ),
+                        ]
+                        : [],
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Text.rich(
                     TextSpan(
-                      style: AppTextStyles.bodySmall(context).copyWith(height: 1.3),
+                      style: AppTextStyles.bodySmall(context).copyWith(
+                        height: 1.3,
+                        color: AppColors.textPrimary(context),
+                      ),
                       children: [
                         TextSpan(
                           text: 'Costo Anual Total ',
-                          style: TextStyle(color: Colors.teal[800]),
+                          style: TextStyle(color: AppColors.primary),
                         ),
                         TextSpan(
                           text: '(CAT)',
                           style: TextStyle(
-                            color: Colors.teal[800],
+                            color: AppColors.primary,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -101,7 +107,7 @@ class SimulacionPage extends StatelessWidget {
                         TextSpan(
                           text: 'SIN IVA',
                           style: TextStyle(
-                            color: Colors.teal[700],
+                            color: AppColors.primary,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -113,7 +119,7 @@ class SimulacionPage extends StatelessWidget {
                         TextSpan(
                           text: 'CAT',
                           style: TextStyle(
-                            color: Colors.teal[800],
+                            color: AppColors.primary,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -124,7 +130,7 @@ class SimulacionPage extends StatelessWidget {
                         TextSpan(
                           text: '(CONDUSEF)',
                           style: TextStyle(
-                            color: Colors.teal[800],
+                            color: AppColors.primary,
                             fontWeight: FontWeight.bold,
                           ),
                         ),

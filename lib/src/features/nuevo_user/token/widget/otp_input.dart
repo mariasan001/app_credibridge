@@ -41,65 +41,67 @@ class _OtpInputState extends State<OtpInput> {
     widget.onCompleted(code);
   }
 
-  void _onBackspace(int index) {
-    if (_controllers[index].text.isEmpty && index > 0) {
-      _focusNodes[index - 1].requestFocus();
-      _controllers[index - 1].clear();
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final borderColor = isDark ? Colors.white70 : Colors.grey.shade400;
+    final fillColor = isDark ? const Color(0xFF2A2A2A) : Colors.white;
+    final textColor = isDark ? Colors.white : Colors.black87;
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: List.generate(6, (i) {
-        return Container(
-          width: 48.w,
-          height: 56.h,
-          margin: EdgeInsets.symmetric(horizontal: 6.w),
-          child: TextField(
-            controller: _controllers[i],
-            focusNode: _focusNodes[i],
-            textAlign: TextAlign.center,
-            maxLength: 1,
-            keyboardType: TextInputType.text,
-            textInputAction: TextInputAction.next,
-            style: TextStyle(
-              fontSize: 22.sp,
-              fontWeight: FontWeight.bold,
-              letterSpacing: 1.5,
-            ),
-            decoration: InputDecoration(
-              counterText: '',
-              contentPadding: EdgeInsets.zero,
-              enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(20.r),
-                borderSide: BorderSide(color: Colors.grey.shade400),
+        return Padding(
+          padding: EdgeInsets.symmetric(horizontal: 4.w),
+          child: SizedBox(
+            width: 45.w,
+            height: 56.h,
+            child: TextField(
+              controller: _controllers[i],
+              focusNode: _focusNodes[i],
+              textAlign: TextAlign.center,
+              maxLength: 1,
+              keyboardType: TextInputType.text,
+              textInputAction: TextInputAction.next,
+              style: TextStyle(
+                fontSize: 22.sp,
+                fontWeight: FontWeight.bold,
+                letterSpacing: 1.5,
+                color: textColor,
               ),
-              focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(20.r),
-                borderSide: const BorderSide(color: Colors.teal, width: 2),
+              decoration: InputDecoration(
+                counterText: '',
+                filled: true,
+                fillColor: fillColor,
+                contentPadding: EdgeInsets.zero,
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(20.r),
+                  borderSide: BorderSide(color: borderColor),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(20.r),
+                  borderSide: const BorderSide(color: Colors.teal, width: 2),
+                ),
               ),
+              onChanged: (value) {
+                final upper = value.toUpperCase();
+                _controllers[i].value = TextEditingValue(
+                  text: upper,
+                  selection: TextSelection.collapsed(offset: upper.length),
+                );
+                _onChanged(upper, i);
+              },
+              inputFormatters: [
+                FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z0-9]')),
+              ],
+              onTapOutside: (_) => FocusScope.of(context).unfocus(),
+              onSubmitted: (_) {
+                if (i == 5) {
+                  final code = _controllers.map((c) => c.text).join();
+                  widget.onCompleted(code);
+                }
+              },
             ),
-            onChanged: (value) {
-              final upper = value.toUpperCase();
-              _controllers[i].value = TextEditingValue(
-                text: upper,
-                selection: TextSelection.collapsed(offset: upper.length),
-              );
-              _onChanged(upper, i);
-            },
-            inputFormatters: [
-              FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z0-9]')),
-            ],
-            onTapOutside: (_) => FocusScope.of(context).unfocus(),
-            onEditingComplete: () {},
-            onSubmitted: (_) {
-              if (i == 5) {
-                final code = _controllers.map((c) => c.text).join();
-                widget.onCompleted(code);
-              }
-            },
           ),
         );
       }),

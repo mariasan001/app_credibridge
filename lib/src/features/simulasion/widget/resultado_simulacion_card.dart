@@ -1,7 +1,7 @@
 import 'package:app_creditos/src/features/simulasion/page/solicitar_credito.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:app_creditos/src/features/auth/models/user_model.dart';
 import 'package:app_creditos/src/features/simulasion/models/simulacion_result.dart';
@@ -27,34 +27,51 @@ class ResultadoSimulacionCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final formatCurrency = NumberFormat.currency(locale: 'es_MX', symbol: '\$', decimalDigits: 2);
+    final labelFontSize = 11.sp;
+    final valueFontSize = 15.sp;
+
+    final backgroundColor = AppColors.cardBackground(context);
+    final borderColor = isTopOption
+        ? AppColors.primary
+        : Theme.of(context).brightness == Brightness.dark
+            ? Colors.white12
+            : Colors.grey.shade300;
+
+    final icon = isTopOption ? Icons.emoji_events_outlined : Icons.account_balance;
+    final iconColor = isTopOption ? AppColors.iconColorStrong : AppColors.primary;
+
+    final formatCurrency = NumberFormat.currency(
+      locale: 'es_MX',
+      symbol: '\$',
+      decimalDigits: 2,
+    );
 
     final bool excedeDescuento = solicitud.tipoSimulacion?.id == 1 &&
         solicitud.descuento != null &&
         result.capital > solicitud.descuento!;
 
+    final buttonColor = excedeDescuento
+        ? Colors.red
+        : (isTopOption ? AppColors.iconColorStrong : AppColors.primary);
+
     final String capitalLabel = solicitud.tipoSimulacion?.id == 1 ? 'Descuento' : 'Crédito';
 
     return Container(
       margin: EdgeInsets.only(bottom: 20.h),
-      padding: EdgeInsets.all(16.r),
+      padding: EdgeInsets.all(16.w),
       decoration: BoxDecoration(
-        color: Theme.of(context).brightness == Brightness.dark ? const Color(0xFF1E1E1E) : Colors.white,
+        color: backgroundColor,
         borderRadius: BorderRadius.circular(20.r),
-        border: Border.all(
-          color: isTopOption
-              ? AppColors.primary
-              : Theme.of(context).brightness == Brightness.dark
-                  ? Colors.white12
-                  : const Color(0xFFE5E5E5),
-        ),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.06),
-            blurRadius: 12.r,
-            offset: const Offset(0, 4),
-          ),
-        ],
+        border: Border.all(color: borderColor, width: 1),
+        boxShadow: Theme.of(context).brightness == Brightness.light
+            ? [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.06),
+                  blurRadius: 12.r,
+                  offset: Offset(0, 4.h),
+                ),
+              ]
+            : [],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -64,11 +81,11 @@ class ResultadoSimulacionCard extends StatelessWidget {
               padding: EdgeInsets.only(bottom: 12.h),
               child: Row(
                 children: [
-                  Icon(Icons.star_rounded, color: AppColors.iconColorStrong, size: 22.sp),
+                  Icon(Icons.star_rounded, color: AppColors.iconColorStrong, size: 20.sp),
                   SizedBox(width: 6.w),
                   Text(
                     'Mejor opción para ti',
-                    style: AppTextStyles.titleheader(context).copyWith(fontSize: 16.sp),
+                    style: AppTextStyles.titleheader(context).copyWith(fontSize: 14.sp),
                   ),
                 ],
               ),
@@ -77,11 +94,8 @@ class ResultadoSimulacionCard extends StatelessWidget {
             children: [
               CircleAvatar(
                 radius: 20.r,
-                backgroundColor: AppColors.primary.withOpacity(0.1),
-                child: Icon(
-                  isTopOption ? Icons.emoji_events_outlined : Icons.account_balance,
-                  color: isTopOption ? AppColors.iconColorStrong : AppColors.primary,
-                ),
+                backgroundColor: iconColor.withOpacity(0.1),
+                child: Icon(icon, color: iconColor, size: 20.sp),
               ),
               SizedBox(width: 12.w),
               Expanded(
@@ -90,14 +104,18 @@ class ResultadoSimulacionCard extends StatelessWidget {
                   children: [
                     Text(
                       result.lenderName,
-                      style: AppTextStyles.promoBold(context).copyWith(fontSize: 15.sp),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: AppTextStyles.promoBold(context).copyWith(fontSize: valueFontSize),
                     ),
                     SizedBox(height: 2.h),
                     Text(
                       result.serviceTypeDesc.toUpperCase(),
                       style: AppTextStyles.bodySmall(context).copyWith(
-                        fontSize: 11.sp,
-                        color: Colors.grey.shade600,
+                        fontSize: labelFontSize,
+                        color: Theme.of(context).brightness == Brightness.dark
+                            ? Colors.grey[400]
+                            : Colors.grey[600],
                         letterSpacing: 1.1,
                       ),
                     ),
@@ -109,6 +127,9 @@ class ResultadoSimulacionCard extends StatelessWidget {
                     ? null
                     : () {
                         solicitud
+                          ..tipoSimulacion = solicitud.tipoSimulacion
+                          ..monto = solicitud.monto
+                          ..plazo = solicitud.plazo
                           ..tasaAnual = result.effectiveAnnualRate
                           ..tasaPorPeriodo = result.effectivePeriodRate
                           ..lenderId = result.lenderId
@@ -118,17 +139,16 @@ class ResultadoSimulacionCard extends StatelessWidget {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (_) => ResultadosPage(user: user, solicitud: solicitud),
+                            builder: (_) => ResultadosPage(
+                              user: user,
+                              solicitud: solicitud,
+                            ),
                           ),
                         );
                       },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: excedeDescuento
-                      ? Colors.red
-                      : isTopOption
-                          ? AppColors.iconColorStrong
-                          : AppColors.primary,
-                  padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 10.h),
+                  backgroundColor: buttonColor,
+                  padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 10.h),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10.r),
                   ),
@@ -147,12 +167,30 @@ class ResultadoSimulacionCard extends StatelessWidget {
           Divider(color: Colors.grey.shade300),
           SizedBox(height: 12.h),
           Wrap(
-            spacing: 25.w,
+            spacing: 15.w,
             runSpacing: 12.h,
             children: [
-              _buildDato(context, label: capitalLabel, value: '${formatCurrency.format(result.capital)} MXN'),
-              _buildDato(context, label: 'Tasa Anual', value: '${result.effectiveAnnualRate.toStringAsFixed(2)}%'),
-              _buildDato(context, label: 'Tasa x Periodo', value: '${result.effectivePeriodRate.toStringAsFixed(2)}%'),
+              _buildDato(
+                context,
+                label: capitalLabel,
+                value: '${formatCurrency.format(result.capital)} MXN',
+                labelFontSize: labelFontSize,
+                valueFontSize: valueFontSize,
+              ),
+              _buildDato(
+                context,
+                label: 'Tasa Anual',
+                value: '${result.effectiveAnnualRate.toStringAsFixed(2)}%',
+                labelFontSize: labelFontSize,
+                valueFontSize: valueFontSize,
+              ),
+              _buildDato(
+                context,
+                label: 'Tasa x Periodo',
+                value: '${result.effectivePeriodRate.toStringAsFixed(2)}%',
+                labelFontSize: labelFontSize,
+                valueFontSize: valueFontSize,
+              ),
             ],
           ),
         ],
@@ -160,13 +198,28 @@ class ResultadoSimulacionCard extends StatelessWidget {
     );
   }
 
-  Widget _buildDato(BuildContext context, {required String label, required String value}) {
+  Widget _buildDato(
+    BuildContext context, {
+    required String label,
+    required String value,
+    required double labelFontSize,
+    required double valueFontSize,
+  }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(label, style: AppTextStyles.bodySmall(context).copyWith(fontSize: 12.sp)),
+        Text(
+          label,
+          style: AppTextStyles.bodySmall(context).copyWith(
+            fontSize: labelFontSize,
+            color: AppColors.textPrimary(context),
+          ),
+        ),
         SizedBox(height: 2.h),
-        Text(value, style: AppTextStyles.promoBold(context).copyWith(fontSize: 14.sp)),
+        Text(
+          value,
+          style: AppTextStyles.promoBold(context).copyWith(fontSize: valueFontSize),
+        ),
       ],
     );
   }

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-
 import 'package:app_creditos/src/features/auth/widgets/logo_title.dart';
 import 'package:app_creditos/src/features/nuevo_user/pass_new_user/page/pass_new_user.dart';
 import 'package:app_creditos/src/features/nuevo_user/token/services/token_services.dart';
@@ -66,6 +65,7 @@ class _TokenPageState extends State<TokenPage> {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     final isKeyboardVisible = MediaQuery.of(context).viewInsets.bottom > 0;
     final logoTop = showContainer
         ? (isKeyboardVisible ? 120.h : 140.h)
@@ -75,7 +75,7 @@ class _TokenPageState extends State<TokenPage> {
       backgroundColor: AppColors.background(context),
       body: Stack(
         children: [
-          /// LOGO con animación
+          // Logo animado
           AnimatedPositioned(
             duration: const Duration(milliseconds: 800),
             curve: Curves.easeOut,
@@ -85,7 +85,7 @@ class _TokenPageState extends State<TokenPage> {
             child: const Center(child: LogoTitle()),
           ),
 
-          /// Contenedor principal inferior
+          // Contenedor inferior
           AnimatedPositioned(
             duration: const Duration(milliseconds: 800),
             curve: Curves.easeOut,
@@ -96,7 +96,7 @@ class _TokenPageState extends State<TokenPage> {
               width: double.infinity,
               padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 36.h),
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: isDark ? const Color(0xFF1E1E1E) : Colors.white,
                 borderRadius: BorderRadius.vertical(top: Radius.circular(32.r)),
               ),
               child: SingleChildScrollView(
@@ -113,6 +113,7 @@ class _TokenPageState extends State<TokenPage> {
                     ),
                     SizedBox(height: 42.h),
 
+                    // Input para token
                     OtpInput(
                       onCompleted: (code) {
                         setState(() => _codigoIngresado = code);
@@ -121,6 +122,7 @@ class _TokenPageState extends State<TokenPage> {
 
                     SizedBox(height: 64.h),
 
+                    // Botón de validación
                     PrimaryButton(
                       label: 'Validar Token',
                       isLoading: _isLoading,
@@ -132,7 +134,10 @@ class _TokenPageState extends State<TokenPage> {
                     Center(
                       child: Text(
                         'Aviso de privacidad',
-                        style: Theme.of(context).textTheme.labelSmall?.copyWith(fontSize: 10.sp),
+                        style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                              fontSize: 10.sp,
+                              color: AppColors.textMuted(context),
+                            ),
                       ),
                     ),
                   ],
