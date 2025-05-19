@@ -62,7 +62,6 @@ class _DirectorioPageState extends State<DirectorioPage> {
 
     return Scaffold(
       backgroundColor: AppColors.background(context),
-      resizeToAvoidBottomInset: true,
       appBar: CustomAppBar(user: widget.user),
       body: SafeArea(
         child: FutureBuilder<List<LenderServiceGrouped>>(
@@ -116,9 +115,10 @@ class _DirectorioPageState extends State<DirectorioPage> {
                       SizedBox(height: 20.h),
                       TextField(
                         onChanged: _onSearchChanged,
+                        style: TextStyle(color: AppColors.text(context)),
                         decoration: InputDecoration(
                           hintText: 'Buscar servicio o institución',
-                          prefixIcon: const Icon(Icons.search),
+                          prefixIcon: Icon(Icons.search, color: AppColors.textMuted(context)),
                           filled: true,
                           fillColor: isDark ? const Color(0xFF2A2A2A) : Colors.white,
                           contentPadding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 14.h),
@@ -126,7 +126,9 @@ class _DirectorioPageState extends State<DirectorioPage> {
                             borderRadius: BorderRadius.circular(30.r),
                             borderSide: BorderSide.none,
                           ),
-                          hintStyle: AppTextStyles.inputHint(context),
+                          hintStyle: AppTextStyles.inputHint(context).copyWith(
+                            color: AppColors.textMuted(context),
+                          ),
                         ),
                       ),
                     ],
@@ -157,7 +159,7 @@ class _DirectorioPageState extends State<DirectorioPage> {
                                     style: AppTextStyles.linkBold(context).copyWith(
                                       fontWeight: FontWeight.w800,
                                       fontSize: 18.sp,
-                                      color: isDark ? Colors.white70 : Colors.black54,
+                                      color: AppColors.textMuted(context),
                                     ),
                                   ),
                                 ),
@@ -167,7 +169,7 @@ class _DirectorioPageState extends State<DirectorioPage> {
                                     margin: EdgeInsets.only(bottom: 16.h),
                                     padding: EdgeInsets.all(12.w),
                                     decoration: BoxDecoration(
-                                      color: isDark ? const Color(0xFF2A2A2A) : Colors.white,
+                                      color: AppColors.promoCardBackground(context),
                                       borderRadius: BorderRadius.circular(16.r),
                                       boxShadow: [
                                         BoxShadow(
@@ -185,7 +187,11 @@ class _DirectorioPageState extends State<DirectorioPage> {
                                           backgroundColor: color.withOpacity(0.15),
                                           child: Text(
                                             service.lender.lenderName[0],
-                                            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14.sp, color: color),
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 14.sp,
+                                              color: color,
+                                            ),
                                           ),
                                         ),
                                         SizedBox(width: 12.w),
@@ -225,7 +231,7 @@ class _DirectorioPageState extends State<DirectorioPage> {
                                               SizedBox(height: 6.h),
                                               Row(
                                                 children: [
-                                                  Icon(Icons.email, size: 14.sp, color: Colors.grey),
+                                                  Icon(Icons.email, size: 14.sp, color: AppColors.textMuted(context)),
                                                   SizedBox(width: 4.w),
                                                   Expanded(
                                                     child: Text(
@@ -238,11 +244,14 @@ class _DirectorioPageState extends State<DirectorioPage> {
                                               SizedBox(height: 4.h),
                                               Row(
                                                 children: [
-                                                  Icon(Icons.phone, size: 15.sp, color: Colors.grey),
+                                                  Icon(Icons.phone, size: 15.sp, color: AppColors.textMuted(context)),
                                                   SizedBox(width: 4.w),
                                                   Text(
                                                     service.lender.lenderPhone,
-                                                    style: TextStyle(fontSize: 13.sp, color: const Color(0xFF686868)),
+                                                    style: TextStyle(
+                                                      fontSize: 13.sp,
+                                                      color: AppColors.textMuted(context),
+                                                    ),
                                                   ),
                                                 ],
                                               ),

@@ -1,14 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:app_creditos/src/shared/theme/app_colors.dart';
 import 'package:app_creditos/src/features/auth/models/user_model.dart';
-
-// Componentes externos
 import 'package:app_creditos/src/shared/components/notification_popup.dart';
 import 'package:app_creditos/src/shared/components/theme_toggle_button.dart';
-import 'package:app_creditos/src/shared/components/options_menu_button.dart'; // Asegúrate de tenerlo
+import 'package:app_creditos/src/shared/components/options_menu_button.dart';
 
-/// AppBar personalizado con logo, notificaciones y menú de usuario.
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final User user;
 
@@ -16,8 +12,10 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return AppBar(
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       elevation: 0,
       automaticallyImplyLeading: false,
       title: RichText(
@@ -26,15 +24,15 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
             TextSpan(
               text: 'Credi',
               style: TextStyle(
-                color: AppColors.primary,
+                color: const Color(0xFFFF8C00), // Naranja institucional o el que tú uses
                 fontWeight: FontWeight.w900,
-                fontSize: 24.sp, // Escalado responsivo
+                fontSize: 24.sp,
               ),
             ),
             TextSpan(
               text: 'Bridge',
               style: TextStyle(
-                color: Colors.black,
+                color: isDark ? Colors.white : Colors.black,
                 fontWeight: FontWeight.w900,
                 fontSize: 24.sp,
               ),
@@ -45,11 +43,11 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       actions: [
         const NotificationPopupButton(),
         const ThemeToggleButton(),
-        OptionsMenuButton(user: user), // ✅ Aquí ya sí aparece
+        OptionsMenuButton(user: user),
       ],
     );
   }
 
   @override
-  Size get preferredSize => Size.fromHeight(kToolbarHeight);
+  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
 }

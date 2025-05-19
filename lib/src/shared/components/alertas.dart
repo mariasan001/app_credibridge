@@ -5,8 +5,15 @@ void showCustomSnackBar(
   String message, {
   bool isError = false,
 }) {
-  final color = isError ? Colors.red[400] : Colors.green[400];
-  final icon = isError ? Icons.error_outline : Icons.check_circle_outline;
+  final isDark = Theme.of(context).brightness == Brightness.dark;
+
+  final Color color = isError
+      ? Colors.red[400]!
+      : isDark
+          ? const Color(0xFFFF8C00) // naranja en modo oscuro
+          : Colors.green[400]!;
+
+  final IconData icon = isError ? Icons.error_outline : Icons.check_circle_outline;
 
   ScaffoldMessenger.of(context).showSnackBar(
     SnackBar(

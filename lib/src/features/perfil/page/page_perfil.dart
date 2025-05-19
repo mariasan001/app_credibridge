@@ -30,6 +30,8 @@ class _PerfilPageState extends State<PerfilPage> {
 
   Widget buildField(IconData icon, String label, String value, {bool enabled = false}) {
     final isStatusField = label == 'Situación';
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Padding(
       padding: EdgeInsets.only(bottom: 16.h),
       child: Row(
@@ -52,7 +54,7 @@ class _PerfilPageState extends State<PerfilPage> {
                     style: TextStyle(
                       fontSize: 13.sp,
                       fontWeight: FontWeight.w600,
-                      color: Colors.black54,
+                      color: AppColors.textMuted(context),
                     ),
                   ),
                 ),
@@ -78,12 +80,12 @@ class _PerfilPageState extends State<PerfilPage> {
                     style: TextStyle(
                       fontSize: 14.sp,
                       fontWeight: FontWeight.w600,
-                      color: Colors.black87,
+                      color: AppColors.text(context),
                     ),
                     decoration: InputDecoration(
                       isDense: true,
                       filled: true,
-                      fillColor: const Color(0xFFF3F3F3),
+                      fillColor: isDark ? const Color(0xFF2A2A2A) : const Color(0xFFF3F3F3),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12.r),
                         borderSide: BorderSide.none,
@@ -103,11 +105,11 @@ class _PerfilPageState extends State<PerfilPage> {
       margin: EdgeInsets.only(bottom: 20.h),
       padding: EdgeInsets.all(20.w),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.promoCardBackground(context),
         borderRadius: BorderRadius.circular(16.r),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: AppColors.promoShadow(context),
             blurRadius: 5.r,
             offset: Offset(0, 2.h),
           ),
@@ -116,7 +118,12 @@ class _PerfilPageState extends State<PerfilPage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(title, style: TextStyle(fontWeight: FontWeight.w800, fontSize: 16.sp)),
+          Text(title,
+              style: TextStyle(
+                fontWeight: FontWeight.w800,
+                fontSize: 16.sp,
+                color: AppColors.text(context),
+              )),
           SizedBox(height: 16.h),
           ...fields,
         ],
@@ -125,32 +132,34 @@ class _PerfilPageState extends State<PerfilPage> {
   }
 
   Widget buildSkeletonSection() {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     Widget shimmerLine({double width = double.infinity}) => Container(
-      height: 14.h,
-      width: width.w,
-      margin: EdgeInsets.symmetric(vertical: 6.h),
-      decoration: BoxDecoration(
-        color: Colors.grey[300],
-        borderRadius: BorderRadius.circular(8.r),
-      ),
-    );
+          height: 14.h,
+          width: width.w,
+          margin: EdgeInsets.symmetric(vertical: 6.h),
+          decoration: BoxDecoration(
+            color: isDark ? Colors.grey.shade700 : Colors.grey.shade300,
+            borderRadius: BorderRadius.circular(8.r),
+          ),
+        );
 
     Widget shimmerField() => Padding(
-      padding: EdgeInsets.only(bottom: 16.h),
-      child: Row(
-        children: [
-          CircleAvatar(radius: 18.r, backgroundColor: Colors.grey[300]),
-          SizedBox(width: 12.w),
-          Expanded(
-            child: Column(children: [shimmerLine(width: 100), shimmerLine()]),
+          padding: EdgeInsets.only(bottom: 16.h),
+          child: Row(
+            children: [
+              CircleAvatar(radius: 18.r, backgroundColor: Colors.grey[300]),
+              SizedBox(width: 12.w),
+              Expanded(
+                child: Column(children: [shimmerLine(width: 100), shimmerLine()]),
+              ),
+            ],
           ),
-        ],
-      ),
-    );
+        );
 
     return Shimmer.fromColors(
-      baseColor: Colors.grey.shade300!,
-      highlightColor: Colors.grey.shade100!,
+      baseColor: isDark ? Colors.grey.shade700 : Colors.grey.shade300,
+      highlightColor: isDark ? Colors.grey.shade500 : Colors.grey.shade100,
       child: Column(
         children: List.generate(4, (_) => buildSection("", List.generate(4, (_) => shimmerField()))),
       ),

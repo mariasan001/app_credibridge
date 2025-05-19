@@ -19,6 +19,7 @@ import 'package:app_creditos/src/features/inicio/widget/PromocionCardSkeleton.da
 import 'package:app_creditos/src/features/inicio/widget/PromocionesActivasWidget.dart';
 import 'package:app_creditos/src/features/inicio/widget/DescuentoCardSkeleton.dart';
 import 'package:app_creditos/src/features/inicio/widget/sin_promociones_widget.dart';
+
 class HomePage extends StatefulWidget {
   final User user;
   const HomePage({super.key, required this.user});
@@ -47,9 +48,9 @@ class _HomePageState extends State<HomePage> {
       }
     } catch (e) {
       if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error: ${e.toString()}')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Error: ${e.toString()}')));
     }
   }
 
@@ -70,7 +71,9 @@ class _HomePageState extends State<HomePage> {
                   // 👋 Bienvenida
                   RichText(
                     text: TextSpan(
-                      style: AppTextStyles.heading(context).copyWith(fontSize: 22.sp),
+                      style: AppTextStyles.heading(
+                        context,
+                      ).copyWith(fontSize: 22.sp),
                       children: [
                         const TextSpan(text: 'Bienvenido '),
                         TextSpan(
@@ -87,25 +90,34 @@ class _HomePageState extends State<HomePage> {
                   SizedBox(height: 4.h),
                   Text(
                     'Gestiona tu cuenta de manera rápida y sencilla.',
-                    style: AppTextStyles.bodySmall(context),
+                    style: AppTextStyles.bodySmall(
+                      context,
+                    ).copyWith(color: AppColors.textMuted(context)),
                   ),
-                  SizedBox(height: 16.h),
+
+                  SizedBox(height: 20.h),
 
                   // 💸 Tarjeta de descuento
                   AnimatedSwitcher(
                     duration: const Duration(milliseconds: 300),
-                    child: descuento == null
-                        ? const DescuentoCardSkeleton()
-                        : DescuentoCard(descuento: descuento!, user: widget.user),
+                    child:
+                        descuento == null
+                            ? const DescuentoCardSkeleton()
+                            : DescuentoCard(
+                              descuento: descuento!,
+                              user: widget.user,
+                            ),
                   ),
-                  SizedBox(height: 24.h),
+                  SizedBox(height: 40.h),
 
                   // 🏷️ Título de promociones
                   Text(
                     'Promociones',
-                    style: AppTextStyles.heading(context).copyWith(fontSize: 22.sp),
+                    style: AppTextStyles.heading(
+                      context,
+                    ).copyWith(fontSize: 22.sp),
                   ),
-                  SizedBox(height: 8.h),
+                  SizedBox(height: 1.h),
                 ],
               ),
             ),

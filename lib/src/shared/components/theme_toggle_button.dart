@@ -13,17 +13,17 @@ class ThemeToggleButton extends StatelessWidget {
     return IconButton(
       icon: Icon(
         isDark ? Icons.wb_sunny_outlined : Icons.bedtime_outlined,
-        color: Colors.black,
-        size: 24.sp, // Escalado responsivo
+        color: isDark ? const Color(0xFFFF944D) : Colors.black,
+        size: 24.sp,
       ),
-      tooltip: 'Cambiar tema', // Mejora accesibilidad
+      tooltip: 'Cambiar tema',
       onPressed: () {
         context.read<ThemeNotifier>().toggleTheme();
+        final nuevoTema = isDark ? 'Modo claro activado' : 'Modo oscuro activado';
+
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text(
-              isDark ? 'Modo claro activado' : 'Modo oscuro activado',
-            ),
+            content: Text(nuevoTema),
             duration: const Duration(milliseconds: 900),
           ),
         );

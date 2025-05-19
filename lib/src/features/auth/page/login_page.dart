@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:app_creditos/src/shared/theme/app_colors.dart';
+
 import '../widgets/login_form.dart';
 import '../widgets/logo_title.dart';
 import '../../../shared/components/welcome_text.dart';
+
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
 
@@ -17,8 +19,6 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
-
-    /// Permitir la entrada animada después de un pequeño retardo
     Future.delayed(const Duration(milliseconds: 300), () {
       if (mounted) setState(() => showContainer = true);
     });
@@ -37,10 +37,10 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
       resizeToAvoidBottomInset: true,
       backgroundColor: AppColors.background(context),
       body: GestureDetector(
-        onTap: () => FocusScope.of(context).unfocus(), // cerrar teclado al tocar fuera
+        onTap: () => FocusScope.of(context).unfocus(),
         child: Stack(
           children: [
-            /// LOGO ANIMADO
+            /// LOGO
             AnimatedPositioned(
               duration: const Duration(milliseconds: 600),
               curve: Curves.easeOut,
@@ -61,14 +61,14 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                 width: double.infinity,
                 padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 20.h),
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: AppColors.promoCardBackground(context), // ✅ modo claro/oscuro
                   borderRadius: BorderRadius.vertical(top: Radius.circular(32.r)),
                   boxShadow: [
                     BoxShadow(
                       color: Colors.black.withOpacity(0.05),
                       blurRadius: 10,
                       offset: const Offset(0, -2),
-                    )
+                    ),
                   ],
                 ),
                 child: const _LoginBody(),
@@ -86,7 +86,7 @@ class _LoginBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView( // ✅ Mejora en caso de teclado activo
+    return SingleChildScrollView(
       physics: const BouncingScrollPhysics(),
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -104,7 +104,10 @@ class _LoginBody extends StatelessWidget {
           Center(
             child: Text(
               'Aviso de privacidad',
-              style: Theme.of(context).textTheme.labelSmall?.copyWith(fontSize: 10.sp),
+              style: TextStyle(
+                fontSize: 10.sp,
+                color: AppColors.textMuted(context), // ✅ texto legible en ambos temas
+              ),
             ),
           ),
         ],

@@ -14,8 +14,13 @@ class PromocionCardVisual extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     final fechaFin = DateFormat("yyyy-MM-ddTHH:mm:ss").parse(promo.endDate);
-    final fechaFormateada = DateFormat("d 'de' MMMM 'del' yyyy", 'es_MX').format(fechaFin);
+    final fechaFormateada = DateFormat(
+      "d 'de' MMMM 'del' yyyy",
+      'es_MX',
+    ).format(fechaFin);
 
     return Padding(
       padding: EdgeInsets.all(8.w),
@@ -50,7 +55,10 @@ class PromocionCardVisual extends StatelessWidget {
                       CircleAvatar(
                         radius: 20.r,
                         backgroundColor: AppColors.iconBgLight,
-                        child: const Icon(Icons.doorbell_outlined, color: AppColors.iconColorStrong),
+                        child: const Icon(
+                          Icons.doorbell_outlined,
+                          color: AppColors.iconColorStrong,
+                        ),
                       ),
                       SizedBox(width: 12.w),
                       Expanded(
@@ -62,6 +70,7 @@ class PromocionCardVisual extends StatelessWidget {
                               style: AppTextStyles.promoTitle(context).copyWith(
                                 fontWeight: FontWeight.w700,
                                 fontSize: 16.sp,
+                                color: AppColors.text(context),
                               ),
                             ),
                             SizedBox(height: 4.h),
@@ -79,7 +88,6 @@ class PromocionCardVisual extends StatelessWidget {
                       ),
                     ],
                   ),
-
                   SizedBox(height: 12.h),
 
                   /// Descripción
@@ -87,35 +95,41 @@ class PromocionCardVisual extends StatelessWidget {
                     promo.promotionDesc,
                     style: AppTextStyles.promoBody(context).copyWith(
                       fontSize: 13.sp,
-                      color: Colors.black54,
+                      color: AppColors.textMuted(context),
                       height: 1.4,
                     ),
                   ),
-
                   SizedBox(height: 12.h),
 
                   /// Beneficios
-                  ...promo.benefits.map((benef) => Padding(
-                        padding: EdgeInsets.only(bottom: 4.h),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Icon(Icons.check_circle,
-                                color: AppColors.successCheck, size: 18.sp),
-                            SizedBox(width: 6.w),
-                            Expanded(
-                              child: Text(
-                                benef,
-                                style: AppTextStyles.promoListText(context).copyWith(
-                                  fontSize: 12.5.sp,
-                                  color: Colors.black54,
-                                  height: 1.4,
-                                ),
+                  ...promo.benefits.map(
+                    (benef) => Padding(
+                      padding: EdgeInsets.only(bottom: 4.h),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Icon(
+                            Icons.check_circle,
+                            color: AppColors.successCheck,
+                            size: 18.sp,
+                          ),
+                          SizedBox(width: 6.w),
+                          Expanded(
+                            child: Text(
+                              benef,
+                              style: AppTextStyles.promoListText(
+                                context,
+                              ).copyWith(
+                                fontSize: 12.5.sp,
+                                color: AppColors.textMuted(context),
+                                height: 1.4,
                               ),
                             ),
-                          ],
-                        ),
-                      )),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -135,37 +149,54 @@ class PromocionCardVisual extends StatelessWidget {
                   Expanded(
                     child: Text(
                       'Expira el $fechaFormateada',
-                      style: AppTextStyles.promoFooterDate(context).copyWith(fontSize: 12.sp),
+                      style: AppTextStyles.promoFooterDate(context).copyWith(
+                        fontSize: 12.sp,
+                        color:
+                            Colors
+                                .black, // ✅ Forzar negro para que siempre se vea sobre promoYellow
+                      ),
                     ),
                   ),
                   OpenContainer(
                     transitionType: ContainerTransitionType.fadeThrough,
                     transitionDuration: const Duration(milliseconds: 400),
-                    openBuilder: (context, _) => PromocionDetallePage(promo: promo),
+                    openBuilder:
+                        (context, _) => PromocionDetallePage(promo: promo),
                     closedColor: AppColors.promoButton,
-                    closedShape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.r)),
-                    closedElevation: 0,
-                    closedBuilder: (context, openContainer) => InkWell(
-                      onTap: openContainer,
+                    closedShape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8.r),
-                      child: Container(
-                        padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),
-                        child: Row(
-                          children: [
-                            Icon(Icons.favorite_border,
-                                color: AppColors.promoButtonIcon, size: 18.sp),
-                            SizedBox(width: 4.w),
-                            Text(
-                              'Lo quiero',
-                              style: AppTextStyles.promoButtonText(context).copyWith(
-                                color: const Color.fromARGB(255, 142, 113, 10),
-                                fontSize: 13.sp,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
                     ),
+                    closedElevation: 0,
+                    closedBuilder:
+                        (context, openContainer) => InkWell(
+                          onTap: openContainer,
+                          borderRadius: BorderRadius.circular(8.r),
+                          child: Container(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 12.w,
+                              vertical: 8.h,
+                            ),
+                            child: Row(
+                              children: [
+                                Icon(
+                                  Icons.favorite_border,
+                                  color: AppColors.promoButtonIcon,
+                                  size: 18.sp,
+                                ),
+                                SizedBox(width: 4.w),
+                                Text(
+                                  'Lo quiero',
+                                  style: AppTextStyles.promoButtonText(
+                                    context,
+                                  ).copyWith(
+                                    color: AppColors.promoButtonIcon,
+                                    fontSize: 13.sp,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
                   ),
                 ],
               ),

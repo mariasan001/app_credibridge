@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:animations/animations.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:app_creditos/src/features/auth/models/user_model.dart';
 import 'package:app_creditos/src/features/simulasion/page/simulasion_page.dart';
@@ -21,20 +20,19 @@ class DescuentoCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Skeleton si no hay datos aún
     if (descuento == null) return const DescuentoCardSkeleton();
 
     return AnimatedOpacity(
       duration: const Duration(milliseconds: 300),
-      opacity: descuento != null ? 1.0 : 0.0,
+      opacity: 1.0,
       child: Container(
         padding: EdgeInsets.all(20.r),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: AppColors.promoCardBackground(context),
           borderRadius: BorderRadius.circular(24.r),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.04),
+              color: AppColors.promoShadow(context),
               blurRadius: 6,
               offset: const Offset(0, 3),
             ),
@@ -48,8 +46,6 @@ class DescuentoCard extends StatelessWidget {
               style: AppTextStyles.heading(context).copyWith(fontSize: 16.sp),
             ),
             SizedBox(height: 10.h),
-
-            /// Animación suave con easing personalizado
             TweenAnimationBuilder<double>(
               tween: Tween(begin: 0, end: descuento!),
               duration: const Duration(milliseconds: 900),
@@ -65,20 +61,20 @@ class DescuentoCard extends StatelessWidget {
                 );
               },
             ),
-
             SizedBox(height: 8.h),
             Text(
               'Se muestra el monto que puede descontarse de tu nómina.',
               textAlign: TextAlign.center,
-              style: AppTextStyles.bodySmall(context).copyWith(fontSize: 12.sp),
+              style: AppTextStyles.bodySmall(context).copyWith(
+                fontSize: 12.sp,
+                color: AppColors.textMuted(context),
+              ),
             ),
             SizedBox(height: 20.h),
-
-            /// Acciones
             Container(
               padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 10.h),
               decoration: BoxDecoration(
-                color: const Color(0xFFFCF8F2),
+                color: AppColors.background(context),
                 borderRadius: BorderRadius.circular(16.r),
               ),
               child: Row(
@@ -135,11 +131,11 @@ class DescuentoCard extends StatelessWidget {
         constraints: BoxConstraints(minWidth: 90.w, maxWidth: 120.w),
         padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 12.h),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: AppColors.promoCardBackground(context),
           borderRadius: BorderRadius.circular(12.r),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.05),
+              color: AppColors.promoShadow(context),
               blurRadius: 4,
               offset: const Offset(0, 2),
             ),
@@ -147,14 +143,14 @@ class DescuentoCard extends StatelessWidget {
         ),
         child: Column(
           children: [
-            Icon(icon, size: 25.sp, color: Colors.black87),
+            Icon(icon, size: 25.sp, color: AppColors.text(context)),
             SizedBox(height: 6.h),
             Text(
               label,
               style: AppTextStyles.bodySmall(context).copyWith(
                 fontWeight: FontWeight.w600,
                 fontSize: 11.sp,
-                color: Colors.black87,
+                color: AppColors.text(context),
               ),
             ),
           ],

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:app_creditos/src/shared/theme/app_text_styles.dart';
+import 'package:app_creditos/src/shared/theme/app_colors.dart';
 
 /// Encabezado reutilizable con bienvenida, título y subtítulo.
 /// Perfecto para login, registro, recuperación, etc.
@@ -29,7 +30,7 @@ class WelcomeText extends StatelessWidget {
           style: AppTextStyles.bodySmall(context).copyWith(
             fontSize: 16.sp,
             fontWeight: FontWeight.w300,
-            color: const Color.fromARGB(255, 79, 79, 79),
+            color: AppColors.text(context),
           ),
         ),
         SizedBox(height: 10.h),
@@ -41,6 +42,7 @@ class WelcomeText extends StatelessWidget {
               fontSize: 27.sp,
               fontWeight: FontWeight.w700,
               height: 1,
+              color: AppColors.text(context),
             ),
             children: [
               TextSpan(text: '$titlePrefix '),
@@ -62,6 +64,7 @@ class WelcomeText extends StatelessWidget {
           subtitle,
           style: AppTextStyles.bodySmall(context).copyWith(
             fontSize: 14.sp,
+            color: AppColors.textMuted(context),
           ),
         ),
         SizedBox(height: 20.h),

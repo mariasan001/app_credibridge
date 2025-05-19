@@ -3,10 +3,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:app_creditos/src/shared/theme/app_colors.dart';
 import 'package:app_creditos/src/shared/theme/app_text_styles.dart';
 
-/// Botón primario reutilizable con estilo responsivo y estado de carga.
 class PrimaryButton extends StatelessWidget {
-  final String label;          // Texto del botón
-  final bool isLoading;        // Muestra spinner si está en carga
+  final String label;
+  final bool isLoading;
   final VoidCallback onPressed;
 
   const PrimaryButton({
@@ -18,25 +17,32 @@ class PrimaryButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final bool isDisabled = isLoading;
+    final Color backgroundColor = isDisabled
+        ? AppColors.buttonDisabled
+        : AppColors.primary;
+
+    final Color textColor = AppColors.buttonForeground;
+
     return SizedBox(
-      width: double.infinity, // O puedes usar 1.sw para ancho de pantalla
+      width: double.infinity,
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
-          backgroundColor: AppColors.primary,
-          foregroundColor: AppColors.buttonForeground,
+          backgroundColor: backgroundColor,
+          foregroundColor: textColor,
           padding: EdgeInsets.symmetric(vertical: 14.h),
           textStyle: AppTextStyles.buttonText(context).copyWith(fontSize: 16.sp),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12.r),
           ),
         ),
-        onPressed: isLoading ? null : onPressed,
+        onPressed: isDisabled ? null : onPressed,
         child: isLoading
             ? SizedBox(
                 width: 20.sp,
                 height: 20.sp,
-                child: const CircularProgressIndicator(
-                  color: AppColors.buttonForeground,
+                child: CircularProgressIndicator(
+                  color: textColor,
                   strokeWidth: 2,
                 ),
               )

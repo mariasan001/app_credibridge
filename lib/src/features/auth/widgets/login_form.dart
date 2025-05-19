@@ -69,25 +69,17 @@ class _LoginFormState extends State<LoginForm> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           UsernameField(controller: _usernameController),
-
           SizedBox(height: 32.h),
-
           buildPasswordField(),
-
           SizedBox(height: 8.h),
-
           const RecoveryLink(),
-
           SizedBox(height: 16.h),
-
           PrimaryButton(
             label: 'Enviar',
             isLoading: _isLoading,
             onPressed: _submit,
           ),
-
           SizedBox(height: 16.h),
-
           const RegisterLink(),
         ],
       ),
@@ -95,6 +87,8 @@ class _LoginFormState extends State<LoginForm> {
   }
 
   Widget buildPasswordField() {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return TextFormField(
       controller: _passwordController,
       obscureText: _obscurePassword,
@@ -102,12 +96,20 @@ class _LoginFormState extends State<LoginForm> {
         labelText: 'Contraseña *',
         hintText: 'Escribe tu contraseña',
         floatingLabelBehavior: FloatingLabelBehavior.always,
-        labelStyle: AppTextStyles.inputLabel(context),
-        hintStyle: AppTextStyles.inputHint(context),
+
+        // ✅ Colores adaptativos
+        labelStyle: AppTextStyles.inputLabel(context).copyWith(
+          color: AppColors.text(context),
+        ),
+        hintStyle: AppTextStyles.inputHint(context).copyWith(
+          color: AppColors.textMuted(context),
+        ),
+
         contentPadding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 14.h),
         suffixIcon: IconButton(
           icon: Icon(
             _obscurePassword ? Icons.visibility_off : Icons.visibility,
+            color: AppColors.text(context),
           ),
           onPressed: () => setState(() => _obscurePassword = !_obscurePassword),
         ),
@@ -123,6 +125,10 @@ class _LoginFormState extends State<LoginForm> {
           borderRadius: BorderRadius.circular(8.r),
           borderSide: const BorderSide(color: AppColors.primary, width: 2),
         ),
+        filled: true,
+        fillColor: isDark
+            ? const Color(0xFF2A2A2A)
+            : const Color(0xFFF9F9F9),
       ),
       validator: (value) =>
           value == null || value.isEmpty ? 'Por favor ingresa tu contraseña' : null,

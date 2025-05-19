@@ -36,10 +36,14 @@ class _OptionsMenuButtonState extends State<OptionsMenuButton> {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
+    final Color orange = const Color(0xFFFF8C00);
 
     return IconButton(
       key: _menuKey,
-      icon: Icon(Icons.grid_view_outlined, color: isDark ? Colors.white : Colors.black),
+      icon: Icon(
+        Icons.grid_view_outlined,
+        color: isDark ? orange : const Color.fromARGB(255, 0, 0, 0),
+      ),
       onPressed: _showMenu,
     );
   }
