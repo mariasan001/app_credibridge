@@ -52,6 +52,10 @@ class AppColors {
       Theme.of(context).brightness == Brightness.dark
           ? Colors.black26
           : const Color(0x11000000);
+static Color divider(BuildContext context) =>
+    Theme.of(context).brightness == Brightness.dark
+        ? Colors.grey[700]! 
+        : Colors.grey[300]!;
 
   // 🎨 Constantes globales (colores base)
   static const Color primary = Color(0xFFFF944D);
