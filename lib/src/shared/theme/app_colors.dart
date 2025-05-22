@@ -10,7 +10,7 @@ class AppColors {
 
   static Color cardBackground(BuildContext context) =>
       Theme.of(context).brightness == Brightness.dark
-          ? const Color(0xFF1E1E1E)
+          ? const Color.fromARGB(255, 44, 44, 44)
           : Colors.white;
 
   static Color textPrimary(BuildContext context) =>

@@ -28,7 +28,7 @@ class ResultadosPage extends StatefulWidget {
 class _ResultadosPageState extends State<ResultadosPage> {
   final TextEditingController _telefonoController = TextEditingController();
   bool _loading = false;
-  bool _showSkeleton = true; // 👈 nuevo
+  bool _showSkeleton = true; 
 
   @override
   void initState() {
@@ -55,7 +55,7 @@ class _ResultadosPageState extends State<ResultadosPage> {
       body: _showSkeleton
           ? const Padding(
               padding: EdgeInsets.all(20),
-              child: ResultadosSkeleton(), // 👈 placeholder
+              child: ResultadosSkeleton(), // placeholder
             )
           : SingleChildScrollView(
               physics: const ClampingScrollPhysics(),
