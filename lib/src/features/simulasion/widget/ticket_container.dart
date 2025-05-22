@@ -19,7 +19,7 @@ class TicketContainer extends StatelessWidget {
 
     // Define el color de fondo por defecto según el tema
     final bgColor = backgroundColor ??
-        (isDark ? const Color(0xFF2A2A2A) : Colors.white);
+        (isDark ? const Color(0xFF2A2A2A) : const Color.fromARGB(255, 255, 255, 255));
 
     return CustomPaint(
       painter: _TicketPainter(backgroundColor: bgColor, radius: radius.r),

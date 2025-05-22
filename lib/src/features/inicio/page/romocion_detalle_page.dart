@@ -15,18 +15,21 @@ class PromocionDetallePage extends StatelessWidget {
       backgroundColor: AppColors.background(context),
       appBar: AppBar(
         backgroundColor: Colors.white,
-        elevation: 1,
+        elevation: 0.8,
+        surfaceTintColor: Colors.transparent,
         iconTheme: IconThemeData(color: AppColors.text(context)),
         title: Text(
           promo.promotionTitle,
           style: AppTextStyles.promoTitle(context),
         ),
       ),
-      body: Padding(
-        padding: EdgeInsets.all(20.w),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+      body: AnimatedSwitcher(
+        duration: const Duration(milliseconds: 300),
+        child: ListView(
+          physics: const BouncingScrollPhysics(),
+          padding: EdgeInsets.all(20.w),
           children: [
+            // Financiera
             Text(
               'Financiera:',
               style: AppTextStyles.promoBold(context).copyWith(fontSize: 14.sp),
@@ -36,9 +39,9 @@ class PromocionDetallePage extends StatelessWidget {
               promo.lenderName,
               style: AppTextStyles.bodySmall(context).copyWith(fontSize: 13.sp),
             ),
-
             SizedBox(height: 16.h),
 
+            // Descripción
             Text(
               'Descripción:',
               style: AppTextStyles.promoBold(context).copyWith(fontSize: 14.sp),
@@ -48,15 +51,14 @@ class PromocionDetallePage extends StatelessWidget {
               promo.promotionDesc,
               style: AppTextStyles.promoBody(context).copyWith(fontSize: 13.sp),
             ),
-
             SizedBox(height: 16.h),
 
+            // Beneficios
             Text(
               'Beneficios:',
               style: AppTextStyles.promoBold(context).copyWith(fontSize: 14.sp),
             ),
             SizedBox(height: 8.h),
-
             ...promo.benefits.map(
               (benefit) => Padding(
                 padding: EdgeInsets.only(bottom: 6.h),
@@ -75,6 +77,7 @@ class PromocionDetallePage extends StatelessWidget {
                 ),
               ),
             ),
+            SizedBox(height: 20.h),
           ],
         ),
       ),

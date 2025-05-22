@@ -1,3 +1,4 @@
+import 'package:animations/animations.dart';
 import 'package:app_creditos/src/features/simulasion/page/solicitar_credito.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -25,36 +26,42 @@ class ResultadoSimulacionCard extends StatelessWidget {
     this.ranking,
   });
 
+  static final formatCurrency = NumberFormat.currency(
+    locale: 'es_MX',
+    symbol: '\$',
+    decimalDigits: 2,
+  );
+
   @override
   Widget build(BuildContext context) {
     final labelFontSize = 11.sp;
     final valueFontSize = 15.sp;
 
     final backgroundColor = AppColors.cardBackground(context);
-    final borderColor = isTopOption
-        ? AppColors.primary
-        : Theme.of(context).brightness == Brightness.dark
+    final borderColor =
+        isTopOption
+            ? AppColors.primary
+            : Theme.of(context).brightness == Brightness.dark
             ? Colors.white12
             : Colors.grey.shade300;
 
-    final icon = isTopOption ? Icons.emoji_events_outlined : Icons.account_balance;
-    final iconColor = isTopOption ? AppColors.iconColorStrong : AppColors.primary;
+    final icon =
+        isTopOption ? Icons.emoji_events_outlined : Icons.account_balance;
+    final iconColor =
+        isTopOption ? AppColors.iconColorStrong : AppColors.primary;
 
-    final formatCurrency = NumberFormat.currency(
-      locale: 'es_MX',
-      symbol: '\$',
-      decimalDigits: 2,
-    );
-
-    final bool excedeDescuento = solicitud.tipoSimulacion?.id == 1 &&
+    final bool excedeDescuento =
+        solicitud.tipoSimulacion?.id == 1 &&
         solicitud.descuento != null &&
         result.capital > solicitud.descuento!;
 
-    final buttonColor = excedeDescuento
-        ? Colors.red
-        : (isTopOption ? AppColors.iconColorStrong : AppColors.primary);
+    final buttonColor =
+        excedeDescuento
+            ? Colors.red
+            : (isTopOption ? AppColors.iconColorStrong : AppColors.primary);
 
-    final String capitalLabel = solicitud.tipoSimulacion?.id == 1 ? 'Descuento' : 'Crédito';
+    final String capitalLabel =
+        solicitud.tipoSimulacion?.id == 1 ? 'Descuento' : 'Crédito';
 
     return Container(
       margin: EdgeInsets.only(bottom: 20.h),
@@ -63,15 +70,6 @@ class ResultadoSimulacionCard extends StatelessWidget {
         color: backgroundColor,
         borderRadius: BorderRadius.circular(20.r),
         border: Border.all(color: borderColor, width: 1),
-        boxShadow: Theme.of(context).brightness == Brightness.light
-            ? [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.06),
-                  blurRadius: 12.r,
-                  offset: Offset(0, 4.h),
-                ),
-              ]
-            : [],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -81,15 +79,23 @@ class ResultadoSimulacionCard extends StatelessWidget {
               padding: EdgeInsets.only(bottom: 12.h),
               child: Row(
                 children: [
-                  Icon(Icons.star_rounded, color: AppColors.iconColorStrong, size: 20.sp),
+                  Icon(
+                    Icons.star_rounded,
+                    color: AppColors.iconColorStrong,
+                    size: 20.sp,
+                  ),
                   SizedBox(width: 6.w),
                   Text(
                     'Mejor opción para ti',
-                    style: AppTextStyles.titleheader(context).copyWith(fontSize: 14.sp),
+                    style: AppTextStyles.titleheader(
+                      context,
+                    ).copyWith(fontSize: 14.sp),
                   ),
                 ],
               ),
             ),
+
+          // Row principal
           Row(
             children: [
               CircleAvatar(
@@ -104,68 +110,80 @@ class ResultadoSimulacionCard extends StatelessWidget {
                   children: [
                     Text(
                       result.lenderName,
-                      maxLines: 2,
+                      maxLines: 1,
                       overflow: TextOverflow.ellipsis,
-                      style: AppTextStyles.promoBold(context).copyWith(fontSize: valueFontSize),
+                      style: AppTextStyles.promoBold(
+                        context,
+                      ).copyWith(fontSize: valueFontSize),
                     ),
                     SizedBox(height: 2.h),
                     Text(
                       result.serviceTypeDesc.toUpperCase(),
                       style: AppTextStyles.bodySmall(context).copyWith(
                         fontSize: labelFontSize,
-                        color: Theme.of(context).brightness == Brightness.dark
-                            ? Colors.grey[400]
-                            : Colors.grey[600],
+                        color:
+                            Theme.of(context).brightness == Brightness.dark
+                                ? Colors.grey[400]
+                                : Colors.grey[600],
                         letterSpacing: 1.1,
                       ),
                     ),
                   ],
                 ),
               ),
-              ElevatedButton(
-                onPressed: excedeDescuento
-                    ? null
-                    : () {
-                        solicitud
-                          ..tipoSimulacion = solicitud.tipoSimulacion
-                          ..monto = solicitud.monto
-                          ..plazo = solicitud.plazo
-                          ..tasaAnual = result.effectiveAnnualRate
-                          ..tasaPorPeriodo = result.effectivePeriodRate
-                          ..lenderId = result.lenderId
-                          ..lenderName = result.lenderName
-                          ..capital = result.capital;
 
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (_) => ResultadosPage(
-                              user: user,
-                              solicitud: solicitud,
-                            ),
-                          ),
-                        );
-                      },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: buttonColor,
-                  padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 10.h),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10.r),
-                  ),
+              // Botón
+              OpenContainer(
+                transitionType:
+                    ContainerTransitionType.fadeThrough, 
+                transitionDuration: const Duration(milliseconds: 350),
+                openBuilder: (context, _) {
+                  solicitud
+                    ..tipoSimulacion = solicitud.tipoSimulacion
+                    ..monto = solicitud.monto
+                    ..plazo = solicitud.plazo
+                    ..tasaAnual = result.effectiveAnnualRate
+                    ..tasaPorPeriodo = result.effectivePeriodRate
+                    ..lenderId = result.lenderId
+                    ..lenderName = result.lenderName
+                    ..capital = result.capital;
+
+                  return ResultadosPage(user: user, solicitud: solicitud);
+                },
+                closedElevation: 0,
+                closedShape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10.r),
                 ),
-                child: Text(
-                  excedeDescuento ? 'Límite excedido' : 'Solicitar',
-                  style: AppTextStyles.buttonText(context).copyWith(
-                    fontSize: 12.sp,
-                    color: excedeDescuento ? Colors.black : Colors.white,
-                  ),
-                ),
+                closedColor: buttonColor,
+                closedBuilder:
+                    (context, openContainer) => ElevatedButton(
+                      onPressed: excedeDescuento ? null : openContainer,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: buttonColor,
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 16.w,
+                          vertical: 10.h,
+                        ),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10.r),
+                        ),
+                      ),
+                      child: Text(
+                        excedeDescuento ? 'Límite excedido' : 'Solicitar',
+                        style: AppTextStyles.buttonText(context).copyWith(
+                          fontSize: 12.sp,
+                          color: excedeDescuento ? Colors.black : Colors.white,
+                        ),
+                      ),
+                    ),
               ),
             ],
           ),
+
           SizedBox(height: 16.h),
           Divider(color: Colors.grey.shade300),
           SizedBox(height: 12.h),
+
           Wrap(
             spacing: 15.w,
             runSpacing: 12.h,
@@ -215,10 +233,12 @@ class ResultadoSimulacionCard extends StatelessWidget {
             color: AppColors.textPrimary(context),
           ),
         ),
-        SizedBox(height: 2.h),
+        const SizedBox(height: 2),
         Text(
           value,
-          style: AppTextStyles.promoBold(context).copyWith(fontSize: valueFontSize),
+          style: AppTextStyles.promoBold(
+            context,
+          ).copyWith(fontSize: valueFontSize),
         ),
       ],
     );

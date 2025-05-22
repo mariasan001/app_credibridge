@@ -8,6 +8,8 @@ import 'package:app_creditos/src/features/simulasion/utils/text_utils.dart';
 import 'package:app_creditos/src/shared/theme/app_colors.dart';
 import 'package:app_creditos/src/shared/theme/app_text_styles.dart';
 
+
+
 class SelectorTipoSimulacion extends StatefulWidget {
   final Function(SimType?)? onChanged;
   final SimType? initialValue;
@@ -53,9 +55,7 @@ class _SelectorTipoSimulacionState extends State<SelectorTipoSimulacion> {
             padding: EdgeInsets.symmetric(vertical: 8.h),
             child: Text(
               'Error al cargar tipos de simulación',
-              style: AppTextStyles.bodySmall(
-                context,
-              ).copyWith(color: Colors.red),
+              style: AppTextStyles.bodySmall(context).copyWith(color: Colors.red),
             ),
           );
         }
@@ -69,40 +69,38 @@ class _SelectorTipoSimulacionState extends State<SelectorTipoSimulacion> {
               'Tipo de simulación',
               style: AppTextStyles.heading(context).copyWith(fontSize: 16.sp),
             ),
-            SizedBox(height: 8.h),
+            SizedBox(height: 10.h),
             Container(
-              padding: EdgeInsets.symmetric(horizontal: 12.w),
+              padding: EdgeInsets.symmetric(horizontal: 16.w),
               decoration: BoxDecoration(
-                color: AppColors.background(context),
-                borderRadius: BorderRadius.circular(12.r),
+                color: AppColors.cardBackground(context),
+                borderRadius: BorderRadius.circular(14.r),
+                border: Border.all(
+                  color: AppColors.primary.withOpacity(0.2),
+                  width: 1,
+                ),
               ),
               child: DropdownButtonHideUnderline(
                 child: DropdownButton<SimType>(
+                  isExpanded: true,
                   value: _selectedTipo,
-                  hint: Text(
-                    'Selecciona tu tipo de simulación',
-                    style: AppTextStyles.inputHint(context).copyWith(
-                      color:
-                          Theme.of(context).brightness == Brightness.dark
-                              ? Colors.grey[400]
-                              : Colors.grey[700],
+                  hint: Padding(
+                    padding: EdgeInsets.symmetric(vertical: 14.h),
+                    child: Text(
+                      'Selecciona tu tipo de simulación',
+                      style: AppTextStyles.inputHint(context).copyWith(
+                        fontSize: 14.sp,
+                        color: AppColors.textMuted(context),
+                      ),
                     ),
                   ),
-
-                  isExpanded: true,
-                  icon: Icon(
-                    Icons.keyboard_arrow_down_rounded,
-                    color:
-                        Theme.of(context).brightness == Brightness.dark
-                            ? Colors.grey[300]
-                            : Colors.grey[600],
-                  ),
-                  borderRadius: BorderRadius.circular(12.r),
                   dropdownColor: AppColors.cardBackground(context),
+                  borderRadius: BorderRadius.circular(12.r),
                   itemHeight: 52.h,
-                  style: AppTextStyles.bodySmall(
-                    context,
-                  ).copyWith(color: AppColors.textPrimary(context)),
+                  style: AppTextStyles.bodySmall(context).copyWith(
+                    fontSize: 14.sp,
+                    color: AppColors.textPrimary(context),
+                  ),
                   onChanged: (value) {
                     setState(() {
                       _selectedTipo = value;
@@ -110,29 +108,19 @@ class _SelectorTipoSimulacionState extends State<SelectorTipoSimulacion> {
                       widget.onChanged?.call(value);
                     });
                   },
-                  items:
-                      tipos.map((tipo) {
-                        return DropdownMenuItem<SimType>(
-                          value: tipo,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                capitalizarSoloPrimera(tipo.name),
-                                style: TextStyle(
-                                  color: AppColors.textPrimary(context),
-                                ),
-                              ),
-                              if (_selectedTipo?.id == tipo.id)
-                                Icon(
-                                  Icons.check,
-                                  size: 16,
-                                  color: AppColors.primary,
-                                ),
-                            ],
-                          ),
-                        );
-                      }).toList(),
+                  items: tipos.map((tipo) {
+                    return DropdownMenuItem<SimType>(
+                      value: tipo,
+                      child: Text(
+                        capitalizarSoloPrimera(tipo.name),
+                        style: TextStyle(
+                          fontSize: 14.sp,
+                          fontWeight: FontWeight.w500,
+                          color: AppColors.text(context),
+                        ),
+                      ),
+                    );
+                  }).toList(),
                 ),
               ),
             ),

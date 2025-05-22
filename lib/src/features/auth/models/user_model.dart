@@ -20,19 +20,19 @@ class LoginPayload {
 // -----------------------
 
 class User {
-  final String         userId;
-  final String         name;
-  final String?        email;
-  final String?        rfc;
-  final String?        curp;
-  final String?        occupationDate;
-  final String?        phone;
-  final WorkUnit?      workUnit;
-  final JobCode?       jobCode;
+  final String userId;
+  final String name;
+  final String? email;
+  final String? rfc;
+  final String? curp;
+  final String? occupationDate;
+  final String? phone;
+  final WorkUnit? workUnit;
+  final JobCode? jobCode;
   final PositionStatus? positionStatus;
-  final Bank?          bank;
-  final UserStatus?    userStatus;
-  final List<Role>     roles;
+  final Bank? bank;
+  final UserStatus? userStatus;
+  final List<Role> roles;
 
   User({
     required this.userId,
@@ -61,22 +61,45 @@ class User {
     }
 
     return User(
-      userId:         json['userId'] ?? '',
-      name:           json['name'] ?? '',
-      email:          json['email'],
-      rfc:            json['rfc'],
-      curp:           json['curp'],
+      userId: json['userId'] ?? '',
+      name: json['name'] ?? '',
+      email: json['email'],
+      rfc: json['rfc'],
+      curp: json['curp'],
       occupationDate: json['occupationDate'],
-      phone:          json['phone'],
-      workUnit:       json['workUnit']       != null ? WorkUnit.fromJson(json['workUnit'])       : null,
-      jobCode:        json['jobCode']        != null ? JobCode.fromJson(json['jobCode'])         : null,
+      phone: json['phone'],
+      workUnit: json['workUnit'] != null ? WorkUnit.fromJson(json['workUnit']) : null,
+      jobCode: json['jobCode'] != null ? JobCode.fromJson(json['jobCode']) : null,
       positionStatus: json['positionStatus'] != null ? PositionStatus.fromJson(json['positionStatus']) : null,
-      bank:           json['bank']           != null ? Bank.fromJson(json['bank'])               : null,
-      userStatus:     json['userStatus']     != null ? UserStatus.fromJson(json['userStatus'])   : null,
-      roles:          parsedRoles,
+      bank: json['bank'] != null ? Bank.fromJson(json['bank']) : null,
+      userStatus: json['userStatus'] != null ? UserStatus.fromJson(json['userStatus']) : null,
+      roles: parsedRoles,
+    );
+  }
+
+  /// ✅ Método para clonar el objeto con email o phone nuevos
+  User copyWith({
+    String? email,
+    String? phone,
+  }) {
+    return User(
+      userId: userId,
+      name: name,
+      email: email ?? this.email,
+      rfc: rfc,
+      curp: curp,
+      occupationDate: occupationDate,
+      phone: phone ?? this.phone,
+      workUnit: workUnit,
+      jobCode: jobCode,
+      positionStatus: positionStatus,
+      bank: bank,
+      userStatus: userStatus,
+      roles: roles,
     );
   }
 }
+
 
 // -----------------------
 // 🔗 SUBMODELOS
