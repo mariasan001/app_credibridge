@@ -12,7 +12,6 @@ class ResumenPagoCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final formatter = DateFormat("d 'de' MMMM 'del' y", 'es_MX');
     final ahora = DateTime.now();
     final dia = ahora.day;
 

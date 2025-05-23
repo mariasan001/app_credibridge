@@ -1,4 +1,3 @@
-import 'package:app_creditos/src/features/solicitudes/model/contract_model.dart';
 import 'package:app_creditos/src/shared/components/alertas.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
