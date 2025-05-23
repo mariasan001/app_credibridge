@@ -1,3 +1,4 @@
+import 'package:app_creditos/src/features/solicitudes/model/contract_model.dart';
 import 'package:app_creditos/src/shared/components/alertas.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -11,7 +12,9 @@ import 'package:app_creditos/src/shared/theme/app_colors.dart';
 import 'package:app_creditos/src/shared/theme/app_text_styles.dart';
 
 class LoginForm extends StatefulWidget {
-  const LoginForm({super.key});
+
+  const LoginForm({super.key, });
+  
 
   @override
   State<LoginForm> createState() => _LoginFormState();
@@ -48,7 +51,7 @@ class _LoginFormState extends State<LoginForm> {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-          builder: (context) => HomePage(user: result),
+          builder: (context) => HomePage(user: result, ),
         ),
       );
     } catch (e) {

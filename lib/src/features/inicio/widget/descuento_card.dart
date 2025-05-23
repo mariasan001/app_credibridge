@@ -1,4 +1,6 @@
 import 'package:animations/animations.dart';
+import 'package:app_creditos/src/features/movimientos/page/page_movimientos.dart';
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -14,11 +16,7 @@ class DescuentoCard extends StatelessWidget {
   final double? descuento;
   final User user;
 
-  const DescuentoCard({
-    super.key,
-    required this.descuento,
-    required this.user,
-  });
+  const DescuentoCard({super.key, required this.descuento, required this.user});
 
   @override
   Widget build(BuildContext context) {
@@ -51,7 +49,10 @@ class DescuentoCard extends StatelessWidget {
             curve: Curves.easeOutCubic,
             builder: (_, value, __) {
               return Text(
-                NumberFormat.currency(locale: 'es_MX', symbol: '\$').format(value),
+                NumberFormat.currency(
+                  locale: 'es_MX',
+                  symbol: '\$',
+                ).format(value),
                 style: AppTextStyles.heading(context).copyWith(
                   fontSize: 42.sp,
                   fontWeight: FontWeight.w900,
@@ -64,10 +65,9 @@ class DescuentoCard extends StatelessWidget {
           Text(
             'Se muestra el monto que puede descontarse de tu nómina.',
             textAlign: TextAlign.center,
-            style: AppTextStyles.bodySmall(context).copyWith(
-              fontSize: 12.sp,
-              color: AppColors.textMuted(context),
-            ),
+            style: AppTextStyles.bodySmall(
+              context,
+            ).copyWith(fontSize: 12.sp, color: AppColors.textMuted(context)),
           ),
           SizedBox(height: 20.h),
           Container(
@@ -84,17 +84,24 @@ class DescuentoCard extends StatelessWidget {
                   context: context,
                   icon: Icons.swap_horiz,
                   label: 'Movimientos',
-                  onTap: () => ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Función "Movimientos" aún no disponible')),
-                  ),
+                  onTap:
+                      () => Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (_) => PageMovimientos(user: user),
+                        ),
+                      ),
                 ),
+
                 _buildActionContainer(
                   context: context,
                   icon: Icons.book_outlined,
                   label: 'Directorio',
-                  onTap: () => Navigator.of(context).push(
-                    MaterialPageRoute(builder: (_) => DirectorioPage(user: user)),
-                  ),
+                  onTap:
+                      () => Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (_) => DirectorioPage(user: user),
+                        ),
+                      ),
                 ),
               ],
             ),
@@ -113,7 +120,7 @@ class DescuentoCard extends StatelessWidget {
       closedShape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12.r),
       ),
-      openBuilder: (_, __) => SimulacionPage(user: user, descuento: descuento!),
+      openBuilder: (_, __) => SimulacionPage(user: user, descuento: descuento,),
       closedBuilder: (context, openContainer) {
         return GestureDetector(
           onTap: openContainer,

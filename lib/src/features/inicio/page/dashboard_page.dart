@@ -1,3 +1,4 @@
+import 'package:app_creditos/src/features/solicitudes/model/contract_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -18,8 +19,10 @@ import 'package:app_creditos/src/features/inicio/widget/DescuentoCardSkeleton.da
 import 'package:app_creditos/src/features/inicio/widget/sin_promociones_widget.dart';
 
 class HomePage extends StatefulWidget {
+  final double? descuento;
+  final ContractModel? contrato;
   final User user;
-  const HomePage({super.key, required this.user});
+  const HomePage({super.key, required this.user, this.descuento, this.contrato, });
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -95,9 +98,8 @@ class _HomePageState extends State<HomePage> {
                   // 💸 Tarjeta descuento
                   descuento == null
                       ? const DescuentoCardSkeleton()
-                      : DescuentoCard(descuento: descuento!, user: widget.user),
-
-                  SizedBox(height: 32.h),
+                      : DescuentoCard(descuento: descuento!, user: widget.user ),
+                                        SizedBox(height: 32.h),
 
                   // 🏷️ Título de promociones
                   Text(

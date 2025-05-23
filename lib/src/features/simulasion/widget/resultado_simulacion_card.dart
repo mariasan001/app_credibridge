@@ -144,7 +144,7 @@ class ResultadoSimulacionCard extends StatelessWidget {
                     ..plazo = solicitud.plazo
                     ..tasaAnual = result.effectiveAnnualRate
                     ..tasaPorPeriodo = result.effectivePeriodRate
-                    ..lenderId = result.lenderId
+                    ..lenderServiceId = result.lenderServiceId
                     ..lenderName = result.lenderName
                     ..capital = result.capital;
 

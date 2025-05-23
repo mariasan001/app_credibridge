@@ -16,25 +16,15 @@ class SolicitudCard extends StatelessWidget {
     return formatter.format(value ?? 0);
   }
 
-  String formatDate(String? date) {
-    if (date == null || date.isEmpty) return '---';
-    try {
-      final parsed = DateTime.parse(date);
-      return DateFormat('dd/MM/yyyy').format(parsed);
-    } catch (_) {
-      return date;
-    }
-  }
-
   Color getStatusColor(String? status) {
     if (status == null) return Colors.grey;
     switch (status.toUpperCase()) {
-      case 'Activo':
+      case 'ACTIVO':
         return AppColors.iconColorStrong;
-      case 'Reserva':
+      case 'RESERVA':
         return const Color.fromARGB(255, 55, 55, 55);
-      case 'Rechazado':
-        return AppColors.iconColorStrong;
+      case 'RECHAZADO':
+        return Colors.red.shade400;
       default:
         return AppColors.iconColorStrong;
     }
@@ -49,18 +39,35 @@ class SolicitudCard extends StatelessWidget {
         backgroundColor: AppColors.cardBackground(context),
         child: Column(
           children: [
-            // Encabezado
+            // Encabezado con número de solicitud y nombre de financiera
             Padding(
               padding: EdgeInsets.symmetric(vertical: 12.h),
-              child: Center(
-                child: Text(
-                  'SOLICITUD #${contrato.id}',
-                  style: AppTextStyles.promoTitle(context),
-                ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text(
+                    'SOLICITUD #${contrato.contractId}',
+                    style: AppTextStyles.promoTitle(context),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    textAlign: TextAlign.center,
+                  ),
+                  SizedBox(height: 6.h),
+                  Text(
+                    contrato.lenderName,
+                    textAlign: TextAlign.center,
+                    style: AppTextStyles.promoBold(context).copyWith(
+                      fontSize: 14.sp,
+                      color: AppColors.textMuted(context),
+                    ),
+                  ),
+                ],
               ),
             ),
+
             _buildDottedLine(),
-            // Detalles
+
+            // Detalles del contrato
             Padding(
               padding: EdgeInsets.symmetric(vertical: 14.h),
               child: Wrap(
@@ -68,18 +75,19 @@ class SolicitudCard extends StatelessWidget {
                 runSpacing: 12.h,
                 alignment: WrapAlignment.center,
                 children: [
-                  _buildMiniDetail(context, "Plazos", "${contrato.installments ?? '--'} meses"),
-                  _buildMiniDetail(context, "Tasa efectiva", contrato.effectiveRate != null ? "${contrato.effectiveRate!.toStringAsFixed(2)}%" : '---'),
+                  _buildMiniDetail(context, "Tipo", contrato.serviceTypeDesc),
+                  _buildMiniDetail(context, "Plazos", "${contrato.installments}"),
                   _buildMiniDetail(context, "Monto", formatCurrency(contrato.amount)),
-                  _buildMiniDetail(context, "Tasa anual", contrato.anualRate != null ? "${contrato.anualRate!.toStringAsFixed(2)}%" : '---'),
-                  _buildMiniDetail(context, "Descuento", formatCurrency(contrato.monthlyDeductionAmount)),
-                  _buildMiniDetail(context, "Creado", formatDate(contrato.createdAt)),
+                  _buildMiniDetail(context, "Desc. quincenal", formatCurrency(contrato.biweeklyDiscount)),
+                  _buildMiniDetail(context, "Tasa efectiva", "${contrato.effectiveRate.toStringAsFixed(2)}%"),
+                  _buildMiniDetail(context, "Tasa anual", "${contrato.anualRate.toStringAsFixed(2)}%"),
                 ],
               ),
             ),
 
             _buildDottedLine(),
 
+            // Estado del contrato
             Container(
               width: double.infinity,
               padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 10.h),
@@ -87,11 +95,9 @@ class SolicitudCard extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    contrato.contractStatusDesc?.toUpperCase() ?? 'SIN ESTATUS',
+                    contrato.contractStatusDesc.toUpperCase(),
                     style: AppTextStyles.promoBold(context).copyWith(
-                  
                       color: getStatusColor(contrato.contractStatusDesc),
-                    
                     ),
                   ),
                   Icon(
@@ -122,10 +128,7 @@ class SolicitudCard extends StatelessWidget {
             ),
           ),
           SizedBox(height: 2.h),
-          Text(
-            value,
-            style: AppTextStyles.promoBold(context),
-          ),
+          Text(value, style: AppTextStyles.promoBold(context)),
         ],
       ),
     );

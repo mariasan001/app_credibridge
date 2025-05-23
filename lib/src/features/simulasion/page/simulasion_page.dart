@@ -46,7 +46,7 @@ class _SimulacionPageState extends State<SimulacionPage> {
               padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 24.h),
               physics: const ClampingScrollPhysics(),
               children: [
-                /// 🔙 Encabezado
+                /// Encabezado
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -75,7 +75,7 @@ class _SimulacionPageState extends State<SimulacionPage> {
 
                 SizedBox(height: 20.h),
 
-                /// 📝 Formulario
+                ///Formulario
                 FormularioSimulacion(
                   user: widget.user,
                   descuento: widget.descuento!,
@@ -83,7 +83,7 @@ class _SimulacionPageState extends State<SimulacionPage> {
 
                 SizedBox(height: 40.h),
 
-                /// ℹ️ Información CAT
+                ///Información CAT
                 _buildCatInfo(context),
 
                 SizedBox(height: 24.h),
@@ -176,7 +176,7 @@ class _SimulacionPageState extends State<SimulacionPage> {
       ),
     );
   }
-
+  
   Widget _buildLink(BuildContext context, String url) {
     return Row(
       mainAxisSize: MainAxisSize.min,

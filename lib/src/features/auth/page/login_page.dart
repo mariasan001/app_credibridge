@@ -1,3 +1,4 @@
+import 'package:app_creditos/src/features/solicitudes/model/contract_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:app_creditos/src/shared/theme/app_colors.dart';
@@ -7,7 +8,8 @@ import '../widgets/logo_title.dart';
 import '../../../shared/components/welcome_text.dart';
 
 class LoginPage extends StatefulWidget {
-  const LoginPage({super.key});
+
+  const LoginPage({super.key,});
 
   @override
   State<LoginPage> createState() => _LoginPageState();

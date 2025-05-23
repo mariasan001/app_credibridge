@@ -1,76 +1,62 @@
 class ContractModel {
-  final int id;
-  final String userId;
-  final int? documentation;
-  final int? contractType;
-  final int? installments;
+  final int contractId;
+  final int installments;
+  final int discountsAplied;
+  final double biweeklyDiscount;
   final double amount;
-  final double monthlyDeductionAmount;
-  final double? effectiveRate;
-  final String? phone;
-  final int? contractStatusId;
-  final String? contractStatusDesc;
-  final String? creditId;
-  final String? updatedAt;
-  final String? modificatedUser;
-  final double? anualRate;
-  final int? termMonths;
-  final String? startDate;
-  final String? endAt;
-  final String? paymentFrequency;
-  final String? createdAt;
-  final String? nextPaymentDate;
-  final double paymentAmount;
+  final double effectiveRate;
+  final double anualRate;
+  final double lastBalance;
+  final double newBalance;
+
+  final String userId;
+  final String userName;
+  final String lenderName;
+  final String lenderServiceDesc;
+  final String serviceTypeDesc;
+  final String contractStatusDesc;
 
   ContractModel({
-    required this.id,
-    required this.userId,
-    this.documentation,
-    this.contractType,
-    this.installments,
+    required this.contractId,
+    required this.installments,
+    required this.discountsAplied,
+    required this.biweeklyDiscount,
     required this.amount,
-    required this.monthlyDeductionAmount,
-    this.effectiveRate,
-    this.phone,
-    this.contractStatusId,
-    this.contractStatusDesc,
-    this.creditId,
-    this.updatedAt,
-    this.modificatedUser,
-    this.anualRate,
-    this.termMonths,
-    this.startDate,
-    this.endAt,
-    this.paymentFrequency,
-    this.createdAt,
-    this.nextPaymentDate,
-    required this.paymentAmount,
+    required this.effectiveRate,
+    required this.anualRate,
+    required this.lastBalance,
+    required this.newBalance,
+    required this.userId,
+    required this.userName,
+    required this.lenderName,
+    required this.lenderServiceDesc,
+    required this.serviceTypeDesc,
+    required this.contractStatusDesc,
   });
 
   factory ContractModel.fromJson(Map<String, dynamic> json) {
+    final user = json['user'] ?? {};
+    final lender = json['lender'] ?? {};
+    final contractStatus = json['contractStatus'] ?? {};
+    final lenderService = json['lenderService'] ?? {};
+    final serviceType = lenderService['serviceType'] ?? {};
+
     return ContractModel(
-      id: json['id'],
-      userId: json['userId'],
-      documentation: json['documentation'],
-      contractType: json['contractType'],
-      installments: json['installments'],
+      contractId: json['contractId'] ?? 0,
+      installments: json['installments'] ?? 0,
+      discountsAplied: json['discountsAplied'] ?? 0,
+      biweeklyDiscount: (json['biweeklyDiscount'] ?? 0).toDouble(),
       amount: (json['amount'] ?? 0).toDouble(),
-      monthlyDeductionAmount: (json['monthlyDeductionAmount'] ?? 0).toDouble(),
       effectiveRate: (json['effectiveRate'] ?? 0).toDouble(),
-      phone: json['phone'],
-      contractStatusId: json['contractStatusId'],
-      contractStatusDesc: json['contractStatusDesc'],
-      creditId: json['creditId'],
-      updatedAt: json['updatedAt'],
-      modificatedUser: json['modificatedUser'],
       anualRate: (json['anualRate'] ?? 0).toDouble(),
-      termMonths: json['termMonths'],
-      startDate: json['startDate'],
-      endAt: json['endAt'],
-      paymentFrequency: json['paymentFrequency'],
-      createdAt: json['createdAt'],
-      nextPaymentDate: json['nextPaymentDate'],
-      paymentAmount: (json['paymentAmount'] ?? 0).toDouble(),
+      lastBalance: (json['lastBalance'] ?? 0).toDouble(),
+      newBalance: (json['newBalance'] ?? 0).toDouble(),
+      userId: user['userId'] ?? '',
+      userName: user['name'] ?? '',
+      lenderName: lender['lenderName'] ?? '',
+      lenderServiceDesc: lenderService['lenderServiceDesc'] ?? '',
+      serviceTypeDesc: serviceType['serviceTypeDesc'] ?? '',
+      contractStatusDesc: contractStatus['contractStatusDesc'] ?? '',
     );
   }
 }

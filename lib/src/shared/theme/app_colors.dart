@@ -10,7 +10,7 @@ class AppColors {
 
   static Color cardBackground(BuildContext context) =>
       Theme.of(context).brightness == Brightness.dark
-          ? const Color.fromARGB(255, 44, 44, 44)
+          ? const Color.fromARGB(255, 18, 10, 1)
           : Colors.white;
 
   static Color textPrimary(BuildContext context) =>
@@ -74,4 +74,5 @@ static Color divider(BuildContext context) =>
   static const Color successCheck = Color(0xFF22C55E);
   static const Color iconBgLight = Color(0xFFF2FEE0);
   static const Color iconColorStrong = Color(0xFF167426);
+  static const Color cuotasColor = Color.fromARGB(255, 18, 134, 86);
 }

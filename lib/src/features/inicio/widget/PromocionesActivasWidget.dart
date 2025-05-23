@@ -14,7 +14,6 @@ class PromocionCardVisual extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
 
     final fechaFin = DateFormat("yyyy-MM-ddTHH:mm:ss").parse(promo.endDate);
     final fechaFormateada = DateFormat(

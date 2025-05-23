@@ -16,7 +16,7 @@ class SolicitudCreditoData {
   double? tasaPorPeriodo;
 
   // Financiera seleccionada
-  int? lenderId;
+  int? lenderServiceId;
   String? lenderName;
 
   // Capital ofrecido
@@ -33,7 +33,7 @@ class SolicitudCreditoData {
     this.plazo,
     this.tasaAnual,
     this.tasaPorPeriodo,
-    this.lenderId,
+    this.lenderServiceId,
     this.lenderName,
     this.capital,
     this.descuento, 
@@ -49,7 +49,7 @@ class SolicitudCreditoData {
       'plazo': plazo,
       'tasaAnual': tasaAnual,
       'tasaPorPeriodo': tasaPorPeriodo,
-      'lenderId': lenderId,
+      'lenderServiceId': lenderServiceId,
       'lenderName': lenderName,
       'capital': capital,
       'descuento': descuento,

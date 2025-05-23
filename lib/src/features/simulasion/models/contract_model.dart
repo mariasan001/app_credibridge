@@ -4,7 +4,7 @@ class ContratoModel {
   final int contractType;
   final int installments;
   final double amount;
-  final int monthlyDeductionAmount;
+  final int biweeklyDiscount;
   final double effectiveRate;
   final double effectiveAnnualRate;
   final String phone;
@@ -15,10 +15,10 @@ class ContratoModel {
     required this.contractType,
     required this.installments,
     required this.amount,
-    required this.monthlyDeductionAmount,
+    required this.biweeklyDiscount,
     required this.effectiveRate,
     required this.effectiveAnnualRate,
-    required this.phone,
+    required this.phone, 
   });
 
 Map<String, dynamic> toJson() {
@@ -28,7 +28,7 @@ Map<String, dynamic> toJson() {
     "contractType": contractType,
     "installments": installments,
     "amount": amount,
-    "monthlyDeductionAmount": monthlyDeductionAmount,
+    "biweeklyDiscount": biweeklyDiscount,
     "effectiveRate": effectiveRate,
     "effectiveAnnualRate": effectiveAnnualRate,
     "phone": phone,

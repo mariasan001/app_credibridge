@@ -87,7 +87,7 @@ class _PageSolicitudesState extends State<PageSolicitudes> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           GestureDetector(
-            onTap: () => Navigator.pop(context),
+            onTap: () => Navigator.maybePop(context),
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [

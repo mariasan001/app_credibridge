@@ -18,7 +18,7 @@ Future<void> enviarContrato({
     return;
   }
 
-  if (solicitud.lenderId == null) {
+  if (solicitud.lenderServiceId == null) {
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
         content: Text('❌ No se encontró la financiera seleccionada.'),
@@ -30,25 +30,25 @@ Future<void> enviarContrato({
   final int tipoSimulacion = solicitud.tipoSimulacion?.id ?? 0;
 
   final double amount;
-  final double monthlyDeductionAmount;
+  final double biweeklyDiscount;
 
   if (tipoSimulacion == 1) {
     // Por valor liberado
     amount = solicitud.monto ?? 0;
-    monthlyDeductionAmount = solicitud.capital ?? 0;
+    biweeklyDiscount = solicitud.capital ?? 0;
   } else {
     // Por descuento quincenal
     amount = solicitud.capital ?? 0;
-    monthlyDeductionAmount = solicitud.monto?.roundToDouble() ?? 0;
+    biweeklyDiscount = solicitud.monto?.roundToDouble() ?? 0;
   }
 
   final contrato = ContratoModel(
-    lenderId: solicitud.lenderId!,
+    lenderId: solicitud.lenderServiceId !, //este es lenderServiceId 
     userId: user.userId.toString(),
     contractType: tipoSimulacion,
     installments: solicitud.plazo ?? 0,
     amount: amount,
-    monthlyDeductionAmount: monthlyDeductionAmount.round(),  
+    biweeklyDiscount: biweeklyDiscount.round(),  
     effectiveRate: solicitud.tasaPorPeriodo ?? 0,
     effectiveAnnualRate: solicitud.tasaAnual ?? 0,
     phone: telefono,

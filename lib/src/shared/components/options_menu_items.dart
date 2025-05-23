@@ -112,7 +112,7 @@ class OptionsMenuItems extends StatelessWidget {
     );
   }
 
-   Widget _buildSolicitudes(BuildContext context) {
+  Widget _buildSolicitudes(BuildContext context) {
     return OpenContainer(
       transitionType: ContainerTransitionType.fadeThrough,
       transitionDuration: const Duration(milliseconds: 350),
@@ -143,7 +143,6 @@ class OptionsMenuItems extends StatelessWidget {
           ),
     );
   }
-
 
   Widget _buildDocumentos() => InkWell(
     onTap: onClose,

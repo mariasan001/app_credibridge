@@ -63,7 +63,7 @@ class TicketDetalleWidget extends StatelessWidget {
             Dato(
               label: solicitud.tipoSimulacion?.id == 1
                   ? 'Total solicitado'
-                  : 'Valor de descuento quincenal',
+                  : 'Abono quincenal',
               value: '${formatCurrency.format(solicitud.monto)} MXN',
             ),
             Dato(
