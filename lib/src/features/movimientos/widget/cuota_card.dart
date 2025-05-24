@@ -15,7 +15,7 @@ class CuotaCard extends StatelessWidget {
       width: 95.w,
       padding: EdgeInsets.symmetric(vertical: 12.h),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.inputBackground(context),
         borderRadius: BorderRadius.circular(16.r),
         boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 4, offset: Offset(0, 2))],
       ),
@@ -27,7 +27,7 @@ class CuotaCard extends StatelessWidget {
             style: AppTextStyles.heading(context).copyWith(
               fontSize: 24.sp,
               fontWeight: FontWeight.bold,
-              color: Colors.teal[700],
+              color: AppColors.cardtextfondo(context),
               height: 1.2,
             ),
           ),

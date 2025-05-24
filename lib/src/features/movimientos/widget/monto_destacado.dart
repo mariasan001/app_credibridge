@@ -6,12 +6,28 @@ import 'package:intl/intl.dart';
 
 class MontoDestacado extends StatelessWidget {
   final double monto;
-  const MontoDestacado({super.key, required this.monto});
+  final String tipo; // Tipo de servicio: préstamo, seguro, otro
+
+  const MontoDestacado({
+    super.key,
+    required this.monto,
+    required this.tipo,
+  });
 
   @override
   Widget build(BuildContext context) {
     final formatter = NumberFormat.currency(locale: 'es_MX', symbol: '', decimalDigits: 2);
     final partes = formatter.format(monto).split('.');
+
+    // 🎨 Determinar color según tipo de servicio
+    Color colorPrincipal;
+    if (tipo.toLowerCase().contains('préstamo') || tipo.toLowerCase().contains('prestamo')) {
+      colorPrincipal = AppColors.primary;
+    } else if (tipo.toLowerCase().contains('seguro')) {
+      colorPrincipal = AppColors.cardtextfondo(context);
+    } else {
+      colorPrincipal = Colors.grey.shade600;
+    }
 
     return RichText(
       text: TextSpan(
@@ -19,17 +35,25 @@ class MontoDestacado extends StatelessWidget {
           TextSpan(
             text: '\$${partes[0]}.',
             style: AppTextStyles.heading(context).copyWith(
-              fontSize: 42.sp,
+              fontSize: 40.sp,
               fontWeight: FontWeight.w900,
-              color: AppColors.primary,
+              color: colorPrincipal,
             ),
           ),
           TextSpan(
-            text: '${partes[1]} mx',
+            text: partes[1],
             style: AppTextStyles.heading(context).copyWith(
-              fontSize: 28.sp,
+              fontSize: 22.sp,
               fontWeight: FontWeight.w500,
-              color: AppColors.primary.withOpacity(0.6),
+              color: colorPrincipal.withOpacity(0.7),
+            ),
+          ),
+          TextSpan(
+            text: ' mx',
+            style: AppTextStyles.heading(context).copyWith(
+              fontSize: 18.sp,
+              fontWeight: FontWeight.w400,
+              color: Colors.grey.shade500,
             ),
           ),
         ],

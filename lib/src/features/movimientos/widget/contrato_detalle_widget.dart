@@ -15,13 +15,27 @@ class ContratoDetalleWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final cuotasRestantes = contrato.installments - contrato.discountsAplied;
+    final tipo = contrato.serviceTypeDesc.toLowerCase();
+    final esPrestamo = tipo.contains('préstamo') || tipo.contains('prestamo');
+    final esSeguro = tipo.contains('seguro');
+
+    String obtenerTitulo(String tipo) {
+      if (esSeguro) {
+        return "Estado actual de tu seguro";
+      } else if (esPrestamo) {
+        return "Tu saldo pendiente";
+      } else {
+        return "Detalle del servicio";
+      }
+    }
 
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 10.h),
+      padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 12.h), // 🟡 Margen exterior
       child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 18.w, vertical: 22.h),
+        width: double.infinity, // 🟢 Ocupar todo el ancho
+        padding: EdgeInsets.all(20.r), // 🟡 Padding interior
         decoration: BoxDecoration(
-          color: AppColors.cardBackground(context),
+          color: AppColors.promoCardBackground(context),
           borderRadius: BorderRadius.circular(16.r),
           boxShadow: [
             BoxShadow(
@@ -34,51 +48,72 @@ class ContratoDetalleWidget extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            // Título
+            // 🏷️ Título dinámico
             Text(
-              "Tu saldo pendiente",
-              style: AppTextStyles.promoTitle(
-                context,
-              ).copyWith(fontSize: 20.sp, fontWeight: FontWeight.bold),
+              obtenerTitulo(contrato.serviceTypeDesc),
+              style: AppTextStyles.promoTitle(context).copyWith(
+                fontSize: 20.sp,
+                fontWeight: FontWeight.bold,
+              ),
             ),
-            SizedBox(height: 8.h),
+            SizedBox(height: 4.h),
 
+            // 🏢 Subtítulo: Otorgado por
             RichText(
               textAlign: TextAlign.center,
               text: TextSpan(
                 style: AppTextStyles.bodySmall(context).copyWith(
-                  fontSize: 12.sp, 
+                  fontSize: 12.sp,
                   color: const Color(0xFF746343),
                 ),
                 children: [
-                  const TextSpan(text: "Otorgado por: "),
                   TextSpan(
-                    text:
-                        (contrato.lenderName.isNotEmpty)
-                            ? contrato.lenderName
-                            : "Institución no disponible",
+                    text: "Otorgado por: ",
                     style: AppTextStyles.bodySmall(context).copyWith(
-                      fontSize: 12.sp, 
+                      fontSize: 12.sp,
                       fontWeight: FontWeight.bold,
-                      color: const Color(0xFF746343),
+                      color: AppColors.text(context),
+                    ),
+                  ),
+                  TextSpan(
+                    text: contrato.lenderName.isNotEmpty
+                        ? contrato.lenderName
+                        : "Institución no disponible",
+                    style: AppTextStyles.bodySmall(context).copyWith(
+                      fontSize: 12.sp,
+                      fontWeight: FontWeight.bold,
+                      color: AppColors.textCar(context),
                     ),
                   ),
                 ],
               ),
             ),
 
-            SizedBox(height: 16.h),
+            SizedBox(height: 18.h),
 
-            // los widgets separados aquí:
-            MontoDestacado(monto: contrato.newBalance),
-            SizedBox(height: 8.h),
-            TextoPrestamoSolicitado(monto: contrato.amount),
-            SizedBox(height: 20.h),
-            ResumenCuotas(
-              total: contrato.installments,
-              actual: contrato.discountsAplied,
-              restantes: cuotasRestantes,
+            // 💵 Monto principal
+            MontoDestacado(
+              monto: esPrestamo ? contrato.newBalance : contrato.amount,
+              tipo: contrato.serviceTypeDesc,
             ),
+
+            SizedBox(height: 12.h),
+
+            // 📌 Texto dinámico según tipo
+            TextoPrestamoSolicitado(
+              monto: contrato.amount,
+              tipo: contrato.serviceTypeDesc,
+            ),
+
+            // 📊 Cuotas solo si es préstamo
+            if (esPrestamo) ...[
+              SizedBox(height: 24.h),
+              ResumenCuotas(
+                total: contrato.installments,
+                actual: contrato.discountsAplied,
+                restantes: cuotasRestantes,
+              ),
+            ],
           ],
         ),
       ),

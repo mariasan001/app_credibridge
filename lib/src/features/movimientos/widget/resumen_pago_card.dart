@@ -15,155 +15,205 @@ class ResumenPagoCard extends StatelessWidget {
     final ahora = DateTime.now();
     final dia = ahora.day;
 
-    // Próximo descuento
-    DateTime proximo;
-    if (dia < 15) {
-      proximo = DateTime(ahora.year, ahora.month, 15);
-    } else {
-      final nextMonth = DateTime(ahora.year, ahora.month + 1, 1);
-      proximo = DateTime(nextMonth.year, nextMonth.month, 0); // último día
-    }
+    DateTime proximo =
+        dia < 15 ? DateTime(ahora.year, ahora.month, 15) : DateTime(ahora.year, ahora.month + 1, 0);
 
-    // Último descuento
-    DateTime ultimo;
-    if (dia >= 15) {
-      ultimo = DateTime(ahora.year, ahora.month, 15);
-    } else {
-      final prevMonth = DateTime(ahora.year, ahora.month, 1).subtract(const Duration(days: 1));
-      ultimo = DateTime(prevMonth.year, prevMonth.month, 15);
-    }
+    DateTime ultimo =
+        dia >= 15 ? DateTime(ahora.year, ahora.month, 15) : DateTime(ahora.year, ahora.month - 1, 15);
 
-    final monto = contrato.biweeklyDiscount;
-    final tienePagos = contrato.discountsAplied > 0;
+    final formatterFecha = DateFormat("d MMM y", 'es_MX');
+    final formatterMonto = NumberFormat.currency(locale: 'es_MX', symbol: '\$');
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        _buildBloquePago(
-          context,
-          isProximo: true,
-          fecha: proximo,
-          monto: monto,
-          color: const Color(0xFFF5D875),
-          icon: Icons.payments_outlined,
-          titulo: "Próximo descuento",
-          textoMonto: "El retiro de su nómina será de",
-        ),
-        SizedBox(height: 20.h),
-        tienePagos
-            ? _buildBloquePago(
-                context,
-                isProximo: false,
-                fecha: ultimo,
-                monto: monto,
-                color: Colors.grey.shade400,
-                icon: Icons.history,
-                titulo: "Último descuento",
-                textoMonto: "El retiro de su nómina fue de",
-                esGris: true,
-              )
-            : Center(
-                child: Padding(
-                  padding: EdgeInsets.only(top: 8.h),
-                  child: Text(
-                    "No hay descuentos anteriores registrados",
-                    style: AppTextStyles.bodySmall(context),
-                  ),
-                ),
-              ),
-      ],
-    );
-  }
-
-  Widget _buildBloquePago(
-    BuildContext context, {
-    required bool isProximo,
-    required DateTime fecha,
-    required double monto,
-    required Color color,
-    required IconData icon,
-    required String titulo,
-    required String textoMonto,
-    bool esGris = false,
-  }) {
-    final formatter = DateFormat("d 'de' MMMM 'del' y", 'es_MX');
-    final montoFormateado =
-        NumberFormat.currency(locale: 'es_MX', symbol: '\$').format(monto);
-
-    final textoColor = esGris ? Colors.grey : AppColors.text(context);
-    final negritaColor = esGris ? Colors.grey.shade600 : Colors.black;
+    final montoFormateado = formatterMonto.format(contrato.biweeklyDiscount);
+    final partes = montoFormateado.split('.');
 
     return Container(
-      padding: EdgeInsets.symmetric(vertical: 16.h, horizontal: 12.w),
+      margin: EdgeInsets.symmetric(horizontal: 9.w, vertical: 12.h),
+      padding: EdgeInsets.all(20.r),
       decoration: BoxDecoration(
-        color: AppColors.cardBackground(context),
-        borderRadius: BorderRadius.circular(20.r),
+        color: AppColors.promoCardBackground(context),
+        borderRadius: BorderRadius.circular(24.r),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.03),
+            color: AppColors.promoShadow(context),
             blurRadius: 6,
-            offset: const Offset(0, 2),
+            offset: const Offset(0, 3),
           ),
         ],
       ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      child: Column(
         children: [
-          CircleAvatar(
-            radius: 26.r,
-            backgroundColor: color,
-            child: Icon(icon, color: Colors.white, size: 28.sp),
-          ),
-          SizedBox(width: 14.w),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  "$titulo ${isProximo ? 'es el' : 'fue el'} ${formatter.format(fecha)}",
-                  style: TextStyle(
-                    fontSize: 13.sp,
-                    fontWeight: FontWeight.w700,
-                    color: textoColor,
-                  ),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Expanded(
+                child: Text(
+                  "Historial",
+                  style: AppTextStyles.promoButtonText2(context),
                 ),
-                SizedBox(height: 4.h),
-                RichText(
-                  text: TextSpan(
-                    style: TextStyle(
-                      fontSize: 13.sp,
-                      color: textoColor,
+              ),
+              Row(
+                children: [
+                  IconButton(
+                    padding: EdgeInsets.zero,
+                    constraints: const BoxConstraints(),
+                    icon: Icon(
+                      Icons.remove_red_eye_outlined,
+                      size: 20.sp,
+                      color: Colors.grey.shade600,
                     ),
+                    onPressed: () => Navigator.pushNamed(context, '/historial'),
+                  ),
+                  SizedBox(width: 3.w),
+                  IconButton(
+                    padding: EdgeInsets.zero,
+                    constraints: const BoxConstraints(),
+                    icon: Icon(
+                      Icons.help_outline,
+                      size: 20.sp,
+                      color: Colors.grey.shade600,
+                    ),
+                    onPressed: () => Navigator.pushNamed(
+                      context,
+                      '/aclaracion',
+                      arguments: contrato,
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+          SizedBox(height: 14.h),
+          Row(
+            children: [
+              CircleAvatar(
+                radius: 22.r,
+                backgroundColor: const Color.fromARGB(255, 8, 119, 81),
+                child: Icon(
+                  Icons.payments_outlined,
+                  color: Colors.white,
+                  size: 22.sp,
+                ),
+              ),
+              SizedBox(width: 14.w),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Próximo descuento",
+                      style: AppTextStyles.promoBold(context),
+                    ),
+                    SizedBox(height: 2.h),
+                    Text(
+                      formatterFecha.format(proximo),
+                      style: AppTextStyles.promoFooterDate(context),
+                    ),
+                  ],
+                ),
+              ),
+              RichText(
+                text: TextSpan(
+                  style: AppTextStyles.promoTitle(context),
+                  children: [
+                    TextSpan(text: '${partes[0]}.'),
+                    TextSpan(
+                      text: partes.length > 1 ? partes[1] : '00',
+                      style: AppTextStyles.promoTitle(context).copyWith(
+                        fontSize: 14.sp,
+                        color: Colors.grey.shade600,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          Container(
+            margin: EdgeInsets.symmetric(vertical: 14.h),
+            child: LayoutBuilder(
+              builder: (context, constraints) {
+                return Row(
+                  children: List.generate(
+                    (constraints.maxWidth / 10).floor(),
+                    (index) => Expanded(
+                      child: Container(
+                        margin: EdgeInsets.symmetric(horizontal: 2.w),
+                        height: 1,
+                        color: Colors.grey.shade300,
+                      ),
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+          contrato.discountsAplied > 0
+              ? Row(
+                  children: [
+                    CircleAvatar(
+                      radius: 22.r,
+                      backgroundColor: Colors.grey.shade300,
+                      child: Icon(Icons.history, color: Colors.white, size: 22.sp),
+                    ),
+                    SizedBox(width: 14.w),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "Último descuento",
+                            style: AppTextStyles.promoListText(context).copyWith(color: Colors.grey.shade600),
+                          ),
+                          SizedBox(height: 2.h),
+                          Text(
+                            formatterFecha.format(ultimo),
+                            style: AppTextStyles.promoFooterDate(context).copyWith(color: Colors.grey.shade500),
+                          ),
+                        ],
+                      ),
+                    ),
+                    RichText(
+                      text: TextSpan(
+                        style: AppTextStyles.promoBold(context),
+                        children: [
+                          TextSpan(
+                            text: '${partes[0]}.',
+                            style: AppTextStyles.promoBold(context).copyWith(
+                              fontSize: 16.sp,
+                              color: Colors.grey.shade600,
+                            ),
+                          ),
+                          TextSpan(
+                            text: partes.length > 1 ? partes[1] : '00',
+                            style: AppTextStyles.promoBold(context).copyWith(
+                              fontSize: 10.sp,
+                              color: const Color.fromARGB(255, 170, 170, 170),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                )
+              : Padding(
+                  padding: EdgeInsets.symmetric(vertical: 8.h),
+                  child: Row(
                     children: [
-                      TextSpan(text: "$textoMonto "),
-                      TextSpan(
-                        text: montoFormateado,
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: negritaColor,
+                      Icon(Icons.info_outline, size: 20.sp, color: Colors.grey.shade400),
+                      SizedBox(width: 8.w),
+                      Expanded(
+                        child: Text(
+                          "No se ha registrado ningún descuento aún",
+                          style: AppTextStyles.bodySmall(context).copyWith(
+                            fontSize: 12.sp,
+                            color: Colors.grey.shade500,
+                          ),
                         ),
                       ),
                     ],
                   ),
                 ),
-                SizedBox(height: 6.h),
-                GestureDetector(
-                  onTap: () {
-                    // 👉 Aquí navegas a la pantalla de aclaración
-                    Navigator.pushNamed(context, '/aclaracion', arguments: contrato);
-                  },
-                  child: Text(
-                    "Solicitar Aclaración",
-                    style: TextStyle(
-                      fontSize: 12.sp,
-                      color: Colors.teal[600],
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
         ],
       ),
     );

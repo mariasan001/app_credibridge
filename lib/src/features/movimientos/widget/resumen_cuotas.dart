@@ -1,4 +1,5 @@
 import 'package:app_creditos/src/features/movimientos/widget/cuota_card.dart';
+import 'package:app_creditos/src/shared/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -14,7 +15,7 @@ class ResumenCuotas extends StatelessWidget {
     return Container(
       padding: EdgeInsets.symmetric(vertical: 12.h, horizontal: 8.w),
       decoration: BoxDecoration(
-        color: const Color(0xFFFCF8F2),
+      color: AppColors.background(context),
         borderRadius: BorderRadius.circular(16.r),
       ),
       child: Row(
@@ -23,7 +24,7 @@ class ResumenCuotas extends StatelessWidget {
           CuotaCard(value: total, label: "cuotas totales"),
           CuotaCard(value: actual, label: "cuota actual"),
           CuotaCard(value: restantes, label: "cuotas restantes"),
-        ],
+        ]  
       ),
     );
   }

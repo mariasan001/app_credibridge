@@ -22,7 +22,6 @@ class _PageMovimientosState extends State<PageMovimientos> {
   List<ContractModel> contratos = [];
   bool loading = true;
   bool _showCards = false;
-  int _currentIndex = 0;
 
   @override
   void initState() {
@@ -50,8 +49,6 @@ class _PageMovimientosState extends State<PageMovimientos> {
 
   @override
   Widget build(BuildContext context) {
-    final contratosActivos = contratos.where((c) => c.contractStatusDesc == 'ACTIVO').toList();
-
     return Scaffold(
       appBar: CustomAppBar(user: widget.user),
       body: loading
@@ -68,11 +65,12 @@ class _PageMovimientosState extends State<PageMovimientos> {
                 ],
               ),
             )
-          : contratosActivos.isEmpty
-              ? const Center(child: Text('No se encontraron contratos activos'))
+          : contratos.isEmpty
+              ? const Center(child: Text('No se encontraron contratos'))
               : Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    // 🔙 Encabezado
                     Padding(
                       padding: EdgeInsets.symmetric(
                         horizontal: 17.w,
@@ -94,7 +92,7 @@ class _PageMovimientosState extends State<PageMovimientos> {
                                 ),
                                 SizedBox(width: 4.w),
                                 Text(
-                                  'Mis servicios Activos',
+                                  'Mis movimientos',
                                   style: AppTextStyles.titleheader(context),
                                 ),
                               ],
@@ -102,30 +100,24 @@ class _PageMovimientosState extends State<PageMovimientos> {
                           ),
                           SizedBox(height: 6.h),
                           Text(
-                            contratosActivos.isNotEmpty
-                                ? 'Desliza para ver los demás servicios ${_currentIndex + 1} de ${contratosActivos.length}'
-                                : '',
+                            'Consulta el estado de tus préstamos activos',
                             style: AppTextStyles.bodySmall(context).copyWith(
-                              fontSize: 12.sp,
-                              fontWeight: FontWeight.w600,
-                              color: Colors.grey.shade700,
+                              fontSize: 13.sp,
+                              color: Colors.grey.shade600,
                             ),
                           ),
                         ],
                       ),
                     ),
+
+                    // 📲 Contenido deslizable
                     Expanded(
                       child: PageView.builder(
-                        itemCount: contratosActivos.length,
+                        itemCount: contratos.length,
                         controller: PageController(viewportFraction: 0.95),
                         physics: const BouncingScrollPhysics(),
-                        onPageChanged: (index) {
-                          setState(() {
-                            _currentIndex = index;
-                          });
-                        },
                         itemBuilder: (context, index) {
-                          final contrato = contratosActivos[index];
+                          final contrato = contratos[index];
                           return AnimatedOpacity(
                             opacity: _showCards ? 1 : 0,
                             duration: const Duration(milliseconds: 500),
@@ -138,8 +130,11 @@ class _PageMovimientosState extends State<PageMovimientos> {
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
+                                    // 🧾 Contrato
                                     ContratoDetalleWidget(contrato: contrato),
                                     SizedBox(height: 20.h),
+
+                                    // 💳 Tarjeta resumen
                                     ResumenPagoCard(contrato: contrato),
                                     SizedBox(height: 30.h),
                                   ],

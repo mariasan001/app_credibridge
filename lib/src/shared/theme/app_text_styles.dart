@@ -119,6 +119,14 @@ class AppTextStyles {
     );
   }
 
+    static TextStyle promoButtonText2(BuildContext context) {
+    return GoogleFonts.poppins(
+      fontSize: 16.sp,
+      fontWeight: FontWeight.w700,
+      color: AppColors.text(context),
+    );
+  }
+
   static TextStyle titleheader(BuildContext context) {
     return GoogleFonts.poppins(
       fontSize: 24.sp,

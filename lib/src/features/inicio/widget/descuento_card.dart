@@ -24,7 +24,7 @@ class DescuentoCard extends StatelessWidget {
 
     return Container(
       padding: EdgeInsets.all(20.r),
-      decoration: BoxDecoration(
+   decoration: BoxDecoration(
         color: AppColors.promoCardBackground(context),
         borderRadius: BorderRadius.circular(24.r),
         boxShadow: [

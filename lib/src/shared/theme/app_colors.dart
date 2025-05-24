@@ -57,6 +57,18 @@ static Color divider(BuildContext context) =>
         ? Colors.grey[700]! 
         : Colors.grey[300]!;
 
+static Color textCar(BuildContext context) =>
+    Theme.of(context).brightness == Brightness.dark
+        ?  const Color.fromARGB(255, 234, 221, 197)
+        :  const Color(0xFF746343);
+
+static Color cardtextfondo(BuildContext context) =>
+    Theme.of(context).brightness == Brightness.dark
+        ?  const Color.fromARGB(255, 52, 205, 141)
+        :   const Color.fromARGB(255, 18, 134, 86);
+
+
+
   // 🎨 Constantes globales (colores base)
   static const Color primary = Color(0xFFFF944D);
   static const Color accent = Color(0xFFFFE7A0);
