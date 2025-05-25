@@ -48,7 +48,7 @@ dependencies:
   flutter_slidable: ^3.0.0
   flutter_masked_text2: ^0.9.1
   flutter_screenutil: ^5.8.4
-
+  line_icons: ^2.0.1
 
 
 dev_dependencies:

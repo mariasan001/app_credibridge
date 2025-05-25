@@ -1,4 +1,3 @@
-import 'package:app_creditos/src/features/solicitudes/model/contract_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -7,6 +6,7 @@ import 'package:app_creditos/src/shared/theme/app_text_styles.dart';
 
 import 'package:app_creditos/src/features/auth/models/user_model.dart';
 import 'package:app_creditos/src/features/inicio/model/model_promociones.dart';
+import 'package:app_creditos/src/features/solicitudes/model/contract_model.dart';
 import 'package:app_creditos/src/features/inicio/service/descuento_service.dart';
 import 'package:app_creditos/src/features/inicio/service/promociones_service.dart';
 
@@ -22,7 +22,13 @@ class HomePage extends StatefulWidget {
   final double? descuento;
   final ContractModel? contrato;
   final User user;
-  const HomePage({super.key, required this.user, this.descuento, this.contrato, });
+
+  const HomePage({
+    super.key,
+    required this.user,
+    this.descuento,
+    this.contrato,
+  });
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -66,64 +72,66 @@ class _HomePageState extends State<HomePage> {
         slivers: [
           SliverToBoxAdapter(
             child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 16.h),
+              padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 18.h),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // 👋 Bienvenida
-                  Text.rich(
-                    TextSpan(
-                      style: AppTextStyles.heading(context).copyWith(fontSize: 22.sp),
-                      children: [
-                        const TextSpan(text: 'Bienvenido '),
-                        TextSpan(
-                          text: obtenerNombreFormateado(widget.user.name),
-                          style: AppTextStyles.heading(context).copyWith(
-                            fontWeight: FontWeight.w900,
-                          ),
-                        ),
-                        const TextSpan(text: ' 👋'),
-                      ],
+                  Text(
+                    'Hola, ${obtenerNombreFormateado(widget.user.name)} 👋',
+                    style: AppTextStyles.heading(context).copyWith(
+                      fontSize: 20.sp,
+                      fontWeight: FontWeight.w700,
                     ),
                   ),
-                  SizedBox(height: 4.h),
+
+                  SizedBox(height: 6.h),
+
                   Text(
-                    'Gestiona tu cuenta de manera rápida y sencilla.',
+                    'Consulta y administra tus servicios.',
                     style: AppTextStyles.bodySmall(context).copyWith(
+                      fontSize: 13.sp,
                       color: AppColors.textMuted(context),
                     ),
                   ),
-                  SizedBox(height: 20.h),
 
-                  // 💸 Tarjeta descuento
+                  SizedBox(height: 24.h),
+
                   descuento == null
                       ? const DescuentoCardSkeleton()
-                      : DescuentoCard(descuento: descuento!, user: widget.user ),
-                                        SizedBox(height: 32.h),
+                      : DescuentoCard(descuento: descuento!, user: widget.user),
 
-                  // 🏷️ Título de promociones
+                  SizedBox(height: 24.h),
+
                   Text(
-                    'Promociones',
-                    style: AppTextStyles.heading(context).copyWith(fontSize: 22.sp),
+                    'Ofertas disponibles para ti',
+                    style: AppTextStyles.heading(context).copyWith(
+                      fontSize: 18.sp,
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
-                  SizedBox(height: 1.h),
+
+                  SizedBox(height: 8.h),
                 ],
               ),
             ),
           ),
 
-          // 📦 Lista de promociones
           SliverToBoxAdapter(
             child: FutureBuilder<List<Promotion>>(
               future: _futurePromos,
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Column(
-                    children: [
-                      PromocionCardSkeleton(),
-                      PromocionCardSkeleton(),
-                      PromocionCardSkeleton(),
-                    ],
+                  return const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 16),
+                    child: Column(
+                      children: [
+                        PromocionCardSkeleton(),
+                        SizedBox(height: 12),
+                        PromocionCardSkeleton(),
+                        SizedBox(height: 12),
+                        PromocionCardSkeleton(),
+                      ],
+                    ),
                   );
                 }
 
@@ -137,10 +145,14 @@ class _HomePageState extends State<HomePage> {
                 }
 
                 return ListView.builder(
+                  padding: EdgeInsets.symmetric(horizontal: 8.w),
                   physics: const NeverScrollableScrollPhysics(),
                   shrinkWrap: true,
                   itemCount: promociones.length,
-                  itemBuilder: (_, i) => PromocionCardVisual(promo: promociones[i]),
+                  itemBuilder: (_, i) => Padding(
+                    padding: EdgeInsets.only(bottom: 16.h),
+                    child: PromocionCardVisual(promo: promociones[i]),
+                  ),
                 );
               },
             ),

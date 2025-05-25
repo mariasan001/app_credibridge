@@ -1,3 +1,4 @@
+import 'package:app_creditos/src/features/movimientos/page/page_movimiento_skeleton.dart';
 import 'package:app_creditos/src/features/movimientos/widget/resumen_pago_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -7,7 +8,6 @@ import 'package:app_creditos/src/features/solicitudes/services/contract_service.
 import 'package:app_creditos/src/features/movimientos/widget/contrato_detalle_widget.dart';
 import 'package:app_creditos/src/shared/components/ustom_app_bar.dart';
 import 'package:app_creditos/src/shared/theme/app_text_styles.dart';
-import 'package:shimmer/shimmer.dart';
 
 class PageMovimientos extends StatefulWidget {
   final User user;
@@ -32,9 +32,7 @@ class _PageMovimientosState extends State<PageMovimientos> {
 
   Future<void> cargarContratos() async {
     try {
-      final result = await ContractService.getContractsByUser(
-        widget.user.userId,
-      );
+      final result = await ContractService.getContractsByUser(widget.user.userId);
       setState(() {
         contratos = result;
         loading = false;
@@ -55,29 +53,14 @@ class _PageMovimientosState extends State<PageMovimientos> {
     return Scaffold(
       appBar: CustomAppBar(user: widget.user),
       body: loading
-          ? Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 20.h),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  _buildHeaderSkeleton(context),
-                  SizedBox(height: 20.h),
-                  _buildBoxSkeleton(height: 140.h),
-                  SizedBox(height: 20.h),
-                  _buildBoxSkeleton(height: 180.h),
-                ],
-              ),
-            )
+          ? const MovimientoSkeletonCard() // <- solo esto cambia
           : contratosActivos.isEmpty
               ? const Center(child: Text('No se encontraron contratos activos'))
               : Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Padding(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 17.w,
-                        vertical: 20.h,
-                      ),
+                      padding: EdgeInsets.symmetric(horizontal: 17.w, vertical: 20.h),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -88,23 +71,15 @@ class _PageMovimientosState extends State<PageMovimientos> {
                               mainAxisSize: MainAxisSize.min,
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
-                                Icon(
-                                  Icons.arrow_back_ios_new_rounded,
-                                  size: 20.sp,
-                                ),
+                                Icon(Icons.arrow_back_ios_new_rounded, size: 20.sp),
                                 SizedBox(width: 4.w),
-                                Text(
-                                  'Mis servicios Activos',
-                                  style: AppTextStyles.titleheader(context),
-                                ),
+                                Text('Mis servicios Activos', style: AppTextStyles.titleheader(context)),
                               ],
                             ),
                           ),
                           SizedBox(height: 6.h),
                           Text(
-                            contratosActivos.isNotEmpty
-                                ? 'Desliza para ver los demás servicios ${_currentIndex + 1} de ${contratosActivos.length}'
-                                : '',
+                            'Desliza para ver los demás servicios ${_currentIndex + 1} de ${contratosActivos.length}',
                             style: AppTextStyles.bodySmall(context).copyWith(
                               fontSize: 12.sp,
                               fontWeight: FontWeight.w600,
@@ -130,10 +105,7 @@ class _PageMovimientosState extends State<PageMovimientos> {
                             opacity: _showCards ? 1 : 0,
                             duration: const Duration(milliseconds: 500),
                             child: Padding(
-                              padding: EdgeInsets.symmetric(
-                                horizontal: 1.w,
-                                vertical: 1.h,
-                              ),
+                              padding: EdgeInsets.symmetric(horizontal: 1.w, vertical: 1.h),
                               child: SingleChildScrollView(
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -152,54 +124,6 @@ class _PageMovimientosState extends State<PageMovimientos> {
                     ),
                   ],
                 ),
-    );
-  }
-
-  Widget _buildBoxSkeleton({required double height}) {
-    return Shimmer.fromColors(
-      baseColor: Colors.grey.shade300,
-      highlightColor: Colors.grey.shade100,
-      child: Container(
-        height: height,
-        width: double.infinity,
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(16.r),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildHeaderSkeleton(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Shimmer.fromColors(
-          baseColor: Colors.grey.shade300,
-          highlightColor: Colors.grey.shade100,
-          child: Container(
-            width: 180.w,
-            height: 20.h,
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(8.r),
-            ),
-          ),
-        ),
-        SizedBox(height: 6.h),
-        Shimmer.fromColors(
-          baseColor: Colors.grey.shade300,
-          highlightColor: Colors.grey.shade100,
-          child: Container(
-            width: 240.w,
-            height: 14.h,
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(8.r),
-            ),
-          ),
-        ),
-      ],
     );
   }
 }
