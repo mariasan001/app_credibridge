@@ -49,8 +49,10 @@ dependencies:
   flutter_masked_text2: ^0.9.1
   flutter_screenutil: ^5.8.4
   line_icons: ^2.0.1
+  collection: ^1.17.1
+  dotted_line: ^3.0.0 
 
-
+  
 dev_dependencies:
   flutter_test:
     sdk: flutter

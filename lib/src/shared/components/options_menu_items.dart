@@ -1,6 +1,7 @@
-import 'package:animations/animations.dart';
-import 'package:app_creditos/src/features/solicitudes/page/page_solicitudes.dart';
 import 'package:flutter/material.dart';
+
+import 'package:line_icons/line_icons.dart';
+import 'package:app_creditos/src/features/solicitudes/page/page_solicitudes.dart';
 import 'package:app_creditos/src/features/auth/page/login_page.dart';
 import 'package:app_creditos/src/features/perfil/page/page_perfil.dart';
 import 'package:app_creditos/src/shared/services/session_manager.dart';
@@ -36,159 +37,73 @@ class OptionsMenuItems extends StatelessWidget {
       duration: const Duration(milliseconds: 200),
       curve: Curves.easeOut,
       child: Container(
-        width: 260,
-        padding: const EdgeInsets.symmetric(vertical: 10),
+        width: 300,
+        padding: const EdgeInsets.symmetric(vertical: 16),
         decoration: BoxDecoration(
           color: isDark ? const Color(0xFF2A2A2A) : Colors.white,
-          borderRadius: BorderRadius.circular(18),
+          borderRadius: BorderRadius.circular(24),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.08),
-              blurRadius: 18,
-              offset: const Offset(0, 6),
+              color: Colors.black.withOpacity(0.1),
+              blurRadius: 24,
+              offset: const Offset(0, 8),
             ),
           ],
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            _buildHeader(),
-            _buildVerPerfil(context),
-            _buildDivider(),
-            _buildDocumentos(),
-            _buildQuejas(),
-            _buildSolicitudes(context),
-            _buildCerrarSesion(context),
+            _buildTile(context, LineIcons.user, 'Ver perfil', onTap: () {
+              onClose();
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => PerfilPage(user: user)),
+              );
+            }),
+            _buildTile(context, LineIcons.fileAlt, 'Documentos', onTap: onClose),
+            _buildTile(context, LineIcons.exclamationCircle, 'Quejas y Aclaraciones', onTap: onClose),
+            _buildTile(context, LineIcons.creditCard, 'Solicitudes', onTap: () {
+              onClose();
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => PageSolicitudes(user: user)),
+              );
+            }),
+            _buildTile(context, LineIcons.alternateSignOut, 'Cerrar sesión',
+                isLogout: true,
+                onTap: () => _logout(context)),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildHeader() => Padding(
-    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
-    child: Align(
-      alignment: Alignment.centerLeft,
-      child: Text(
-        'Ajustes de perfil',
-        style: TextStyle(
-          fontSize: 13,
-          color: isDark ? Colors.white60 : Colors.black54,
-          fontWeight: FontWeight.w500,
+  Widget _buildTile(BuildContext context, IconData icon, String title,
+      {required VoidCallback onTap, bool isLogout = false}) {
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(16),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
+        child: Row(
+          children: [
+            Icon(icon, size: 20, color: isLogout ? Colors.red : (isDark ? Colors.white : Colors.black87)),
+            const SizedBox(width: 16),
+            Expanded(
+              child: Text(
+                title,
+                style: TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.w500,
+                  color: isLogout ? Colors.red : (isDark ? Colors.white : Colors.black87),
+                ),
+              ),
+            ),
+            if (!isLogout)
+              Icon(Icons.arrow_forward_ios, size: 14, color: isDark ? Colors.white30 : Colors.black26),
+          ],
         ),
       ),
-    ),
-  );
-
-  Widget _buildVerPerfil(BuildContext context) {
-    return OpenContainer(
-      transitionType: ContainerTransitionType.fadeThrough,
-      transitionDuration: const Duration(milliseconds: 350),
-      closedElevation: 0,
-      closedColor: Colors.transparent,
-      closedShape: const RoundedRectangleBorder(),
-      openBuilder: (_, __) => PerfilPage(user: user),
-      closedBuilder:
-          (_, openContainer) => InkWell(
-            onTap: () {
-              onClose();
-              openContainer();
-            },
-            borderRadius: BorderRadius.circular(12),
-            child: ListTile(
-              leading: Icon(
-                Icons.person_outline,
-                color: isDark ? Colors.white : null,
-              ),
-              title: Text(
-                'Ver perfil',
-                style: TextStyle(
-                  fontSize: 13,
-                  color: isDark ? Colors.white : null,
-                ),
-              ),
-            ),
-          ),
     );
   }
-
-  Widget _buildSolicitudes(BuildContext context) {
-    return OpenContainer(
-      transitionType: ContainerTransitionType.fadeThrough,
-      transitionDuration: const Duration(milliseconds: 350),
-      closedElevation: 0,
-      closedColor: Colors.transparent,
-      closedShape: const RoundedRectangleBorder(),
-      openBuilder: (_, __) => PageSolicitudes(user: user),
-      closedBuilder:
-          (_, openContainer) => InkWell(
-            onTap: () {
-              onClose();
-              openContainer();
-            },
-            borderRadius: BorderRadius.circular(12),
-            child: ListTile(
-              leading: Icon(
-                Icons.attach_money_rounded,
-                color: isDark ? Colors.white : null,
-              ),
-              title: Text(
-                'Solicitudes',
-                style: TextStyle(
-                  fontSize: 13,
-                  color: isDark ? Colors.white : null,
-                ),
-              ),
-            ),
-          ),
-    );
-  }
-
-  Widget _buildDocumentos() => InkWell(
-    onTap: onClose,
-    borderRadius: BorderRadius.circular(12),
-    child: ListTile(
-      leading: Icon(
-        Icons.description_outlined,
-        color: isDark ? Colors.white : null,
-      ),
-      title: Text(
-        'Documentos',
-        style: TextStyle(fontSize: 13, color: isDark ? Colors.white : null),
-      ),
-    ),
-  );
-  Widget _buildQuejas() => InkWell(
-    onTap: onClose,
-    borderRadius: BorderRadius.circular(12),
-    child: ListTile(
-      leading: Icon(
-        Icons.error_outline_sharp,
-        color: isDark ? Colors.white : null,
-      ),
-      title: Text(
-        'Quejas y Aclaraciones',
-        style: TextStyle(fontSize: 13, color: isDark ? Colors.white : null),
-      ),
-    ),
-  );
-
-  Widget _buildCerrarSesion(BuildContext context) => InkWell(
-    onTap: () => _logout(context),
-    borderRadius: BorderRadius.circular(12),
-    child: ListTile(
-      leading: Icon(Icons.logout, color: isDark ? Colors.white : null),
-      title: Text(
-        'Cerrar sesión',
-        style: TextStyle(fontSize: 13, color: isDark ? Colors.white : null),
-      ),
-    ),
-  );
-
-  Widget _buildDivider() => Divider(
-    height: 0,
-    indent: 12,
-    endIndent: 12,
-    color: isDark ? Colors.white24 : Colors.black12,
-  );
 }

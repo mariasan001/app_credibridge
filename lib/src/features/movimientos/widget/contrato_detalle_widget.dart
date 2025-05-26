@@ -19,27 +19,23 @@ class ContratoDetalleWidget extends StatelessWidget {
     final esPrestamo = tipo.contains('préstamo') || tipo.contains('prestamo');
     final esSeguro = tipo.contains('seguro');
 
-    String obtenerTitulo(String tipo) {
-      if (esSeguro) {
-        return "Estado actual de tu seguro";
-      } else if (esPrestamo) {
-        return "Tu saldo pendiente";
-      } else {
-        return "Detalle del servicio";
-      }
+    String obtenerTitulo() {
+      if (esSeguro) return "Pago de seguro";
+      if (esPrestamo) return "Tu saldo pendiente";
+      return "Servicio activo";
     }
 
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 12.h), // 🟡 Margen exterior
+      padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 12.h),
       child: Container(
-        width: double.infinity, // 🟢 Ocupar todo el ancho
-        padding: EdgeInsets.all(20.r), // 🟡 Padding interior
+        width: double.infinity,
+        padding: EdgeInsets.all(20.r),
         decoration: BoxDecoration(
           color: AppColors.promoCardBackground(context),
           borderRadius: BorderRadius.circular(16.r),
           boxShadow: [
             BoxShadow(
-              color: AppColors.promoShadow(context),
+              color: AppColors.promoShadow(context), 
               blurRadius: 10,
               offset: const Offset(0, 5),
             ),
@@ -50,7 +46,7 @@ class ContratoDetalleWidget extends StatelessWidget {
           children: [
             // 🏷️ Título dinámico
             Text(
-              obtenerTitulo(contrato.serviceTypeDesc),
+              obtenerTitulo(),
               style: AppTextStyles.promoTitle(context).copyWith(
                 fontSize: 20.sp,
                 fontWeight: FontWeight.bold,
@@ -91,15 +87,12 @@ class ContratoDetalleWidget extends StatelessWidget {
 
             SizedBox(height: 18.h),
 
-            // 💵 Monto principal
-            MontoDestacado(
-              monto: esPrestamo ? contrato.newBalance : contrato.amount,
-              tipo: contrato.serviceTypeDesc,
-            ),
-
+            // 💵 Monto destacado
+            MontoDestacado(contrato: contrato),
+ 
             SizedBox(height: 12.h),
 
-            // 📌 Texto dinámico según tipo
+            // 📝 Texto informativo según tipo
             TextoPrestamoSolicitado(
               monto: contrato.amount,
               tipo: contrato.serviceTypeDesc,
@@ -120,3 +113,4 @@ class ContratoDetalleWidget extends StatelessWidget {
     );
   }
 }
+   

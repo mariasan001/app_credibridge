@@ -2,84 +2,122 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shimmer/shimmer.dart';
 
-class LenderCardSkeleton extends StatelessWidget {
-  const LenderCardSkeleton({super.key});
+class DirectorioSkeleton extends StatelessWidget {
+  const DirectorioSkeleton({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Shimmer.fromColors(
-      baseColor: Colors.grey.shade300,
-      highlightColor: Colors.grey.shade100,
-      child: Container(
-        margin: EdgeInsets.only(bottom: 12.h),
-        padding: EdgeInsets.all(16.w),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(16.r),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.05),
-              blurRadius: 5,
-              offset: const Offset(0, 2),
-            )
-          ],
-        ),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Avatar shimmer
-            Container(
-              width: 44.w,
-              height: 44.w,
+    return Column(
+      children: [
+        // Barra de búsqueda skeleton
+        Padding(
+          padding: EdgeInsets.fromLTRB(16.w, 20.h, 16.w, 12.h),
+          child: Shimmer.fromColors(
+            baseColor: Colors.grey.shade300,
+            highlightColor: Colors.grey.shade100,
+            child: Container(
+              height: 48.h,
               decoration: BoxDecoration(
-                color: Colors.grey,
-                shape: BoxShape.circle,
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(30.r),
               ),
             ),
-            SizedBox(width: 16.w),
+          ),
+        ),
+        // Lista de tarjetas
+        Expanded(
+          child: ListView.builder(
+            padding: EdgeInsets.symmetric(horizontal: 16.w),
+            itemCount: 3,
+            itemBuilder: (context, index) {
+              return Padding(
+                padding: EdgeInsets.only(bottom: 24.h),
+                child: Shimmer.fromColors(
+                  baseColor: Colors.grey.shade300,
+                  highlightColor: Colors.grey.shade100,
+                  child: Container(
+                    padding: EdgeInsets.all(16.w),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(24.r),
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          width: 140.w,
+                          height: 14.h,
+                          color: Colors.white,
+                        ),
+                        SizedBox(height: 20.h),
+                        _buildItem(),
+                        SizedBox(height: 12.h),
+                        Divider(color: Colors.grey.shade300, thickness: 1),
+                        SizedBox(height: 12.h),
+                        _buildItem(),
+                      ],
+                    ),
+                  ),
+                ),
+              );
+            },
+          ),
+        ),
+      ],
+    );
+  }
 
-            // Column shimmer
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+  Widget _buildItem() {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Container(
+          width: 44.r,
+          height: 44.r,
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: Colors.white,
+          ),
+        ),
+        SizedBox(width: 12.w),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                width: double.infinity,
+                height: 12.h,
+                color: Colors.white,
+              ),
+              SizedBox(height: 6.h),
+              Container(
+                width: 150.w,
+                height: 10.h,
+                color: Colors.white,
+              ),
+              SizedBox(height: 6.h),
+              Row(
                 children: [
-                  // Línea título
                   Container(
-                    height: 14.h,
-                    width: 0.5.sw,
+                    width: 14.w,
+                    height: 14.w,
                     decoration: BoxDecoration(
-                      color: Colors.grey,
-                      borderRadius: BorderRadius.circular(4.r),
+                      shape: BoxShape.circle,
+                      color: Colors.white,
                     ),
                   ),
-                  SizedBox(height: 8.h),
-
-                  // Línea correo
+                  SizedBox(width: 6.w),
                   Container(
-                    height: 12.h,
-                    width: 0.35.sw,
-                    decoration: BoxDecoration(
-                      color: Colors.grey,
-                      borderRadius: BorderRadius.circular(4.r),
-                    ),
-                  ),
-                  SizedBox(height: 6.h),
-
-                  // Línea teléfono
-                  Container(
-                    height: 12.h,
                     width: 100.w,
-                    decoration: BoxDecoration(
-                      color: Colors.grey,
-                      borderRadius: BorderRadius.circular(4.r),
-                    ),
+                    height: 10.h,
+                    color: Colors.white,
                   ),
                 ],
-              ),
-            )
-          ],
-        ),
-      ),
+              )
+            ],
+          ),
+        )
+      ],
     );
   }
 }

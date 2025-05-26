@@ -3,6 +3,7 @@ import 'package:app_creditos/src/shared/theme/app_text_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
+
 class TextoPrestamoSolicitado extends StatelessWidget {
   final double monto;
   final String tipo;

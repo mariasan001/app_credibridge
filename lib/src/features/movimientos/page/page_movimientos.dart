@@ -34,7 +34,7 @@ class _PageMovimientosState extends State<PageMovimientos> {
     try {
       final result = await ContractService.getContractsByUser(widget.user.userId);
       setState(() {
-        contratos = result;
+        contratos = _ordenarContratos(result);
         loading = false;
         _showCards = true;
       });
@@ -46,6 +46,17 @@ class _PageMovimientosState extends State<PageMovimientos> {
     }
   }
 
+  List<ContractModel> _ordenarContratos(List<ContractModel> lista) {
+    final prestamos = lista.where((c) => c.serviceTypeDesc.toLowerCase().contains('préstamo')).toList();
+    final seguros = lista.where((c) => c.serviceTypeDesc.toLowerCase().contains('seguro')).toList();
+    final otros = lista.where((c) =>
+      !c.serviceTypeDesc.toLowerCase().contains('préstamo') &&
+      !c.serviceTypeDesc.toLowerCase().contains('seguro')
+    ).toList();
+
+    return [...prestamos, ...seguros, ...otros];
+  }
+
   @override
   Widget build(BuildContext context) {
     final contratosActivos = contratos.where((c) => c.contractStatusDesc == 'ACTIVO').toList();
@@ -53,7 +64,7 @@ class _PageMovimientosState extends State<PageMovimientos> {
     return Scaffold(
       appBar: CustomAppBar(user: widget.user),
       body: loading
-          ? const MovimientoSkeletonCard() // <- solo esto cambia
+          ? const MovimientoSkeletonCard()
           : contratosActivos.isEmpty
               ? const Center(child: Text('No se encontraron contratos activos'))
               : Column(
