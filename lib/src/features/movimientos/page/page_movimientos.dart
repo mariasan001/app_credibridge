@@ -32,7 +32,9 @@ class _PageMovimientosState extends State<PageMovimientos> {
 
   Future<void> cargarContratos() async {
     try {
-      final result = await ContractService.getContractsByUser(widget.user.userId);
+      final result = await ContractService.getContractsByUser(
+        widget.user.userId,
+      );
       setState(() {
         contratos = _ordenarContratos(result);
         loading = false;
@@ -46,20 +48,45 @@ class _PageMovimientosState extends State<PageMovimientos> {
     }
   }
 
-  List<ContractModel> _ordenarContratos(List<ContractModel> lista) {
-    final prestamos = lista.where((c) => c.serviceTypeDesc.toLowerCase().contains('préstamo')).toList();
-    final seguros = lista.where((c) => c.serviceTypeDesc.toLowerCase().contains('seguro')).toList();
-    final otros = lista.where((c) =>
-      !c.serviceTypeDesc.toLowerCase().contains('préstamo') &&
-      !c.serviceTypeDesc.toLowerCase().contains('seguro')
-    ).toList();
+bool esPosiblePrestamo(ContractModel contrato) {
+  final tipo = contrato.serviceTypeDesc.toLowerCase();
 
-    return [...prestamos, ...seguros, ...otros];
+  final esSeguro = tipo.contains('seguro');
+  final esPrestamoTexto = tipo.contains('préstamo') || tipo.contains('prestamo');
+
+  final montoValido = contrato.amount > 1000;
+  final tienePagos = contrato.installments > 1;
+  final tieneDescuento = contrato.biweeklyDiscount > 0 && contrato.biweeklyDiscount < 5000;
+  final tieneSaldos = contrato.lastBalance > 0 || contrato.newBalance > 0;
+
+  return !esSeguro && (esPrestamoTexto || (montoValido && tienePagos && tieneDescuento && tieneSaldos));
+}
+
+List<ContractModel> _ordenarContratos(List<ContractModel> lista) {
+  final prestamos = <ContractModel>[];
+  final seguros = <ContractModel>[];
+  final otros = <ContractModel>[];
+
+  for (var contrato in lista) {
+    final tipo = contrato.serviceTypeDesc.toLowerCase();
+
+    if (esPosiblePrestamo(contrato)) {
+      prestamos.add(contrato);
+    } else if (tipo.contains('seguro')) {
+      seguros.add(contrato);
+    } else {
+      otros.add(contrato);
+    }
   }
+
+  return [...prestamos, ...seguros, ...otros];
+}
+
 
   @override
   Widget build(BuildContext context) {
-    final contratosActivos = contratos.where((c) => c.contractStatusDesc == 'ACTIVO').toList();
+    final contratosActivos =
+        contratos.where((c) => c.contractStatusDesc == 'ACTIVO').toList();
 
     return Scaffold(
       appBar: CustomAppBar(user: widget.user),
@@ -82,13 +109,19 @@ class _PageMovimientosState extends State<PageMovimientos> {
                               mainAxisSize: MainAxisSize.min,
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
-                                Icon(Icons.arrow_back_ios_new_rounded, size: 20.sp),
+                                Icon(
+                                  Icons.arrow_back_ios_new_rounded,
+                                  size: 20.sp,
+                                ),
                                 SizedBox(width: 4.w),
-                                Text('Mis servicios Activos', style: AppTextStyles.titleheader(context)),
+                                Text(
+                                  'Mis servicios activos',
+                                  style: AppTextStyles.titleheader(context),
+                                ),
                               ],
                             ),
                           ),
-                          SizedBox(height: 6.h),
+                          SizedBox(height: 8.h),
                           Text(
                             'Desliza para ver los demás servicios ${_currentIndex + 1} de ${contratosActivos.length}',
                             style: AppTextStyles.bodySmall(context).copyWith(
@@ -115,24 +148,37 @@ class _PageMovimientosState extends State<PageMovimientos> {
                           return AnimatedOpacity(
                             opacity: _showCards ? 1 : 0,
                             duration: const Duration(milliseconds: 500),
-                            child: Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 1.w, vertical: 1.h),
-                              child: SingleChildScrollView(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    ContratoDetalleWidget(contrato: contrato),
-                                    SizedBox(height: 20.h),
-                                    ResumenPagoCard(contrato: contrato),
-                                    SizedBox(height: 30.h),
-                                  ],
-                                ),
+                            child: SingleChildScrollView(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  ContratoDetalleWidget(contrato: contrato),
+                                  SizedBox(height: 20.h),
+                                  ResumenPagoCard(contrato: contrato, user: widget.user),
+                                ],
                               ),
                             ),
                           );
                         },
                       ),
                     ),
+                    SizedBox(height: 12.h),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: List.generate(contratosActivos.length, (index) {
+                        final isActive = index == _currentIndex;
+                        return Container(
+                          margin: EdgeInsets.symmetric(horizontal: 4.w),
+                          width: isActive ? 16.w : 8.w,
+                          height: 8.h,
+                          decoration: BoxDecoration(
+                            color: isActive ? Colors.orange : Colors.grey.shade300,
+                            borderRadius: BorderRadius.circular(4.r),
+                          ),
+                        );
+                      }),
+                    ),
+                    SizedBox(height: 20.h),
                   ],
                 ),
     );

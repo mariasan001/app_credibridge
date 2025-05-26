@@ -1,17 +1,9 @@
 import 'package:app_creditos/src/features/auth/models/user_model.dart';
 import 'package:app_creditos/src/shared/services/api_service.dart';
+import 'package:app_creditos/src/shared/services/session_manager.dart'; // ✅ Asegúrate de importar SessionManager
 import 'package:dio/dio.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class AuthService {
-  static FlutterSecureStorage _storage = const FlutterSecureStorage();
-
-  @visibleForTesting
-  static void setStorageForTest(FlutterSecureStorage customStorage) {
-    _storage = customStorage;
-  }
-
   /// 🔐 Login: guarda token desde cookie y devuelve usuario
   static Future<User?> login(String username, String password) async {
     try {
@@ -34,7 +26,7 @@ class AuthService {
       }
 
       if (jwtToken != null && jwtToken.isNotEmpty) {
-        await _storage.write(key: 'jwt_token', value: jwtToken);
+        await SessionManager.saveToken(jwtToken); // ✅ Uso correcto
         print('🔐 JWT guardado correctamente');
       }
 

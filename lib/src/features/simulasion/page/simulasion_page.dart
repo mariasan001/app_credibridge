@@ -1,11 +1,11 @@
-import 'package:app_creditos/src/features/simulasion/page/simulacion_skeleton.dart';
+import 'package:app_creditos/src/shared/theme/app_text_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:app_creditos/src/features/auth/models/user_model.dart';
+import 'package:app_creditos/src/features/simulasion/page/simulacion_skeleton.dart';
 import 'package:app_creditos/src/features/simulasion/widget/formulario_simulacion.dart';
 import 'package:app_creditos/src/shared/theme/app_colors.dart';
-import 'package:app_creditos/src/shared/theme/app_text_styles.dart';
 import 'package:app_creditos/src/shared/components/ustom_app_bar.dart';
 
 class SimulacionPage extends StatefulWidget {
@@ -28,8 +28,6 @@ class _SimulacionPageState extends State<SimulacionPage> {
   @override
   void initState() {
     super.initState();
-
-    // Simula carga de datos por UX, o reemplaza con lógica real
     Future.delayed(const Duration(milliseconds: 800), () {
       if (mounted) setState(() => isLoading = false);
     });
@@ -40,159 +38,221 @@ class _SimulacionPageState extends State<SimulacionPage> {
     return Scaffold(
       backgroundColor: AppColors.background(context),
       appBar: CustomAppBar(user: widget.user),
-      body: isLoading || widget.descuento == null
-          ? const SimulacionSkeleton()
-          : ListView(
-              padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 24.h),
-              physics: const ClampingScrollPhysics(),
-              children: [
-                /// Encabezado
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    InkWell(
-                      onTap: () => Navigator.pop(context),
-                      borderRadius: BorderRadius.circular(8.r),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Icon(Icons.arrow_back_ios_new_rounded, size: 20.sp),
-                          SizedBox(width: 4.w),
-                          Text(
-                            'Simulación',
-                            style: AppTextStyles.titleheader(context),
-                          ),
-                        ],
-                      ),
-                    ),
-                    SizedBox(height: 1.h),
-                    Text(
-                      'Gestiona tu cuenta de manera rápida y sencilla.',
-                      style: AppTextStyles.bodySmall(context),
-                    ),
-                  ],
+      body:
+          isLoading || widget.descuento == null
+              ? const SimulacionSkeleton()
+              : ListView(
+                padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 24.h),
+                physics: const ClampingScrollPhysics(),
+                children: [
+                  _buildHeader(context),
+                  SizedBox(height: 24.h),
+                  _buildSimulacionCard(context),
+                  SizedBox(height: 32.h),
+                  _buildCatInfo(context),
+                  SizedBox(height: 32.h),
+                ],
+              ),
+    );
+  }
+
+  Widget _buildHeader(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            // Botón de retroceso
+            InkWell(
+              onTap: () => Navigator.pop(context),
+              borderRadius: BorderRadius.circular(12.r),
+              child: Container(
+                child: Icon(
+                  Icons.arrow_back,
+                  size: 20.sp,
+                  color: AppColors.cuotasColor,
                 ),
-
-                SizedBox(height: 20.h),
-
-                ///Formulario
-                FormularioSimulacion(
-                  user: widget.user,
-                  descuento: widget.descuento!,
-                ),
-
-                SizedBox(height: 40.h),
-
-                ///Información CAT
-                _buildCatInfo(context),
-
-                SizedBox(height: 24.h),
-              ],
+              ),
             ),
+            SizedBox(width: 6.w),
+            // Título principal
+            Text(
+              'Simula tu préstamo',
+              style: AppTextStyles.heading(context).copyWith(fontSize: 18.sp),
+            ),
+          ],
+        ),
+        SizedBox(height: 4.h),
+        Text(
+          'Elige cuánto necesitas y en cuántos pagos lo devolverás.',
+          style: TextStyle(
+            fontSize: 12.sp,
+            color: AppColors.textMuted(context),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildSimulacionCard(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.all(20.w),
+      decoration: BoxDecoration(
+        color: AppColors.cardBackground(context),
+        borderRadius: BorderRadius.circular(20.r),
+        boxShadow: [
+          if (Theme.of(context).brightness == Brightness.light)
+            BoxShadow(
+              color: Colors.black.withOpacity(0.05),
+              blurRadius: 10,
+              offset: Offset(0, 4.h),
+            ),
+        ],
+      ),
+      child: FormularioSimulacion(
+        user: widget.user,
+        descuento: widget.descuento!,
+      ),
     );
   }
 
   Widget _buildCatInfo(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(16.w),
+      padding: EdgeInsets.all(18.w),
       decoration: BoxDecoration(
         color: AppColors.cardBackground(context),
-        borderRadius: BorderRadius.circular(12.r),
-        boxShadow: Theme.of(context).brightness == Brightness.light
-            ? [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.03),
-                  blurRadius: 4.r,
-                  offset: Offset(0, 2.h),
-                ),
-              ]
-            : [],
+        borderRadius: BorderRadius.circular(16.r),
+        boxShadow: [
+          if (Theme.of(context).brightness == Brightness.light)
+            BoxShadow(
+              color: Colors.black.withOpacity(0.04),
+              blurRadius: 6,
+              offset: Offset(0, 3.h),
+            ),
+        ],
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text.rich(
-            TextSpan(
-              style: AppTextStyles.bodySmall(context).copyWith(
-                height: 1.3,
-                color: AppColors.textPrimary(context),
-              ),
+          const Icon(Icons.info_outline, color: Colors.orange),
+          SizedBox(width: 12.w),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                TextSpan(
-                  text: 'Costo Anual Total ',
-                  style: TextStyle(color: AppColors.primary),
+                Row(
+                  children: [
+                    Text(
+                      '¿Qué es el CAT?',
+                      style: TextStyle(
+                        fontSize: 14.sp,
+                        fontWeight: FontWeight.bold,
+                        color: AppColors.primary,
+                      ),
+                    ),
+                    IconButton(
+                      icon: Icon(
+                        Icons.help_outline,
+                        size: 20.sp,
+                        color: AppColors.primary,
+                      ),
+                      onPressed: () => _showCatDialog(context),
+                      tooltip: 'Más información',
+                    ),
+                  ],
                 ),
-                TextSpan(
-                  text: '(CAT)',
+                Text(
+                  'Haz clic en el ícono para conocer más sobre el CAT y cómo afecta tu préstamo.',
                   style: TextStyle(
-                    color: AppColors.primary,
-                    fontWeight: FontWeight.bold,
+                    fontSize: 12.sp,
+                    color: AppColors.textMuted(context),
                   ),
                 ),
-                const TextSpan(text: ' promedio vigente '),
-                TextSpan(
-                  text: 'SIN IVA',
-                  style: TextStyle(
-                    color: AppColors.primary,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const TextSpan(
-                  text:
-                      ', presentado únicamente con fines informativos y comparativos.\n\nRecomendamos elegir el crédito con el ',
-                ),
-                TextSpan(
-                  text: 'CAT',
-                  style: TextStyle(
-                    color: AppColors.primary,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const TextSpan(
-                  text:
-                      ' más bajo, siempre considerando tus necesidades y capacidad de pago.\n\nPara más info, visita la página de ',
-                ),
-                TextSpan(
-                  text: 'CONDUSEF',
-                  style: TextStyle(
-                    color: AppColors.primary,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const TextSpan(text: ':\n'),
               ],
             ),
-            textAlign: TextAlign.center,
-          ),
-          SizedBox(height: 12.h),
-          Column(
-            children: [
-              _buildLink(context, 'www.buro.gob.mx'),
-              SizedBox(height: 6.h),
-              _buildLink(context, 'www.condusef.gob.mx'),
-            ],
           ),
         ],
       ),
     );
   }
-  
-  Widget _buildLink(BuildContext context, String url) {
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Icon(Icons.link, size: 16.sp, color: Colors.orange),
-        SizedBox(width: 6.w),
-        Text(
-          url,
-          style: AppTextStyles.linkMuted(context).copyWith(
-            fontWeight: FontWeight.w600,
-            fontSize: 12.sp,
-            color: Colors.orange,
-            decoration: TextDecoration.underline,
+
+  void _showCatDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (_) {
+        final isDark = Theme.of(context).brightness == Brightness.dark;
+
+        return AlertDialog(
+          backgroundColor: isDark ? const Color(0xFF1E1E1E) : Colors.white,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
           ),
-        ),
-      ],
+          title: Row(
+            children: [
+              const Icon(Icons.info_outline, color: Colors.orange),
+              SizedBox(width: 8.w),
+              Text(
+                'Información sobre el CAT',
+                style: TextStyle(
+                  fontWeight: FontWeight.w700,
+                  fontSize: 16.sp,
+                  color: isDark ? Colors.white : Colors.black87,
+                ),
+              ),
+            ],
+          ),
+          content: SingleChildScrollView(
+            child: Text.rich(
+              TextSpan(
+                style: TextStyle(
+                  fontSize: 13.sp,
+                  height: 1.5,
+                  color: isDark ? Colors.white70 : Colors.black87,
+                ),
+                children: [
+                  const TextSpan(text: 'El '),
+                  TextSpan(
+                    text: 'Costo Anual Total (CAT)',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: Colors.orange,
+                    ),
+                  ),
+                  const TextSpan(
+                    text:
+                        ' promedio vigente sin IVA se presenta únicamente con fines informativos y comparativos.\n\nRecomendamos elegir el crédito con el ',
+                  ),
+                  TextSpan(
+                    text: 'CAT más bajo',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: Colors.orange,
+                    ),
+                  ),
+                  const TextSpan(
+                    text:
+                        ', siempre considerando tus necesidades y capacidad de pago.\n\nPara más información, visita:',
+                  ),
+                  TextSpan(
+                    text: '\n• www.buro.gob.mx\n• www.condusef.gob.mx',
+                    style: TextStyle(
+                      fontWeight: FontWeight.w600,
+                      color: Colors.orange,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              style: TextButton.styleFrom(foregroundColor: Colors.orange),
+              child: const Text('Cerrar'),
+            ),
+          ],
+        );
+      },
     );
   }
 }

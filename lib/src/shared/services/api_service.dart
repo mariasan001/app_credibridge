@@ -1,3 +1,4 @@
+import 'package:app_creditos/src/shared/services/session_manager.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
@@ -36,7 +37,7 @@ class ApiService {
     _dio.interceptors.add(
       InterceptorsWrapper(
         onRequest: (options, handler) async {
-          final token = await _storage.read(key: 'jwt_token');
+        final token = await SessionManager.getToken();
           if (token != null) {
             options.headers['cookie'] = 'JWT=$token';
             print('✅ JWT enviado por cookie');

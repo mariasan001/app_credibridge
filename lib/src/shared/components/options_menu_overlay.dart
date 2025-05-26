@@ -16,7 +16,7 @@ class OptionsMenuOverlay {
       builder: (_) => Stack(
         children: [
           // Fondo difuminado + dismiss
-          GestureDetector(
+           GestureDetector(
             onTap: onClose,
             behavior: HitTestBehavior.translucent,
             child: BackdropFilter(

@@ -4,23 +4,39 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 import 'package:app_creditos/src/features/solicitudes/model/contract_model.dart';
+
 class MontoDestacado extends StatelessWidget {
   final ContractModel contrato;
 
-  const MontoDestacado({
-    super.key,
-    required this.contrato,
-  });
+  const MontoDestacado({super.key, required this.contrato});
+
+  bool esPrestamoReal(ContractModel contrato) {
+    final tipo = contrato.serviceTypeDesc.toLowerCase();
+
+    final esSeguro = tipo.contains('seguro');
+    final esPrestamoPorTexto = tipo.contains('préstamo') || tipo.contains('prestamo');
+
+    final montoValido = contrato.amount > 1000;
+    final tienePagos = contrato.installments > 1;
+    final tieneDescuento = contrato.biweeklyDiscount > 0 && contrato.biweeklyDiscount < 5000;
+    final tieneSaldos = contrato.lastBalance > 0 || contrato.newBalance > 0;
+
+    // Solo si no es seguro, y se cumple la lógica o el texto dice préstamo
+    return !esSeguro && (esPrestamoPorTexto || (montoValido && tienePagos && tieneDescuento && tieneSaldos));
+  }
 
   @override
   Widget build(BuildContext context) {
-    final formatter = NumberFormat.currency(locale: 'es_MX', symbol: '', decimalDigits: 2);
+    final formatter = NumberFormat.currency(
+      locale: 'es_MX',
+      symbol: '',
+      decimalDigits: 2,
+    );
     final tipo = contrato.serviceTypeDesc.toLowerCase();
-
-    final esPrestamo = tipo.contains('préstamo') || tipo.contains('prestamo');
     final esSeguro = tipo.contains('seguro');
+    final esPrestamo = esPrestamoReal(contrato);
 
-    // Elegimos el monto a mostrar
+    // Monto principal a mostrar
     final monto = esPrestamo ? contrato.newBalance : contrato.biweeklyDiscount;
     final partes = formatter.format(monto).split('.');
 
@@ -33,8 +49,6 @@ class MontoDestacado extends StatelessWidget {
     } else {
       colorPrincipal = Colors.grey.shade600;
     }
-
-
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -69,7 +83,6 @@ class MontoDestacado extends StatelessWidget {
             ],
           ),
         ),
-   
       ],
     );
   }

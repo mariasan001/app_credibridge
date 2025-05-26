@@ -12,12 +12,32 @@ class ContratoDetalleWidget extends StatelessWidget {
 
   const ContratoDetalleWidget({super.key, required this.contrato});
 
+  bool esPrestamoReal(ContractModel contrato) {
+    final tipo = contrato.serviceTypeDesc.toLowerCase();
+
+    final esSeguro = tipo.contains('seguro');
+    final esPrestamoTexto =
+        tipo.contains('préstamo') || tipo.contains('prestamo');
+
+    final montoValido = contrato.amount > 1000;
+    final tienePagos = contrato.installments > 1;
+    final tieneDescuento =
+        contrato.biweeklyDiscount > 0 && contrato.biweeklyDiscount < 5000;
+    final tieneSaldos = contrato.lastBalance > 0 || contrato.newBalance > 0;
+
+    return !esSeguro &&
+        (esPrestamoTexto ||
+            (montoValido && tienePagos && tieneDescuento && tieneSaldos));
+  }
+
   @override
   Widget build(BuildContext context) {
     final cuotasRestantes = contrato.installments - contrato.discountsAplied;
     final tipo = contrato.serviceTypeDesc.toLowerCase();
-    final esPrestamo = tipo.contains('préstamo') || tipo.contains('prestamo');
     final esSeguro = tipo.contains('seguro');
+    final esPrestamo = esPrestamoReal(
+      contrato,
+    ); // ⬅️ Aquí aplicamos la detección refinada
 
     String obtenerTitulo() {
       if (esSeguro) return "Pago de seguro";
@@ -35,7 +55,7 @@ class ContratoDetalleWidget extends StatelessWidget {
           borderRadius: BorderRadius.circular(16.r),
           boxShadow: [
             BoxShadow(
-              color: AppColors.promoShadow(context), 
+              color: AppColors.promoShadow(context),
               blurRadius: 10,
               offset: const Offset(0, 5),
             ),
@@ -44,24 +64,21 @@ class ContratoDetalleWidget extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            // 🏷️ Título dinámico
             Text(
               obtenerTitulo(),
-              style: AppTextStyles.promoTitle(context).copyWith(
-                fontSize: 20.sp,
-                fontWeight: FontWeight.bold,
-              ),
+              style: AppTextStyles.promoTitle(
+                context,
+              ).copyWith(fontSize: 20.sp, fontWeight: FontWeight.bold),
             ),
             SizedBox(height: 4.h),
 
-            // 🏢 Subtítulo: Otorgado por
+            // Otorgado por
             RichText(
               textAlign: TextAlign.center,
               text: TextSpan(
-                style: AppTextStyles.bodySmall(context).copyWith(
-                  fontSize: 12.sp,
-                  color: const Color(0xFF746343),
-                ),
+                style: AppTextStyles.bodySmall(
+                  context,
+                ).copyWith(fontSize: 13.sp, color: const Color(0xFF746343)),
                 children: [
                   TextSpan(
                     text: "Otorgado por: ",
@@ -72,9 +89,10 @@ class ContratoDetalleWidget extends StatelessWidget {
                     ),
                   ),
                   TextSpan(
-                    text: contrato.lenderName.isNotEmpty
-                        ? contrato.lenderName
-                        : "Institución no disponible",
+                    text:
+                        contrato.lenderName.isNotEmpty
+                            ? contrato.lenderName
+                            : "Institución no disponible",
                     style: AppTextStyles.bodySmall(context).copyWith(
                       fontSize: 12.sp,
                       fontWeight: FontWeight.bold,
@@ -86,21 +104,13 @@ class ContratoDetalleWidget extends StatelessWidget {
             ),
 
             SizedBox(height: 18.h),
-
-            // 💵 Monto destacado
             MontoDestacado(contrato: contrato),
- 
             SizedBox(height: 12.h),
+            TextoPrestamoSolicitado(contrato: contrato),
 
-            // 📝 Texto informativo según tipo
-            TextoPrestamoSolicitado(
-              monto: contrato.amount,
-              tipo: contrato.serviceTypeDesc,
-            ),
-
-            // 📊 Cuotas solo si es préstamo
+            // Mostrar cuotas también si es préstamo oculto
             if (esPrestamo) ...[
-              SizedBox(height: 24.h),
+              SizedBox(height: 25.h),
               ResumenCuotas(
                 total: contrato.installments,
                 actual: contrato.discountsAplied,
@@ -113,4 +123,3 @@ class ContratoDetalleWidget extends StatelessWidget {
     );
   }
 }
-   

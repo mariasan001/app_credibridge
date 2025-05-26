@@ -1,3 +1,5 @@
+import 'package:app_creditos/src/features/auth/models/user_model.dart';
+import 'package:app_creditos/src/features/movimientos/page/historial_page.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -7,8 +9,8 @@ import 'package:app_creditos/src/shared/theme/app_text_styles.dart';
 
 class ResumenPagoCard extends StatelessWidget {
   final ContractModel contrato;
-
-  const ResumenPagoCard({super.key, required this.contrato});
+  final User user;
+  const ResumenPagoCard({super.key, required this.contrato, required this.user});
 
   @override
   Widget build(BuildContext context) {
@@ -16,10 +18,14 @@ class ResumenPagoCard extends StatelessWidget {
     final dia = ahora.day;
 
     DateTime proximo =
-        dia < 15 ? DateTime(ahora.year, ahora.month, 15) : DateTime(ahora.year, ahora.month + 1, 0);
+        dia < 15
+            ? DateTime(ahora.year, ahora.month, 15)
+            : DateTime(ahora.year, ahora.month + 1, 0);
 
     DateTime ultimo =
-        dia >= 15 ? DateTime(ahora.year, ahora.month, 15) : DateTime(ahora.year, ahora.month - 1, 15);
+        dia >= 15
+            ? DateTime(ahora.year, ahora.month, 15)
+            : DateTime(ahora.year, ahora.month - 1, 15);
 
     final formatterFecha = DateFormat("d MMM y", 'es_MX');
     final formatterMonto = NumberFormat.currency(locale: 'es_MX', symbol: '\$');
@@ -62,8 +68,16 @@ class ResumenPagoCard extends StatelessWidget {
                       size: 20.sp,
                       color: Colors.grey.shade600,
                     ),
-                    onPressed: () => Navigator.pushNamed(context, '/historial'),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => HistorialPage(contrato: contrato, user:user),
+                        ),
+                      );
+                    },
                   ),
+
                   SizedBox(width: 3.w),
                   IconButton(
                     padding: EdgeInsets.zero,
@@ -73,11 +87,12 @@ class ResumenPagoCard extends StatelessWidget {
                       size: 20.sp,
                       color: Colors.grey.shade600,
                     ),
-                    onPressed: () => Navigator.pushNamed(
-                      context,
-                      '/aclaracion',
-                      arguments: contrato,
-                    ),
+                    onPressed:
+                        () => Navigator.pushNamed(
+                          context,
+                          '/aclaracion',
+                          arguments: contrato,
+                        ),
                   ),
                 ],
               ),
@@ -119,10 +134,9 @@ class ResumenPagoCard extends StatelessWidget {
                     TextSpan(text: '${partes[0]}.'),
                     TextSpan(
                       text: partes.length > 1 ? partes[1] : '00',
-                      style: AppTextStyles.promoTitle(context).copyWith(
-                        fontSize: 14.sp,
-                        color: Colors.grey.shade600,
-                      ),
+                      style: AppTextStyles.promoTitle(
+                        context,
+                      ).copyWith(fontSize: 14.sp, color: Colors.grey.shade600),
                     ),
                   ],
                 ),
@@ -150,70 +164,82 @@ class ResumenPagoCard extends StatelessWidget {
           ),
           contrato.discountsAplied > 0
               ? Row(
+                children: [
+                  CircleAvatar(
+                    radius: 22.r,
+                    backgroundColor: Colors.grey.shade300,
+                    child: Icon(
+                      Icons.history,
+                      color: Colors.white,
+                      size: 22.sp,
+                    ),
+                  ),
+                  SizedBox(width: 14.w),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Último descuento",
+                          style: AppTextStyles.promoListText(
+                            context,
+                          ).copyWith(color: Colors.grey.shade600),
+                        ),
+                        SizedBox(height: 2.h),
+                        Text(
+                          formatterFecha.format(ultimo),
+                          style: AppTextStyles.promoFooterDate(
+                            context,
+                          ).copyWith(color: Colors.grey.shade500),
+                        ),
+                      ],
+                    ),
+                  ),
+                  RichText(
+                    text: TextSpan(
+                      style: AppTextStyles.promoBold(context),
+                      children: [
+                        TextSpan(
+                          text: '${partes[0]}.',
+                          style: AppTextStyles.promoBold(context).copyWith(
+                            fontSize: 16.sp,
+                            color: Colors.grey.shade600,
+                          ),
+                        ),
+                        TextSpan(
+                          text: partes.length > 1 ? partes[1] : '00',
+                          style: AppTextStyles.promoBold(context).copyWith(
+                            fontSize: 10.sp,
+                            color: const Color.fromARGB(255, 170, 170, 170),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              )
+              : Padding(
+                padding: EdgeInsets.symmetric(vertical: 8.h),
+                child: Row(
                   children: [
-                    CircleAvatar(
-                      radius: 22.r,
-                      backgroundColor: Colors.grey.shade300,
-                      child: Icon(Icons.history, color: Colors.white, size: 22.sp),
+                    Icon(
+                      Icons.info_outline,
+                      size: 20.sp,
+                      color: Colors.grey.shade400,
                     ),
-                    SizedBox(width: 14.w),
+                    SizedBox(width: 8.w),
                     Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            "Último descuento",
-                            style: AppTextStyles.promoListText(context).copyWith(color: Colors.grey.shade600),
-                          ),
-                          SizedBox(height: 2.h),
-                          Text(
-                            formatterFecha.format(ultimo),
-                            style: AppTextStyles.promoFooterDate(context).copyWith(color: Colors.grey.shade500),
-                          ),
-                        ],
-                      ),
-                    ),
-                    RichText(
-                      text: TextSpan(
-                        style: AppTextStyles.promoBold(context),
-                        children: [
-                          TextSpan(
-                            text: '${partes[0]}.',
-                            style: AppTextStyles.promoBold(context).copyWith(
-                              fontSize: 16.sp,
-                              color: Colors.grey.shade600,
-                            ),
-                          ),
-                          TextSpan(
-                            text: partes.length > 1 ? partes[1] : '00',
-                            style: AppTextStyles.promoBold(context).copyWith(
-                              fontSize: 10.sp,
-                              color: const Color.fromARGB(255, 170, 170, 170),
-                            ),
-                          ),
-                        ],
+                      child: Text(
+                        "No se ha registrado ningún descuento aún",
+                        style: AppTextStyles.bodySmall(context).copyWith(
+                          fontSize: 12.sp,
+                          color: Colors.grey.shade500,
+                        ),
                       ),
                     ),
                   ],
-                )
-              : Padding(
-                  padding: EdgeInsets.symmetric(vertical: 8.h),
-                  child: Row(
-                    children: [
-                      Icon(Icons.info_outline, size: 20.sp, color: Colors.grey.shade400),
-                      SizedBox(width: 8.w),
-                      Expanded(
-                        child: Text(
-                          "No se ha registrado ningún descuento aún",
-                          style: AppTextStyles.bodySmall(context).copyWith(
-                            fontSize: 12.sp,
-                            color: Colors.grey.shade500,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
                 ),
+              ),
         ],
       ),
     );

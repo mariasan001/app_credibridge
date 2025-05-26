@@ -1,3 +1,20 @@
+class PaymentInfo {
+  final DateTime date;
+  final double amount;
+
+  PaymentInfo({
+    required this.date,
+    required this.amount,
+  });
+
+  factory PaymentInfo.fromJson(Map<String, dynamic> json) {
+    return PaymentInfo(
+      date: DateTime.parse(json['date']),
+      amount: (json['amount'] ?? 0).toDouble(),
+    );
+  }
+}
+
 class ContractModel {
   final int contractId;
   final int installments;
@@ -16,6 +33,9 @@ class ContractModel {
   final String serviceTypeDesc;
   final String contractStatusDesc;
 
+  final PaymentInfo? lastPayment;
+  final PaymentInfo? nextPayment;
+
   ContractModel({
     required this.contractId,
     required this.installments,
@@ -32,6 +52,8 @@ class ContractModel {
     required this.lenderServiceDesc,
     required this.serviceTypeDesc,
     required this.contractStatusDesc,
+    this.lastPayment,
+    this.nextPayment,
   });
 
   factory ContractModel.fromJson(Map<String, dynamic> json) {
@@ -57,6 +79,12 @@ class ContractModel {
       lenderServiceDesc: lenderService['lenderServiceDesc'] ?? '',
       serviceTypeDesc: serviceType['serviceTypeDesc'] ?? '',
       contractStatusDesc: contractStatus['contractStatusDesc'] ?? '',
+      lastPayment: json['lastPayment'] != null
+          ? PaymentInfo.fromJson(json['lastPayment'])
+          : null,
+      nextPayment: json['nextPayment'] != null
+          ? PaymentInfo.fromJson(json['nextPayment'])
+          : null,
     );
   }
 }

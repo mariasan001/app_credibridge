@@ -50,13 +50,8 @@ class _PreloaderCAnimatedState extends State<PreloaderCAnimated>
 
   Future<void> _checkSession() async {
     final token = await SessionManager.getToken();
-    await Future.delayed(const Duration(milliseconds: 800));
-    if (!mounted) return;
-
     if (token != null) {
       final user = await AuthService.getProfile();
-      if (!mounted) return;
-
       if (user != null) {
         Navigator.pushReplacement(
           context,
@@ -65,7 +60,7 @@ class _PreloaderCAnimatedState extends State<PreloaderCAnimated>
         return;
       }
     }
-
+    // 🟠 Si no hay token o es inválido:
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(builder: (_) => const LoginPage()),
@@ -93,8 +88,18 @@ class _PreloaderCAnimatedState extends State<PreloaderCAnimated>
               Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Text("Credi", style: AppTextStyles.logoHighlight(context).copyWith(fontSize: 32.sp)),
-                  Text(visibleText, style: AppTextStyles.logoText(context).copyWith(fontSize: 32.sp)),
+                  Text(
+                    "Credi",
+                    style: AppTextStyles.logoHighlight(
+                      context,
+                    ).copyWith(fontSize: 32.sp),
+                  ),
+                  Text(
+                    visibleText,
+                    style: AppTextStyles.logoText(
+                      context,
+                    ).copyWith(fontSize: 32.sp),
+                  ),
                 ],
               ),
               SizedBox(height: 28.h),

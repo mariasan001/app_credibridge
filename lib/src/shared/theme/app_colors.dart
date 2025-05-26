@@ -5,7 +5,7 @@ class AppColors {
 
   static Color inputBackground(BuildContext context) =>
       Theme.of(context).brightness == Brightness.dark
-          ? const Color(0xFF2A2A2A)
+          ? const Color.fromARGB(255, 219, 201, 201)
           : const Color(0xFFF6F6F6);
 
   static Color cardBackground(BuildContext context) =>

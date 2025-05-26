@@ -1,4 +1,5 @@
 import 'package:app_creditos/src/features/auth/models/user_model.dart';
+import 'package:app_creditos/src/features/inicio/page/dashboard_page.dart';
 import 'package:app_creditos/src/features/solicitudes/page/solicitud_card_skeleton.dart';
 import 'package:app_creditos/src/features/solicitudes/widget/solicitudes_card.dart';
 import 'package:app_creditos/src/shared/theme/app_text_styles.dart';
@@ -8,6 +9,7 @@ import 'package:app_creditos/src/features/solicitudes/services/contract_service.
 import 'package:app_creditos/src/shared/components/ustom_app_bar.dart';
 import 'package:app_creditos/src/shared/theme/app_colors.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:line_icons/line_icons.dart';
 
 class PageSolicitudes extends StatefulWidget {
   final User user;
@@ -56,38 +58,54 @@ class _PageSolicitudesState extends State<PageSolicitudes> {
       body:
           loading
               ? ListView.builder(
-                padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 10.h),
+                padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 1.h),
                 itemCount: 3,
                 itemBuilder: (_, __) => const SolicitudCardSkeleton(),
               )
               : RefreshIndicator(
                 onRefresh: cargarContratos,
-                child: ListView.separated(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: 12.w,
-                    vertical: 10.h,
-                  ),
-                  physics: const AlwaysScrollableScrollPhysics(),
-                  itemCount: contratos.length + 1,
-                  separatorBuilder: (_, __) => SizedBox(height: 10.h),
-                  itemBuilder: (context, index) {
-                    if (index == 0) return _buildHeader(context);
-                    final contrato = contratos[index - 1];
-                    return SolicitudCard(contrato: contrato);
-                  },
-                ),
+                child:
+                    contratos.isEmpty
+                        ? SingleChildScrollView(
+                          physics: const AlwaysScrollableScrollPhysics(),
+                          child: Column(
+                            children: [
+                              _buildHeader(context),
+                              _buildEmptyState(context),
+                            ],
+                          ),
+                        )
+                        : ListView.separated(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 12.w,
+                            vertical: 10.h,
+                          ),
+                          physics: const AlwaysScrollableScrollPhysics(),
+                          itemCount: contratos.length + 1,
+                          separatorBuilder: (_, __) => SizedBox(height: 10.h),
+                          itemBuilder: (context, index) {
+                            if (index == 0) return _buildHeader(context);
+                            final contrato = contratos[index - 1];
+                            return SolicitudCard(contrato: contrato);
+                          },
+                        ),
               ),
     );
   }
 
   Widget _buildHeader(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.only(bottom: 12.h),
+      padding: EdgeInsets.only(bottom: 2.h, top: 10.h),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           GestureDetector(
-            onTap: () => Navigator.maybePop(context),
+            onTap: () {
+              Navigator.of(context).pushAndRemoveUntil(
+                MaterialPageRoute(builder: (_) => HomePage(user: widget.user)),
+                (route) => false,
+              );
+            },
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -97,14 +115,66 @@ class _PageSolicitudesState extends State<PageSolicitudes> {
               ],
             ),
           ),
-          SizedBox(height: 3.h),
           Text(
-            'Aqui encontras el status de tu solicitudes',
+            'Aquí encontrarás el estatus de tus solicitudes.',
             style: AppTextStyles.bodySmall(
               context,
             ).copyWith(color: AppColors.textMuted(context)),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildEmptyState(BuildContext context) {
+    return Center(
+      child: SingleChildScrollView(
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 24.w),
+          child: Container(
+            padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 32.h),
+            decoration: BoxDecoration(
+              color:
+                  Theme.of(context).brightness == Brightness.dark
+                      ? const Color(0xFF1E1E1E)
+                      : Colors.white,
+              borderRadius: BorderRadius.circular(20.r),
+              boxShadow: [
+                if (Theme.of(context).brightness == Brightness.light)
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.05),
+                    blurRadius: 12,
+                    offset: const Offset(0, 4),
+                  ),
+              ],
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(LineIcons.fileContract, size: 80.sp, color: Colors.orange),
+                SizedBox(height: 20.h),
+                Text(
+                  'Aún no tienes solicitudes',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 18.sp,
+                    fontWeight: FontWeight.bold,
+                    color: AppColors.textPrimary(context),
+                  ),
+                ),
+                SizedBox(height: 10.h),
+                Text(
+                  'Cuando realices una solicitud, podrás ver su estado aquí.',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 13.sp,
+                    color: AppColors.textMuted(context),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
       ),
     );
   }

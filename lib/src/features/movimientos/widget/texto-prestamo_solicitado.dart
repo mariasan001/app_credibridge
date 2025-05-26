@@ -3,26 +3,42 @@ import 'package:app_creditos/src/shared/theme/app_text_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
+import 'package:app_creditos/src/features/solicitudes/model/contract_model.dart';
 
 class TextoPrestamoSolicitado extends StatelessWidget {
-  final double monto;
-  final String tipo;
+  final ContractModel contrato;
 
   const TextoPrestamoSolicitado({
     super.key,
-    required this.monto,
-    required this.tipo,
+    required this.contrato,
   });
+
+  bool esPrestamoReal(ContractModel contrato) {
+    final tipo = contrato.serviceTypeDesc.toLowerCase();
+
+    final esSeguro = tipo.contains('seguro');
+    final esPrestamoTexto = tipo.contains('préstamo') || tipo.contains('prestamo');
+
+    final montoValido = contrato.amount > 1000;
+    final tienePagos = contrato.installments > 1;
+    final tieneDescuento = contrato.biweeklyDiscount > 0 && contrato.biweeklyDiscount < 5000;
+    final tieneSaldos = contrato.lastBalance > 0 || contrato.newBalance > 0;
+
+    return !esSeguro && (esPrestamoTexto || (montoValido && tienePagos && tieneDescuento && tieneSaldos));
+  }
 
   @override
   Widget build(BuildContext context) {
-    final montoFormateado =
-        NumberFormat.currency(locale: 'es_MX', symbol: '\$').format(monto);
+    final montoFormateado = NumberFormat.currency(
+      locale: 'es_MX',
+      symbol: '\$',
+    ).format(contrato.amount);
 
-    final isPrestamo = tipo.toLowerCase().contains('préstamo') || tipo.toLowerCase().contains('prestamo');
-    final isSeguro = tipo.toLowerCase().contains('seguro');
+    final tipo = contrato.serviceTypeDesc.toLowerCase();
+    final esSeguro = tipo.contains('seguro');
+    final esPrestamo = esPrestamoReal(contrato);
 
-    if (isPrestamo) {
+    if (esPrestamo) {
       return RichText(
         textAlign: TextAlign.center,
         text: TextSpan(
@@ -46,7 +62,7 @@ class TextoPrestamoSolicitado extends StatelessWidget {
       );
     } else {
       return Text(
-        isSeguro
+        esSeguro
             ? "Tu seguro está vigente desde el 1 Ene 2024"
             : "Servicio activo desde el 1 Ene 2024",
         style: AppTextStyles.bodySmall(context).copyWith(
