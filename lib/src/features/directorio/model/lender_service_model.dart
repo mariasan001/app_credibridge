@@ -1,3 +1,4 @@
+
 class LenderServiceGrouped {
   final int serviceTypeId;
   final String serviceTypeDesc;
@@ -34,7 +35,7 @@ class LenderService {
       serviceDesc: json['serviceDesc'],
       lender: Lender.fromJson(json['lender']),
     );
-  }
+  } 
 }
 
 class Lender {

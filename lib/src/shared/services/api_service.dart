@@ -1,6 +1,5 @@
 import 'package:app_creditos/src/shared/services/session_manager.dart';
 import 'package:dio/dio.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 enum Environment { casa, oficina, prod }
 
@@ -19,7 +18,6 @@ class ApiService {
   }
 
   static late Dio _dio;
-  static final FlutterSecureStorage _storage = const FlutterSecureStorage();
 
   static void init() {
     _dio = Dio(

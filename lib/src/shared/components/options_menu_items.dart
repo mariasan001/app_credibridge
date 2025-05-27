@@ -1,3 +1,4 @@
+import 'package:app_creditos/src/features/quejas-solicitudes/page/seleccionar_financiera_page.dart';
 import 'package:flutter/material.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:app_creditos/src/features/solicitudes/page/page_solicitudes.dart';
@@ -17,24 +18,23 @@ class OptionsMenuItems extends StatelessWidget {
     required this.user,
   });
 
-Future<void> _logout(BuildContext context) async {
-  print('➡️ Clic en cerrar sesión');
+  Future<void> _logout(BuildContext context) async {
+    print('➡️ Clic en cerrar sesión');
 
-  final tokenAntes = await SessionManager.getToken();
-  print('🔍 Token antes de limpiar: $tokenAntes');
+    final tokenAntes = await SessionManager.getToken();
+    print('🔍 Token antes de limpiar: $tokenAntes');
 
-  await SessionManager.clearToken();
+    await SessionManager.clearToken();
 
-  final tokenDespues = await SessionManager.getToken();
-  print('🧹 Token después de limpiar: $tokenDespues');
+    final tokenDespues = await SessionManager.getToken();
+    print('🧹 Token después de limpiar: $tokenDespues');
 
-  await Future.delayed(const Duration(milliseconds: 100));
+    await Future.delayed(const Duration(milliseconds: 100));
 
-  if (context.mounted) {
-    Navigator.of(context).pushNamedAndRemoveUntil('/login', (route) => false);
+    if (context.mounted) {
+      Navigator.of(context).pushNamedAndRemoveUntil('/login', (route) => false);
+    }
   }
-}
-
 
   @override
   Widget build(BuildContext context) {
@@ -80,7 +80,15 @@ Future<void> _logout(BuildContext context) async {
               context,
               LineIcons.exclamationCircle,
               'Quejas y Aclaraciones',
-              onTap: onClose,
+              onTap: () {
+                onClose();
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => ReportePaso1FinancieraPage(user: user),
+                  ),
+                );
+              },
             ),
             _buildTile(
               context,
