@@ -1,3 +1,4 @@
+// ignore_for_file: deprecated_member_use
 import 'package:app_creditos/src/features/auth/models/user_model.dart';
 import 'package:app_creditos/src/features/quejas-solicitudes/model/tiket_response_finaciera_model.dart';
 import 'package:app_creditos/src/features/quejas-solicitudes/service/resposne_finaciera.dart';
@@ -50,7 +51,7 @@ class _ChatTicketPageState extends State<ChatTicketPage> {
         _isLoading = false;
       });
     } catch (e) {
-      print('❌ Error al cargar ticket: $e');
+      //print('❌ Error al cargar ticket: $e');
       setState(() => _isLoading = false);
     }
   }
@@ -58,7 +59,7 @@ class _ChatTicketPageState extends State<ChatTicketPage> {
   void _seleccionarArchivo() async {}
 
   void _enviarMensaje() {
-    print("Mensaje enviado: ${_mensajeController.text}");
+    //print("Mensaje enviado: ${_mensajeController.text}");
     _mensajeController.clear();
   }
 
@@ -129,7 +130,7 @@ class _ChatTicketPageState extends State<ChatTicketPage> {
                   Row(
                     children: [
                       CircleAvatar(
-                        radius: 22.r,
+                        radius: 22.r,   
                         backgroundColor: tipoColor.withOpacity(0.1),
                         child: Icon(
                           isQueja
@@ -299,6 +300,7 @@ class _ChatTicketPageState extends State<ChatTicketPage> {
                         ],
                       ),
                     );
+                  // ignore: unnecessary_to_list_in_spreads
                   }).toList(),
                 ],
               ),

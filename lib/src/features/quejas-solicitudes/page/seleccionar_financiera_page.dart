@@ -1,3 +1,4 @@
+// ignore_for_file: unused_local_variable, curly_braces_in_flow_control_structures, use_build_context_synchronously
 import 'package:app_creditos/src/features/auth/models/user_model.dart';
 import 'package:app_creditos/src/features/quejas-solicitudes/model/lender_model.dart';
 import 'package:app_creditos/src/features/quejas-solicitudes/model/ticket_type_cat.model.dart';
