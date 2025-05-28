@@ -1,4 +1,4 @@
-import 'package:app_creditos/src/features/quejas-solicitudes/page/seleccionar_financiera_page.dart';
+import 'package:app_creditos/src/features/quejas-solicitudes/page/historial_solicitudes_page.dart';
 import 'package:flutter/material.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:app_creditos/src/features/solicitudes/page/page_solicitudes.dart';
@@ -85,7 +85,7 @@ class OptionsMenuItems extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (_) => ReportePaso1FinancieraPage(user: user),
+                    builder: (_) => HistorialSolicitudesPage(user: user),
                   ),
                 );
               },

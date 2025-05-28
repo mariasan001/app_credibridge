@@ -1,5 +1,6 @@
 import 'package:app_creditos/src/features/auth/models/user_model.dart';
 import 'package:app_creditos/src/features/movimientos/page/historial_page.dart';
+import 'package:app_creditos/src/features/quejas-solicitudes/page/seleccionar_financiera_page.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -10,7 +11,11 @@ import 'package:app_creditos/src/shared/theme/app_text_styles.dart';
 class ResumenPagoCard extends StatelessWidget {
   final ContractModel contrato;
   final User user;
-  const ResumenPagoCard({super.key, required this.contrato, required this.user});
+  const ResumenPagoCard({
+    super.key,
+    required this.contrato,
+    required this.user,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -72,7 +77,9 @@ class ResumenPagoCard extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (_) => HistorialPage(contrato: contrato, user:user),
+                          builder:
+                              (_) =>
+                                  HistorialPage(contrato: contrato, user: user),
                         ),
                       );
                     },
@@ -87,12 +94,15 @@ class ResumenPagoCard extends StatelessWidget {
                       size: 20.sp,
                       color: Colors.grey.shade600,
                     ),
-                    onPressed:
-                        () => Navigator.pushNamed(
-                          context,
-                          '/aclaracion',
-                          arguments: contrato,
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder:
+                              (_) => ReportePaso1FinancieraPage(user: user),
                         ),
+                      );
+                    },
                   ),
                 ],
               ),

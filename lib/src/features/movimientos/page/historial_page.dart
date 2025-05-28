@@ -1,4 +1,5 @@
 import 'package:app_creditos/src/features/auth/models/user_model.dart';
+import 'package:app_creditos/src/features/quejas-solicitudes/page/seleccionar_financiera_page.dart';
 import 'package:app_creditos/src/shared/components/ustom_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -28,11 +29,37 @@ class HistorialPage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              "Historial",
-              style: AppTextStyles.promoTitle(
-                context,
-              ).copyWith(fontSize: 18.sp),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  "Historial",
+                  style: AppTextStyles.promoTitle(
+                    context,
+                  ).copyWith(fontSize: 18.sp),
+                ),
+                TextButton.icon(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder:
+                            (_) =>
+                                ReportePaso1FinancieraPage(user: user),
+                      ),
+                    );
+                  },
+                  icon: const Icon(Icons.add_circle_outline, size: 18),
+                  label: Text(
+                    "Crear reporte",
+                    style: TextStyle(fontSize: 13.sp),
+                  ),
+                  style: TextButton.styleFrom(
+                    foregroundColor: const Color.fromARGB(255, 0, 0, 0),
+                    padding: EdgeInsets.symmetric(horizontal: 10.w),
+                  ),
+                ),
+              ],
             ),
             SizedBox(height: 16.h),
 

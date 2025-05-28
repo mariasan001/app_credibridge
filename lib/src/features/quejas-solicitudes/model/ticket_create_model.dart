@@ -4,7 +4,7 @@ class TicketCreateModel {
   final String description;
   final int ticketTypeId;
   final int lenderId;
-  final int clarificationType;
+  final int? clarificationType;
   final String initialMessage;
 
   TicketCreateModel({

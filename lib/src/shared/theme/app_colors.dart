@@ -17,6 +17,11 @@ class AppColors {
       Theme.of(context).brightness == Brightness.dark
           ? const Color.fromARGB(255, 26, 23, 23)
           : const Color.fromARGB(255, 255, 255, 255);
+          
+  static Color inputBackground3(BuildContext context) =>
+      Theme.of(context).brightness == Brightness.dark
+          ? const Color.fromARGB(255, 26, 23, 23)
+          : const Color.fromARGB(255, 247, 247, 247);
 
   static Color cardBackground(BuildContext context) =>
       Theme.of(context).brightness == Brightness.dark
