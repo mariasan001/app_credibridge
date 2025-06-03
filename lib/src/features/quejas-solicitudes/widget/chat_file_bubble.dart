@@ -1,12 +1,8 @@
 
-import 'dart:convert';
-import 'dart:io';
-import 'dart:typed_data';
 import 'package:app_creditos/src/features/quejas-solicitudes/service/flie_tiket_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:open_file/open_file.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:app_creditos/src/features/quejas-solicitudes/model/file_tiket.dart';
 
 class ChatFileBubble extends StatelessWidget {
