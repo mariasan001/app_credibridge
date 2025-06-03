@@ -28,7 +28,6 @@ class AppWrapper extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final themeNotifier = Provider.of<ThemeNotifier>(context);
-
     return ScreenUtilInit(
       designSize: const Size(390, 844),
       minTextAdapt: true,
@@ -36,7 +35,7 @@ class AppWrapper extends StatelessWidget {
       builder: (context, child) {
         return MaterialApp(
           title: 'CrediBridge App',
-          debugShowCheckedModeBanner: false,
+          debugShowCheckedModeBanner: false, 
           theme: ThemeData(
             textTheme: GoogleFonts.poppinsTextTheme(),
             scaffoldBackgroundColor: const Color(0xFFFCF8F2),

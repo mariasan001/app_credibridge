@@ -11,6 +11,7 @@ import 'package:app_creditos/src/shared/theme/app_text_styles.dart';
 class ResumenPagoCard extends StatelessWidget {
   final ContractModel contrato;
   final User user;
+
   const ResumenPagoCard({
     super.key,
     required this.contrato,
@@ -22,21 +23,17 @@ class ResumenPagoCard extends StatelessWidget {
     final ahora = DateTime.now();
     final dia = ahora.day;
 
-    DateTime proximo =
-        dia < 15
-            ? DateTime(ahora.year, ahora.month, 15)
-            : DateTime(ahora.year, ahora.month + 1, 0);
-
-    DateTime ultimo =
-        dia >= 15
-            ? DateTime(ahora.year, ahora.month, 15)
-            : DateTime(ahora.year, ahora.month - 1, 15);
+    DateTime proximo = dia < 15
+        ? DateTime(ahora.year, ahora.month, 15)
+        : DateTime(ahora.year, ahora.month + 1, 0);
 
     final formatterFecha = DateFormat("d MMM y", 'es_MX');
     final formatterMonto = NumberFormat.currency(locale: 'es_MX', symbol: '\$');
 
     final montoFormateado = formatterMonto.format(contrato.biweeklyDiscount);
     final partes = montoFormateado.split('.');
+
+    final lastPayment = contrato.lastPayment;
 
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 9.w, vertical: 12.h),
@@ -54,6 +51,7 @@ class ResumenPagoCard extends StatelessWidget {
       ),
       child: Column(
         children: [
+          /// Encabezado
           Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
@@ -77,14 +75,14 @@ class ResumenPagoCard extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder:
-                              (_) =>
-                                  HistorialPage(contrato: contrato, user: user),
+                          builder: (_) => HistorialPage(
+                            contrato: contrato,
+                            user: user,
+                          ),
                         ),
                       );
                     },
                   ),
-
                   SizedBox(width: 3.w),
                   IconButton(
                     padding: EdgeInsets.zero,
@@ -98,8 +96,8 @@ class ResumenPagoCard extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder:
-                              (_) => ReportePaso1FinancieraPage(user: user),
+                          builder: (_) =>
+                              ReportePaso1FinancieraPage(user: user),
                         ),
                       );
                     },
@@ -109,6 +107,8 @@ class ResumenPagoCard extends StatelessWidget {
             ],
           ),
           SizedBox(height: 14.h),
+
+          /// Próximo descuento
           Row(
             children: [
               CircleAvatar(
@@ -144,15 +144,18 @@ class ResumenPagoCard extends StatelessWidget {
                     TextSpan(text: '${partes[0]}.'),
                     TextSpan(
                       text: partes.length > 1 ? partes[1] : '00',
-                      style: AppTextStyles.promoTitle(
-                        context,
-                      ).copyWith(fontSize: 14.sp, color: Colors.grey.shade600),
+                      style: AppTextStyles.promoTitle(context).copyWith(
+                        fontSize: 14.sp,
+                        color: Colors.grey.shade600,
+                      ),
                     ),
                   ],
                 ),
               ),
             ],
           ),
+
+          /// Separador
           Container(
             margin: EdgeInsets.symmetric(vertical: 14.h),
             child: LayoutBuilder(
@@ -172,84 +175,86 @@ class ResumenPagoCard extends StatelessWidget {
               },
             ),
           ),
-          contrato.discountsAplied > 0
+
+          /// Último descuento
+          contrato.discountsAplied > 0 && lastPayment != null
               ? Row(
-                children: [
-                  CircleAvatar(
-                    radius: 22.r,
-                    backgroundColor: Colors.grey.shade300,
-                    child: Icon(
-                      Icons.history,
-                      color: Colors.white,
-                      size: 22.sp,
-                    ),
-                  ),
-                  SizedBox(width: 14.w),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "Último descuento",
-                          style: AppTextStyles.promoListText(
-                            context,
-                          ).copyWith(color: Colors.grey.shade600),
-                        ),
-                        SizedBox(height: 2.h),
-                        Text(
-                          formatterFecha.format(ultimo),
-                          style: AppTextStyles.promoFooterDate(
-                            context,
-                          ).copyWith(color: Colors.grey.shade500),
-                        ),
-                      ],
-                    ),
-                  ),
-                  RichText(
-                    text: TextSpan(
-                      style: AppTextStyles.promoBold(context),
-                      children: [
-                        TextSpan(
-                          text: '${partes[0]}.',
-                          style: AppTextStyles.promoBold(context).copyWith(
-                            fontSize: 16.sp,
-                            color: Colors.grey.shade600,
-                          ),
-                        ),
-                        TextSpan(
-                          text: partes.length > 1 ? partes[1] : '00',
-                          style: AppTextStyles.promoBold(context).copyWith(
-                            fontSize: 10.sp,
-                            color: const Color.fromARGB(255, 170, 170, 170),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              )
-              : Padding(
-                padding: EdgeInsets.symmetric(vertical: 8.h),
-                child: Row(
                   children: [
-                    Icon(
-                      Icons.info_outline,
-                      size: 20.sp,
-                      color: Colors.grey.shade400,
+                    CircleAvatar(
+                      radius: 22.r,
+                      backgroundColor: Colors.grey.shade300,
+                      child: Icon(
+                        Icons.history,
+                        color: Colors.white,
+                        size: 22.sp,
+                      ),
                     ),
-                    SizedBox(width: 8.w),
+                    SizedBox(width: 14.w),
                     Expanded(
-                      child: Text(
-                        "No se ha registrado ningún descuento aún",
-                        style: AppTextStyles.bodySmall(context).copyWith(
-                          fontSize: 12.sp,
-                          color: Colors.grey.shade500,
-                        ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "Último descuento",
+                            style: AppTextStyles.promoListText(context).copyWith(
+                              color: Colors.grey.shade600,
+                            ),
+                          ),
+                          SizedBox(height: 2.h),
+                          Text(
+                            formatterFecha.format(lastPayment.date),
+                            style: AppTextStyles.promoFooterDate(context).copyWith(
+                              color: Colors.grey.shade500,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    RichText(
+                      text: TextSpan(
+                        style: AppTextStyles.promoBold(context),
+                        children: [
+                          TextSpan(
+                            text: '${partes[0]}.',
+                            style: AppTextStyles.promoBold(context).copyWith(
+                              fontSize: 16.sp,
+                              color: Colors.grey.shade600,
+                            ),
+                          ),
+                          TextSpan(
+                            text: partes.length > 1 ? partes[1] : '00',
+                            style: AppTextStyles.promoBold(context).copyWith(
+                              fontSize: 10.sp,
+                              color: const Color.fromARGB(255, 170, 170, 170),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ],
+                )
+              : Padding(
+                  padding: EdgeInsets.symmetric(vertical: 8.h),
+                  child: Row(
+                    children: [
+                      Icon(
+                        Icons.info_outline,
+                        size: 20.sp,
+                        color: Colors.grey.shade400,
+                      ),
+                      SizedBox(width: 8.w),
+                      Expanded(
+                        child: Text(
+                          "No se ha registrado ningún descuento aún",
+                          style: AppTextStyles.bodySmall(context).copyWith(
+                            fontSize: 12.sp,
+                            color: Colors.grey.shade500,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
         ],
       ),
     );
