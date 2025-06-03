@@ -1,3 +1,4 @@
+
 import 'package:app_creditos/src/features/quejas-solicitudes/model/ticket_type_cat.model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -26,22 +27,30 @@ class ListaClarificationTypesWidget extends StatelessWidget {
       ),
       child: ListView.separated(
         scrollDirection: Axis.horizontal,
+        physics: const BouncingScrollPhysics(),
         itemCount: tipos.length,
         separatorBuilder: (_, __) => SizedBox(width: 6.w),
         itemBuilder: (context, index) {
           final tipo = tipos[index];
           final isSelected = tipo.id == seleccionado?.id;
 
-          return GestureDetector(
+          return InkWell(
             onTap: () => onTap(tipo),
+            borderRadius: BorderRadius.circular(10.r),
             child: AnimatedContainer(
               duration: const Duration(milliseconds: 200),
-              padding: EdgeInsets.symmetric(horizontal: 16.w),
+              padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
               decoration: BoxDecoration(
                 color: isSelected
-                    ? AppColors.cardtextfondo(context).withOpacity(0.1)
+                    ? AppColors.cardtextfondo(context).withOpacity(0.15)
                     : Colors.transparent,
                 borderRadius: BorderRadius.circular(10.r),
+                border: isSelected
+                    ? Border.all(
+                        color: AppColors.cardtextfondo(context),
+                        width: 1.2,
+                      )
+                    : null,
               ),
               alignment: Alignment.center,
               child: Text(

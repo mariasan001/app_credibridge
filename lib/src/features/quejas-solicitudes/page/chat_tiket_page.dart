@@ -1,3 +1,4 @@
+import 'package:app_creditos/src/features/quejas-solicitudes/page/chat_tike_skeleton.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -20,11 +21,7 @@ class ChatTicketPage extends StatefulWidget {
   final int ticketId;
   final User user;
 
-  const ChatTicketPage({
-    super.key,
-    required this.ticketId,
-    required this.user,
-  });
+  const ChatTicketPage({super.key, required this.ticketId, required this.user});
 
   @override
   State<ChatTicketPage> createState() => _ChatTicketPageState();
@@ -39,26 +36,33 @@ class _ChatTicketPageState extends State<ChatTicketPage> {
   @override
   void initState() {
     super.initState();
-    _cargarDetalle();
+    _cargarDatos();
   }
 
-  Future<void> _cargarDetalle() async {
-    try {
-      print('🔄 Solicitando detalle del ticket...');
-      final detalle = await TicketService.getTicketDetail(widget.ticketId);
-      print('✅ Ticket cargado: ${detalle.ticketId} con ${detalle.messages.length} mensajes');
+  // Aqui es la visualizacion y descarga de los archis que se han pasado entre el usario y el agente de la financiera
+  Future<void> _cargarDatos() async {
+    setState(() => _isLoading = true);
 
-      final archivos = await TicketFileService.getFiles(widget.ticketId);
-      print('📎 Archivos encontrados: ${archivos.length}');
+    try {
+      final results = await Future.wait([
+        TicketService.getTicketDetail(widget.ticketId),
+        TicketFileService.getMetadataFiles(widget.ticketId), // ← sin contenido
+      ]);
+
+      if (!mounted) return;
 
       setState(() {
-        _ticketDetail = detalle;
-        _archivos = archivos;
+        _ticketDetail = results[0] as TicketDetailModel;
+        _archivos = results[1] as List<TicketFileModel>; // sin base64 aún
         _isLoading = false;
       });
     } catch (e) {
-      print('❌ Error al cargar detalle o archivos: $e');
-      setState(() => _isLoading = false);
+      if (mounted) {
+        setState(() => _isLoading = false);
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('❌ Error al cargar datos: $e')));
+      }
     }
   }
 
@@ -76,11 +80,11 @@ class _ChatTicketPageState extends State<ChatTicketPage> {
 
       await TicketResponseService.sendResponse(data);
       _mensajeController.clear();
-      await _cargarDetalle();
+      await _cargarDatos();
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('❌ Error al enviar mensaje: $e')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('❌ Error al enviar mensaje: $e')));
     }
   }
 
@@ -94,23 +98,22 @@ class _ChatTicketPageState extends State<ChatTicketPage> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final cardColor =
-        theme.brightness == Brightness.dark ? const Color(0xFF1E1E1E) : Colors.white;
-
-    print('🎨 build ejecutado, loading: $_isLoading');
-    if (_ticketDetail != null) {
-      print('🎟️ ticketId: ${_ticketDetail!.ticketId}');
-      print('💬 mensajes: ${_ticketDetail!.messages.length}');
-      print('📎 archivos: ${_archivos.length}');
-    }
+        theme.brightness == Brightness.dark
+            ? const Color(0xFF1E1E1E)
+            : Colors.white;
 
     return Scaffold(
       appBar: CustomAppBar(user: widget.user),
       backgroundColor: theme.scaffoldBackgroundColor,
-      body: _isLoading
-          ? const Center(child: CircularProgressIndicator())
-          : _ticketDetail == null
-              ? const Center(child: Text('No se pudo cargar el ticket'))
-              : Column(
+      body: AnimatedSwitcher(
+        duration: const Duration(milliseconds: 250),
+        
+        child:
+            _isLoading
+                 ? const ChatTicketSkeleton()
+                : _ticketDetail == null
+                ? const Center(child: Text('No se pudo cargar el ticket'))
+                : Column(
                   children: [
                     Expanded(
                       child: Padding(
@@ -152,6 +155,7 @@ class _ChatTicketPageState extends State<ChatTicketPage> {
                     ),
                   ],
                 ),
+      ),
     );
   }
 }

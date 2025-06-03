@@ -1,5 +1,6 @@
 import 'package:app_creditos/src/features/auth/models/user_model.dart';
 import 'package:app_creditos/src/features/quejas-solicitudes/model/ticket_historial_model.dart';
+import 'package:app_creditos/src/features/quejas-solicitudes/page/historial_skeleton.dart';
 import 'package:app_creditos/src/features/quejas-solicitudes/page/seleccionar_financiera_page.dart';
 import 'package:app_creditos/src/features/quejas-solicitudes/service/ticket_service.dart';
 import 'package:app_creditos/src/features/quejas-solicitudes/widget/tiket_card.dart';
@@ -76,7 +77,7 @@ class _HistorialSolicitudesPageState extends State<HistorialSolicitudesPage> {
                 future: _ticketsFuture,
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const Center(child: CircularProgressIndicator());
+                    return const HistorialSolicitudesSkeleton();
                   }
 
                   if (snapshot.hasError) {
@@ -103,7 +104,10 @@ class _HistorialSolicitudesPageState extends State<HistorialSolicitudesPage> {
                     itemCount: tickets.length,
                     separatorBuilder: (_, __) => SizedBox(height: 12.h),
                     itemBuilder:
-                        (_, index) => TicketCard(ticket: tickets[index], user: widget.user,),
+                        (_, index) => TicketCard(
+                          ticket: tickets[index],
+                          user: widget.user,
+                        ),
                   );
                 },
               ),

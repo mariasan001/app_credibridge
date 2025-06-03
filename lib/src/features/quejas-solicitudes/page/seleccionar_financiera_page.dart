@@ -4,6 +4,7 @@ import 'package:app_creditos/src/features/quejas-solicitudes/model/lender_model.
 import 'package:app_creditos/src/features/quejas-solicitudes/model/ticket_type_cat.model.dart';
 import 'package:app_creditos/src/features/quejas-solicitudes/model/ticket_type_model.dart';
 import 'package:app_creditos/src/features/quejas-solicitudes/model/ticket_create_model.dart';
+import 'package:app_creditos/src/features/quejas-solicitudes/page/finciaera_skelemton.dart';
 import 'package:app_creditos/src/features/quejas-solicitudes/page/historial_solicitudes_page.dart';
 import 'package:app_creditos/src/features/quejas-solicitudes/service/lender_service.dart';
 import 'package:app_creditos/src/features/quejas-solicitudes/service/ticket_type_service.dart';
@@ -78,9 +79,9 @@ class _ReportePaso1FinancieraPageState
       ticketTypeId: _tipoSeleccionado!.id,
       lenderId: _lenderSeleccionado!.id,
       clarificationType:
-       _tipoSeleccionado?.ticketTypeDesc.toLowerCase() == 'solicitud'
-      ? _clarificationSeleccionado?.id
-      : null,
+          _tipoSeleccionado?.ticketTypeDesc.toLowerCase() == 'solicitud'
+              ? _clarificationSeleccionado?.id
+              : null,
 
       initialMessage: messageController.text.trim(),
     );
@@ -199,7 +200,7 @@ class _ReportePaso1FinancieraPageState
         future: Future.wait([_financierasFuture, _tiposFuture]),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
+            return const TicketFormSkeleton();
           }
 
           if (snapshot.hasError) {
