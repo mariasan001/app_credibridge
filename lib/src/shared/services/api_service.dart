@@ -11,7 +11,7 @@ class ApiService {
       case Environment.casa:
         return 'http://192.168.100.183:2910';   
       case Environment.oficina:
-        return 'http://10.0.32.117:2910';
+        return 'http://10.0.32.7:2910';      
       case Environment.prod:
         return 'https://api.credibridge.com';
     }
