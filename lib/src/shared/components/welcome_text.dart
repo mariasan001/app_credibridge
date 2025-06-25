@@ -39,7 +39,7 @@ class WelcomeText extends StatelessWidget {
         RichText(
           text: TextSpan(
             style: AppTextStyles.heading(context).copyWith(
-              fontSize: 27.sp,
+              fontSize: 24.sp,
               fontWeight: FontWeight.w700,
               height: 1,
               color: AppColors.text(context),
@@ -49,7 +49,7 @@ class WelcomeText extends StatelessWidget {
               TextSpan(
                 text: titleHighlight,
                 style: AppTextStyles.logoHighlight(context).copyWith(
-                  fontSize: 27.sp,
+                  fontSize: 25.sp,
                   fontWeight: FontWeight.w900,
                 ),
               ),
@@ -63,7 +63,7 @@ class WelcomeText extends StatelessWidget {
         Text(
           subtitle,
           style: AppTextStyles.bodySmall(context).copyWith(
-            fontSize: 14.sp,
+            fontSize: 13.sp,
             color: AppColors.textMuted(context),
           ),
         ),

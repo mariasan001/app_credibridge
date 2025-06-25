@@ -31,7 +31,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
     final double screenHeight = 1.sh;
 
     final double logoTop = showContainer
-        ? (isKeyboardVisible ? 60.h : screenHeight * 0.12)
+        ? (isKeyboardVisible ? 60.h : screenHeight * 0.17)
         : screenHeight * 0.05;
 
     return Scaffold(
@@ -97,7 +97,7 @@ class _LoginBody extends StatelessWidget {
           const WelcomeText(
             titlePrefix: 'Bienvenidos a',
             titleHighlight: 'CrediBridge',
-            titleSuffix: 'toma el control de tus finanzas',
+            titleSuffix: '',
             subtitle: 'Introduce tu información y descubre tus opciones de crédito.',
           ),
           SizedBox(height: 24.h),

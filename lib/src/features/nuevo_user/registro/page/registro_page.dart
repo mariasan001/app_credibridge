@@ -41,7 +41,7 @@ class _RegistroPageState extends State<RegistroPage> {
     final horizontalPadding = isTablet ? 70.0 : 24.0;
     final verticalPadding = isTablet ? 72.0 : 48.0;
     final double logoTop =
-        showContainer ? (isKeyboardVisible ? 150.0 : (isTablet ? 300.0 : 10.0)) : 50.0;
+        showContainer ? (isKeyboardVisible ? 80.0 : (isTablet ? 300.0 : 90.0)) : 50.0;
 
     return Scaffold(
       backgroundColor: AppColors.background(context),
