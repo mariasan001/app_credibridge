@@ -113,7 +113,7 @@ class ResumenPagoCard extends StatelessWidget {
             children: [
               CircleAvatar(
                 radius: 22.r,
-                backgroundColor: const Color.fromARGB(255, 8, 119, 81),
+                backgroundColor: const Color.fromARGB(255, 0, 0, 0),
                 child: Icon(
                   Icons.payments_outlined,
                   color: Colors.white,

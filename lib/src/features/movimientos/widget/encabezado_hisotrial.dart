@@ -24,9 +24,7 @@ class EncabezadoHistorial extends StatelessWidget {
                 style: AppTextStyles.titleheader(context).copyWith(
                   fontWeight: FontWeight.w900,
                 ),
-              ),
-      
-           
+              ),        
             ],
           ),
 

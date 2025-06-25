@@ -2,6 +2,7 @@ import 'package:app_creditos/src/features/simulasion/page/resultados_skeleton.da
 import 'package:app_creditos/src/features/simulasion/widget/contract_submission_helper.dart';
 import 'package:app_creditos/src/features/simulasion/widget/resultados_header.dart';
 import 'package:app_creditos/src/features/simulasion/widget/ticket_detalle_widget.dart';
+import 'package:app_creditos/src/shared/components/survey_modal.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -28,12 +29,11 @@ class ResultadosPage extends StatefulWidget {
 class _ResultadosPageState extends State<ResultadosPage> {
   final TextEditingController _telefonoController = TextEditingController();
   bool _loading = false;
-  bool _showSkeleton = true; 
+  bool _showSkeleton = true;
 
   @override
   void initState() {
     super.initState();
-    // Simula carga inicial con skeleton
     Future.delayed(const Duration(milliseconds: 1200), () {
       if (mounted) {
         setState(() => _showSkeleton = false);
@@ -47,6 +47,18 @@ class _ResultadosPageState extends State<ResultadosPage> {
     super.dispose();
   }
 
+void _mostrarModalEncuesta() {
+  showDialog(
+    context: context,
+    barrierDismissible: false,
+    builder: (context) => SurveyModal(
+      userId: widget.user.userId,
+      lenderId: widget.solicitud.resultadoSeleccionado!.lenderId, // <- accede desde result
+    ),
+  );
+}
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -55,7 +67,7 @@ class _ResultadosPageState extends State<ResultadosPage> {
       body: _showSkeleton
           ? const Padding(
               padding: EdgeInsets.all(20),
-              child: ResultadosSkeleton(), // placeholder
+              child: ResultadosSkeleton(),
             )
           : SingleChildScrollView(
               physics: const ClampingScrollPhysics(),
@@ -140,6 +152,7 @@ class _ResultadosPageState extends State<ResultadosPage> {
 
                               if (mounted) {
                                 setState(() => _loading = false);
+                                _mostrarModalEncuesta(); // 👈 Mostrar el modal de encuesta
                               }
                             },
                       style: ElevatedButton.styleFrom(

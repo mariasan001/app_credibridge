@@ -5,7 +5,7 @@ class AppColors {
 
   static Color inputBackground(BuildContext context) =>
       Theme.of(context).brightness == Brightness.dark
-          ? const Color.fromARGB(255, 219, 201, 201)
+          ? const Color(0xFFF5F5F7)
           : const Color(0xFFF6F6F6);
 
   static Color inputBackground1(BuildContext context) =>
@@ -36,7 +36,7 @@ class AppColors {
   static Color background(BuildContext context) =>
       Theme.of(context).brightness == Brightness.dark
           ? const Color(0xFF1E1E1E)
-          : const Color(0xFFFCF8F2);
+          : const Color(0xFFF5F5F7);
 
   static Color text(BuildContext context) =>
       Theme.of(context).brightness == Brightness.dark
@@ -75,12 +75,12 @@ static Color divider(BuildContext context) =>
 static Color textCar(BuildContext context) =>
     Theme.of(context).brightness == Brightness.dark
         ?  const Color.fromARGB(255, 234, 221, 197)
-        :  const Color(0xFF746343);
+        :  const Color.fromARGB(255, 61, 61, 61);
 
 static Color cardtextfondo(BuildContext context) =>
     Theme.of(context).brightness == Brightness.dark
         ?  const Color.fromARGB(255, 52, 205, 141)
-        :   const Color.fromARGB(255, 18, 134, 86);
+        :   const Color.fromARGB(255, 0, 0, 0);
 
 
 

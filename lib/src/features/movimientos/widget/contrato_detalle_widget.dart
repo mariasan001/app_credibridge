@@ -78,7 +78,7 @@ class ContratoDetalleWidget extends StatelessWidget {
               text: TextSpan(
                 style: AppTextStyles.bodySmall(
                   context,
-                ).copyWith(fontSize: 13.sp, color: const Color(0xFF746343)),
+                ).copyWith(fontSize: 13.sp, color: const Color.fromARGB(255, 0, 0, 0)),
                 children: [
                   TextSpan(
                     text: "Otorgado por: ",

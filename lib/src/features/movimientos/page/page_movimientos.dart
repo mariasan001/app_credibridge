@@ -48,40 +48,43 @@ class _PageMovimientosState extends State<PageMovimientos> {
     }
   }
 
-bool esPosiblePrestamo(ContractModel contrato) {
-  final tipo = contrato.serviceTypeDesc.toLowerCase();
-
-  final esSeguro = tipo.contains('seguro');
-  final esPrestamoTexto = tipo.contains('préstamo') || tipo.contains('prestamo');
-
-  final montoValido = contrato.amount > 1000;
-  final tienePagos = contrato.installments > 1;
-  final tieneDescuento = contrato.biweeklyDiscount > 0 && contrato.biweeklyDiscount < 5000;
-  final tieneSaldos = contrato.lastBalance > 0 || contrato.newBalance > 0;
-
-  return !esSeguro && (esPrestamoTexto || (montoValido && tienePagos && tieneDescuento && tieneSaldos));
-}
-
-List<ContractModel> _ordenarContratos(List<ContractModel> lista) {
-  final prestamos = <ContractModel>[];
-  final seguros = <ContractModel>[];
-  final otros = <ContractModel>[];
-
-  for (var contrato in lista) {
+  bool esPosiblePrestamo(ContractModel contrato) {
     final tipo = contrato.serviceTypeDesc.toLowerCase();
 
-    if (esPosiblePrestamo(contrato)) {
-      prestamos.add(contrato);
-    } else if (tipo.contains('seguro')) {
-      seguros.add(contrato);
-    } else {
-      otros.add(contrato);
-    }
+    final esSeguro = tipo.contains('seguro');
+    final esPrestamoTexto =
+        tipo.contains('préstamo') || tipo.contains('prestamo');
+
+    final montoValido = contrato.amount > 1000;
+    final tienePagos = contrato.installments > 1;
+    final tieneDescuento =
+        contrato.biweeklyDiscount > 0 && contrato.biweeklyDiscount < 5000;
+    final tieneSaldos = contrato.lastBalance > 0 || contrato.newBalance > 0;
+
+    return !esSeguro &&
+        (esPrestamoTexto ||
+            (montoValido && tienePagos && tieneDescuento && tieneSaldos));
   }
 
-  return [...prestamos, ...seguros, ...otros];
-}
+  List<ContractModel> _ordenarContratos(List<ContractModel> lista) {
+    final prestamos = <ContractModel>[];
+    final seguros = <ContractModel>[];
+    final otros = <ContractModel>[];
 
+    for (var contrato in lista) {
+      final tipo = contrato.serviceTypeDesc.toLowerCase();
+
+      if (esPosiblePrestamo(contrato)) {
+        prestamos.add(contrato);
+      } else if (tipo.contains('seguro')) {
+        seguros.add(contrato);
+      } else {
+        otros.add(contrato);
+      }
+    }
+
+    return [...prestamos, ...seguros, ...otros];
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -90,97 +93,100 @@ List<ContractModel> _ordenarContratos(List<ContractModel> lista) {
 
     return Scaffold(
       appBar: CustomAppBar(user: widget.user),
-      body: loading
-          ? const MovimientoSkeletonCard()
-          : contratosActivos.isEmpty
+      body:
+          loading
+              ? const MovimientoSkeletonCard()
+              : contratosActivos.isEmpty
               ? const Center(child: Text('No se encontraron contratos activos'))
               : Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 17.w, vertical: 20.h),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          InkWell(
-                            onTap: () => Navigator.pop(context),
-                            borderRadius: BorderRadius.circular(8.r),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              crossAxisAlignment: CrossAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 17.w,
+                      vertical: 20.h,
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        InkWell(
+                          onTap: () => Navigator.pop(context),
+                          borderRadius: BorderRadius.circular(8.r),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Text(
+                                'Mis servicios ',
+                                style: AppTextStyles.titleheader(context),
+                              ),
+                            ],
+                          ),
+                        ),
+                        SizedBox(height: .2.h),
+                        Text(
+                          'Desliza para ver los demás servicios ${_currentIndex + 1} de ${contratosActivos.length}',
+                          style: AppTextStyles.bodySmall(context).copyWith(
+                            fontSize: 13.sp,
+                            fontWeight: FontWeight.w300,
+                            color: const Color.fromARGB(255, 128, 128, 128),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Expanded(
+                    child: PageView.builder(
+                      itemCount: contratosActivos.length,
+                      controller: PageController(viewportFraction: 0.95),
+                      physics: const BouncingScrollPhysics(),
+                      onPageChanged: (index) {
+                        setState(() {
+                          _currentIndex = index;
+                        });
+                      },
+                      itemBuilder: (context, index) {
+                        final contrato = contratosActivos[index];
+                        return AnimatedOpacity(
+                          opacity: _showCards ? 1 : 0,
+                          duration: const Duration(milliseconds: 500),
+                          child: SingleChildScrollView(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Icon(
-                                  Icons.arrow_back_ios_new_rounded,
-                                  size: 20.sp,
-                                ),
-                                SizedBox(width: 4.w),
-                                Text(
-                                  'Mis servicios activos',
-                                  style: AppTextStyles.titleheader(context),
+                                ContratoDetalleWidget(contrato: contrato),
+                                SizedBox(height: 10.h),
+                                ResumenPagoCard(
+                                  contrato: contrato,
+                                  user: widget.user,
                                 ),
                               ],
                             ),
                           ),
-                          SizedBox(height: 8.h),
-                          Text(
-                            'Desliza para ver los demás servicios ${_currentIndex + 1} de ${contratosActivos.length}',
-                            style: AppTextStyles.bodySmall(context).copyWith(
-                              fontSize: 12.sp,
-                              fontWeight: FontWeight.w600,
-                              color: Colors.grey.shade700,
-                            ),
-                          ),
-                        ],
-                      ),
+                        );  
+                      },
                     ),
-                    Expanded(
-                      child: PageView.builder(
-                        itemCount: contratosActivos.length,
-                        controller: PageController(viewportFraction: 0.95),
-                        physics: const BouncingScrollPhysics(),
-                        onPageChanged: (index) {
-                          setState(() {
-                            _currentIndex = index;
-                          });
-                        },
-                        itemBuilder: (context, index) {
-                          final contrato = contratosActivos[index];
-                          return AnimatedOpacity(
-                            opacity: _showCards ? 1 : 0,
-                            duration: const Duration(milliseconds: 500),
-                            child: SingleChildScrollView(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  ContratoDetalleWidget(contrato: contrato),
-                                  SizedBox(height: 20.h),
-                                  ResumenPagoCard(contrato: contrato, user: widget.user),
-                                ],
-                              ),
-                            ),
-                          );
-                        },
-                      ),
-                    ),
-                    SizedBox(height: 12.h),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: List.generate(contratosActivos.length, (index) {
-                        final isActive = index == _currentIndex;
-                        return Container(
-                          margin: EdgeInsets.symmetric(horizontal: 4.w),
-                          width: isActive ? 16.w : 8.w,
-                          height: 8.h,
-                          decoration: BoxDecoration(
-                            color: isActive ? Colors.orange : Colors.grey.shade300,
-                            borderRadius: BorderRadius.circular(4.r),
-                          ),
-                        );
-                      }),
-                    ),
-                    SizedBox(height: 20.h),
-                  ],
-                ),
+                  ),
+                  SizedBox(height: 12.h),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: List.generate(contratosActivos.length, (index) {
+                      final isActive = index == _currentIndex;
+                      return Container(
+                        margin: EdgeInsets.symmetric(horizontal: 4.w),
+                        width: isActive ? 16.w : 8.w,
+                        height: 8.h,
+                        decoration: BoxDecoration(
+                          color:
+                              isActive ? const Color.fromARGB(255, 231, 144, 14) : Colors.grey.shade300,
+                          borderRadius: BorderRadius.circular(4.r),
+                        ),
+                      );
+                    }),
+                  ),
+                  SizedBox(height: 20.h),
+                ],
+              ),
     );
   }
 }

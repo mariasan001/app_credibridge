@@ -1,4 +1,5 @@
 import 'package:app_creditos/src/features/simulasion/model/sim_type_model.dart';
+import 'package:app_creditos/src/features/simulasion/models/simulacion_result.dart';
 
 class SolicitudCreditoData {
   // Datos del usuario
@@ -22,10 +23,11 @@ class SolicitudCreditoData {
   // Capital ofrecido
   double? capital;
 
- 
   double? descuento;
 
-  // Constructor actualizado
+  // Resultado completo seleccionado (nuevo)
+  SimulacionResult? resultadoSeleccionado;
+
   SolicitudCreditoData({
     this.userId,
     this.tipoSimulacion,
@@ -36,7 +38,8 @@ class SolicitudCreditoData {
     this.lenderServiceId,
     this.lenderName,
     this.capital,
-    this.descuento, 
+    this.descuento,
+    this.resultadoSeleccionado,
   });
 
   Map<String, dynamic> toJson() {
@@ -53,6 +56,7 @@ class SolicitudCreditoData {
       'lenderName': lenderName,
       'capital': capital,
       'descuento': descuento,
+      // No incluimos resultadoSeleccionado aquí (a menos que lo necesites en el backend)
     };
   }
 

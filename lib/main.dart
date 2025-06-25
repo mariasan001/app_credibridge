@@ -38,7 +38,7 @@ class AppWrapper extends StatelessWidget {
           debugShowCheckedModeBanner: false, 
           theme: ThemeData(
             textTheme: GoogleFonts.poppinsTextTheme(),
-            scaffoldBackgroundColor: const Color(0xFFFCF8F2),
+            scaffoldBackgroundColor: const Color(0xFFF5F5F7),
             colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFFFF944D)),
             useMaterial3: true,
             brightness: Brightness.light,
