@@ -22,31 +22,26 @@ class DescuentoCard extends StatelessWidget {
   Widget build(BuildContext context) {
     if (descuento == null) return const DescuentoCardSkeleton();
 
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Container(
-      padding: EdgeInsets.all(20.r),
-      decoration: BoxDecoration(
-        color: AppColors.promoCardBackground(context),
-        borderRadius: BorderRadius.circular(24.r),
-        boxShadow: [
-          BoxShadow(
-            color: AppColors.promoShadow(context).withOpacity(0.08),
-            blurRadius: 4,
-            spreadRadius: 1,
-            offset: Offset(0, 2),
-          ),
-        ],
-      ),
+      padding: EdgeInsets.all(10.r),
+      decoration: BoxDecoration(borderRadius: BorderRadius.circular(24.r)),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          // Título principal
+          SizedBox(height: 20.h),
+          // Título
           Text(
-            'Límite de descuento en nómina',
-            style: AppTextStyles.heading(context).copyWith(fontSize: 16.sp),
+            'Límite de descuento  ',
+            style: AppTextStyles.heading(context).copyWith(
+              fontSize: 14.sp,
+              color: const Color.fromARGB(255, 150, 149, 149),
+            ),
           ),
           SizedBox(height: 10.h),
 
-          // Animación de conteo del monto
+          // Animación del monto
           TweenAnimationBuilder<double>(
             tween: Tween(begin: 0, end: descuento!),
             duration: const Duration(milliseconds: 900),
@@ -65,24 +60,25 @@ class DescuentoCard extends StatelessWidget {
                     TextSpan(
                       text: '\$${partes[0]}.',
                       style: AppTextStyles.heading(context).copyWith(
-                        fontSize: 48.sp,
+                        fontSize: 55.sp,
                         fontWeight: FontWeight.w900,
-                        color: AppColors.primary,
+                        color: const Color.fromARGB(255, 56, 55, 55),
                       ),
                     ),
                     TextSpan(
                       text: partes[1],
                       style: AppTextStyles.heading(context).copyWith(
-                        fontSize: 25.sp,
+                        fontSize: 30.sp,
                         fontWeight: FontWeight.w500,
-                        color: AppColors.primary.withOpacity(0.7),
+                        color: const Color.fromARGB(255, 233, 158, 53),
                       ),
                     ),
                     TextSpan(
                       text: ' mx',
-                      style: AppTextStyles.bodySmall(
-                        context,
-                      ).copyWith(fontSize: 18.sp, color: Colors.grey.shade500),
+                      style: AppTextStyles.bodySmall(context).copyWith(
+                        fontSize: 18.sp,
+                        color: const Color.fromARGB(223, 248, 171, 18),
+                      ),
                     ),
                   ],
                 ),
@@ -92,22 +88,25 @@ class DescuentoCard extends StatelessWidget {
 
           SizedBox(height: 8.h),
 
-          // Descripción auxiliar
+          // Descripción
           Text(
             'Este es el monto máximo que puede ser descontado de tu nómina.',
             textAlign: TextAlign.center,
             style: AppTextStyles.bodySmall(
               context,
-            ).copyWith(fontSize: 12.sp, color: AppColors.textMuted(context)),
+            ).copyWith(fontSize: 11.sp, color: AppColors.textMuted(context)),
           ),
 
           SizedBox(height: 20.h),
 
-          // Accesos rápidos agrupados
+          // Botones de acción (estilo redondo e inspirado)
           Container(
             padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 10.h),
             decoration: BoxDecoration(
-              color: AppColors.background(context),
+              color:
+                  isDark
+                      ? const Color.fromARGB(255, 148, 148, 148)
+                      : const Color.fromARGB(255, 243, 243, 243),
               borderRadius: BorderRadius.circular(16.r),
             ),
             child: Row(
@@ -115,19 +114,21 @@ class DescuentoCard extends StatelessWidget {
               children: [
                 _buildAnimatedAccess(
                   context: context,
-                  icon: LineIcons.calculator,
+                  icon: LineIcons.wallet,
                   label: 'Simular',
                   destination: SimulacionPage(user: user, descuento: descuento),
+                  isActive: false,
                 ),
                 _buildAnimatedAccess(
                   context: context,
-                  icon: LineIcons.random,
+                  icon: LineIcons.history, // Más claro para "Movimientos"
                   label: 'Movimientos',
                   destination: PageMovimientos(user: user),
                 ),
                 _buildAnimatedAccess(
                   context: context,
-                  icon: LineIcons.addressBook,
+                  icon:
+                      LineIcons.users, // Más cálido y social para "Directorio"
                   label: 'Directorio',
                   destination: DirectorioPage(user: user),
                 ),
@@ -139,12 +140,13 @@ class DescuentoCard extends StatelessWidget {
     );
   }
 
-  // Acceso animado reutilizable con OpenContainer
+  // Acceso con animación
   Widget _buildAnimatedAccess({
     required BuildContext context,
     required IconData icon,
     required String label,
     required Widget destination,
+    bool isActive = false,
   }) {
     return OpenContainer(
       transitionType: ContainerTransitionType.fadeThrough,
@@ -157,36 +159,51 @@ class DescuentoCard extends StatelessWidget {
       closedBuilder: (context, openContainer) {
         return GestureDetector(
           onTap: openContainer,
-          child: _buildActionVisual(context: context, icon: icon, label: label),
+          child: _buildActionVisual(
+            context: context,
+            icon: icon,
+            label: label,
+            isActive: isActive,
+          ),
         );
       },
     );
   }
 
-  // Diseño base de cada botón de acceso
+  // Diseño visual de cada botón
   Widget _buildActionVisual({
     required BuildContext context,
     required IconData icon,
     required String label,
+    bool isActive = false,
   }) {
+    final activeColor = const Color.fromARGB(255, 84, 82, 82);
+
     return Container(
       constraints: BoxConstraints(minWidth: 90.w, maxWidth: 120.w),
       padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 12.h),
       decoration: BoxDecoration(
-        color: AppColors.promoCardBackground(context),
-        borderRadius: BorderRadius.circular(12.r),
+        color:
+            isActive
+                ? activeColor.withOpacity(0.15)
+                : AppColors.promoCardBackground(context),
+        borderRadius: BorderRadius.circular(14.r),
       ),
       child: Column(
         children: [
-          Icon(icon, size: 25.sp, color: AppColors.text(context)),
+          Icon(
+            icon,
+            size: 25.sp,
+            color: isActive ? activeColor : AppColors.text(context),
+          ),
           SizedBox(height: 6.h),
           Text(
             label,
             textAlign: TextAlign.center,
             style: AppTextStyles.bodySmall(context).copyWith(
-              fontWeight: FontWeight.w600,
+              fontWeight: FontWeight.w400,
               fontSize: 11.sp,
-              color: AppColors.text(context),
+              color: isActive ? activeColor : AppColors.text(context),
             ),
           ),
         ],

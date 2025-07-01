@@ -24,7 +24,7 @@ class OptionsMenuItems extends StatelessWidget {
     final tokenAntes = await SessionManager.getToken();
     print('🔍 Token antes de limpiar: $tokenAntes');
 
-    await SessionManager.clearToken();
+
 
     final tokenDespues = await SessionManager.getToken();
     print('🧹 Token después de limpiar: $tokenDespues');

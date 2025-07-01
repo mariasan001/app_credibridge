@@ -108,7 +108,7 @@ class _LoginBody extends StatelessWidget {
               'Aviso de privacidad',
               style: TextStyle(
                 fontSize: 10.sp,
-                color: AppColors.textMuted(context), // ✅ texto legible en ambos temas
+                color: AppColors.textMuted(context),
               ),
             ),
           ),

@@ -47,136 +47,151 @@ class _ResultadosPageState extends State<ResultadosPage> {
     super.dispose();
   }
 
-void _mostrarModalEncuesta() {
-  showDialog(
-    context: context,
-    barrierDismissible: false,
-    builder: (context) => SurveyModal(
-      userId: widget.user.userId,
-      lenderId: widget.solicitud.resultadoSeleccionado!.lenderId, // <- accede desde result
-    ),
-  );
-}
+  void _mostrarModalEncuesta() {
+    final resultado = widget.solicitud.resultadoSeleccionado;
 
+    // Agrega logs para ver qué trae
+    print('Resultado seleccionado: $resultado');
+    print('UserId: ${widget.user.userId}');
+    print('LenderId: ${resultado?.lenderId ?? 'SIN LENDER'}');
+
+    // Mostrar el modal sin bloquear por lenderId nulo
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder:
+          (context) => SurveyModal(userId: widget.user.userId, lenderId: 1),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.background(context),
       appBar: CustomAppBar(user: widget.user),
-      body: _showSkeleton
-          ? const Padding(
-              padding: EdgeInsets.all(20),
-              child: ResultadosSkeleton(),
-            )
-          : SingleChildScrollView(
-              physics: const ClampingScrollPhysics(),
-              padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 24.h),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const ResultadosHeader(),
-                  SizedBox(height: 24.h),
+      body:
+          _showSkeleton
+              ? const Padding(
+                padding: EdgeInsets.all(20),
+                child: ResultadosSkeleton(),
+              )
+              : SingleChildScrollView(
+                physics: const ClampingScrollPhysics(),
+                padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 24.h),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const ResultadosHeader(),
+                    SizedBox(height: 24.h),
 
-                  TicketDetalleWidget(
-                    solicitud: widget.solicitud,
-                    telefono: _telefonoController.text,
-                  ),
-
-                  SizedBox(height: 32.h),
-
-                  Text(
-                    'Proporciona un número telefónico',
-                    style: AppTextStyles.bodySmall(context).copyWith(
-                      fontWeight: FontWeight.w600,
+                    TicketDetalleWidget(
+                      solicitud: widget.solicitud,
+                      telefono: _telefonoController.text,
                     ),
-                  ),
-                  SizedBox(height: 10.h),
 
-                  TextFormField(
-                    controller: _telefonoController,
-                    keyboardType: TextInputType.phone,
-                    maxLength: 10,
-                    style: AppTextStyles.bodySmall(context).copyWith(
-                      color: AppColors.textPrimary(context),
-                      fontWeight: FontWeight.w500,
+                    SizedBox(height: 32.h),
+
+                    Text(
+                      'Proporciona un número telefónico',
+                      style: AppTextStyles.bodySmall(
+                        context,
+                      ).copyWith(fontWeight: FontWeight.w600),
                     ),
-                    decoration: InputDecoration(
-                      counterText: "",
-                      labelText: 'Teléfono',
-                      labelStyle: AppTextStyles.inputLabel(context),
-                      hintText: 'Ej. 7221234567',
-                      hintStyle: AppTextStyles.inputHint(context),
-                      prefixIcon: Icon(
-                        Icons.phone_iphone_rounded,
-                        size: 22.sp,
-                        color: AppColors.primary,
+                    SizedBox(height: 10.h),
+
+                    TextFormField(
+                      controller: _telefonoController,
+                      keyboardType: TextInputType.phone,
+                      maxLength: 10,
+                      style: AppTextStyles.bodySmall(context).copyWith(
+                        color: AppColors.textPrimary(context),
+                        fontWeight: FontWeight.w500,
                       ),
-                      filled: true,
-                      fillColor: AppColors.inputBackground(context),
-                      contentPadding: EdgeInsets.symmetric(
-                        horizontal: 20.w,
-                        vertical: 16.h,
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(14.r),
-                        borderSide: BorderSide(
-                          color: Theme.of(context).brightness == Brightness.dark
-                              ? Colors.white12
-                              : Colors.grey.shade300,
+                      decoration: InputDecoration(
+                        counterText: "",
+                        labelText: 'Teléfono',
+                        labelStyle: AppTextStyles.inputLabel(context),
+                        hintText: 'Ej. 7221234567',
+                        hintStyle: AppTextStyles.inputHint(context),
+                        prefixIcon: Icon(
+                          Icons.phone_iphone_rounded,
+                          size: 22.sp,
+                          color: AppColors.primary,
                         ),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(14.r),
-                        borderSide: BorderSide(color: AppColors.primary, width: 1.5),
-                      ),
-                    ),
-                  ),
-
-                  SizedBox(height: 32.h),
-
-                  SizedBox(
-                    width: double.infinity,
-                    child: ElevatedButton(
-                      onPressed: _loading
-                          ? null
-                          : () async {
-                              setState(() => _loading = true);
-
-                              await enviarContrato(
-                                context: context,
-                                user: widget.user,
-                                solicitud: widget.solicitud,
-                                telefono: _telefonoController.text.trim(),
-                              );
-
-                              if (mounted) {
-                                setState(() => _loading = false);
-                                _mostrarModalEncuesta(); // 👈 Mostrar el modal de encuesta
-                              }
-                            },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: AppColors.primary,
-                        padding: EdgeInsets.symmetric(vertical: 16.h),
-                        shape: RoundedRectangleBorder(
+                        filled: true,
+                        fillColor: AppColors.inputBackground(context),
+                        contentPadding: EdgeInsets.symmetric(
+                          horizontal: 20.w,
+                          vertical: 16.h,
+                        ),
+                        enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(14.r),
+                          borderSide: BorderSide(
+                            color:
+                                Theme.of(context).brightness == Brightness.dark
+                                    ? Colors.white12
+                                    : Colors.grey.shade300,
+                          ),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(14.r),
+                          borderSide: BorderSide(
+                            color: AppColors.primary,
+                            width: 1.5,
+                          ),
                         ),
                       ),
-                      child: _loading
-                          ? SizedBox(
-                              height: 20.h,
-                              width: 20.w,
-                              child: const CircularProgressIndicator(
-                                strokeWidth: 2,
-                                color: Colors.white,
-                              ),
-                            )
-                          : Text('Mandar solicitud', style: AppTextStyles.buttonText(context)),
                     ),
-                  ),
-                ],
+
+                    SizedBox(height: 32.h),
+
+                    SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton(
+                        onPressed:
+                            _loading
+                                ? null
+                                : () async {
+                                  setState(() => _loading = true);
+
+                                  await enviarContrato(
+                                    context: context,
+                                    user: widget.user,
+                                    solicitud: widget.solicitud,
+                                    telefono: _telefonoController.text.trim(),
+                                  );
+
+                                  if (mounted) {
+                                    setState(() => _loading = false);
+                                    _mostrarModalEncuesta();
+                                  }
+                                },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: AppColors.primary,
+                          padding: EdgeInsets.symmetric(vertical: 16.h),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(14.r),
+                          ),
+                        ),
+                        child:
+                            _loading
+                                ? SizedBox(
+                                  height: 20.h,
+                                  width: 20.w,
+                                  child: const CircularProgressIndicator(
+                                    strokeWidth: 2,
+                                    color: Colors.white,
+                                  ),
+                                )
+                                : Text(
+                                  'Mandar solicitud',
+                                  style: AppTextStyles.buttonText(context),
+                                ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
     );
   }
 }

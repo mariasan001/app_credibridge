@@ -15,7 +15,7 @@ class AppTextStyles {
   static TextStyle logoHighlight(BuildContext context) {
     return GoogleFonts.poppins(
       fontSize: 36.sp,
-      color: AppColors.primary,
+      color: AppColors.second,
       fontWeight: FontWeight.w900,
     );
   }

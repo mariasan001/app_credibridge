@@ -23,64 +23,125 @@ class PromocionDetallePage extends StatelessWidget {
           style: AppTextStyles.promoTitle(context),
         ),
       ),
-      body: AnimatedSwitcher(
-        duration: const Duration(milliseconds: 300),
-        child: ListView(
-          physics: const BouncingScrollPhysics(),
-          padding: EdgeInsets.all(20.w),
+      body: SingleChildScrollView(
+        physics: const BouncingScrollPhysics(),
+        padding: EdgeInsets.all(20.w),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Financiera
-            Text(
-              'Financiera:',
-              style: AppTextStyles.promoBold(context).copyWith(fontSize: 14.sp),
-            ),
-            SizedBox(height: 4.h),
-            Text(
-              promo.lenderName,
-              style: AppTextStyles.bodySmall(context).copyWith(fontSize: 13.sp),
-            ),
-            SizedBox(height: 16.h),
-
-            // Descripción
-            Text(
-              'Descripción:',
-              style: AppTextStyles.promoBold(context).copyWith(fontSize: 14.sp),
-            ),
-            SizedBox(height: 4.h),
-            Text(
-              promo.promotionDesc,
-              style: AppTextStyles.promoBody(context).copyWith(fontSize: 13.sp),
-            ),
-            SizedBox(height: 16.h),
-
-            // Beneficios
-            Text(
-              'Beneficios:',
-              style: AppTextStyles.promoBold(context).copyWith(fontSize: 14.sp),
-            ),
-            SizedBox(height: 8.h),
-            ...promo.benefits.map(
-              (benefit) => Padding(
-                padding: EdgeInsets.only(bottom: 6.h),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Icon(Icons.check_circle_outline, size: 18, color: AppColors.successCheck),
-                    SizedBox(width: 6.w),
-                    Expanded(
-                      child: Text(
-                        benefit,
-                        style: AppTextStyles.promoListText(context).copyWith(fontSize: 13.sp),
+            Container(
+              padding: EdgeInsets.all(20.w),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(20.r),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black12,
+                    blurRadius: 12,
+                    offset: Offset(0, 6),
+                  ),
+                ],
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Título + ícono institucional
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Icon(
+                        Icons.campaign_outlined,
+                        color: AppColors.primary,
+                        size: 24,
                       ),
-                    ),
-                  ],
-                ),
+                      SizedBox(width: 10.w),
+                      Expanded(
+                        child: Text(
+                          promo.promotionTitle,
+                          style: AppTextStyles.promoTitle(
+                            context,
+                          ).copyWith(fontSize: 18.sp),
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 20.h),
+
+                  // Financiera
+                  Text(
+                    'Financiera',
+                    style: AppTextStyles.promoBold(
+                      context,
+                    ).copyWith(fontSize: 15.sp, color: AppColors.accent),
+                  ),
+                  SizedBox(height: 4.h),
+                  Text(
+                    promo.lenderName,
+                    style: AppTextStyles.bodySmall(
+                      context,
+                    ).copyWith(fontSize: 14.sp),
+                  ),
+                  Divider(height: 30.h),
+
+                  // Descripción
+                  Text(
+                    'Descripción',
+                    style: AppTextStyles.promoBold(
+                      context,
+                    ).copyWith(fontSize: 15.sp, color: AppColors.accent),
+                  ),
+                  SizedBox(height: 6.h),
+                  Text(
+                    promo.promotionDesc,
+                    style: AppTextStyles.promoBody(
+                      context,
+                    ).copyWith(fontSize: 14.sp),
+                  ),
+                  Divider(height: 30.h),
+
+                  // Beneficios
+                  Text(
+                    'Beneficios',
+                    style: AppTextStyles.promoBold(
+                      context,
+                    ).copyWith(fontSize: 15.sp, color: AppColors.accent),
+                  ),
+                  SizedBox(height: 12.h),
+                  Column(
+                    children:
+                        promo.benefits.map((benefit) {
+                          return Container(
+                            margin: EdgeInsets.only(bottom: 10.h),
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Icon(
+                                  Icons.check_circle_rounded,
+                                  size: 20,
+                                  color: AppColors.successCheck,
+                                ),
+                                SizedBox(width: 10.w),
+                                Expanded(
+                                  child: Text(
+                                    benefit,
+                                    style: AppTextStyles.promoListText(
+                                      context,
+                                    ).copyWith(fontSize: 14.sp),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          );
+                        }).toList(),
+                  ),
+                ],
               ),
             ),
-            SizedBox(height: 20.h),
+            SizedBox(height: 30.h),
           ],
         ),
       ),
+  
     );
   }
 }

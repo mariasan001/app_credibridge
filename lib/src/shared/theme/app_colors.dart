@@ -85,7 +85,8 @@ static Color cardtextfondo(BuildContext context) =>
 
 
   // 🎨 Constantes globales (colores base)
-  static const Color primary = Color(0xFFFF944D);
+  static const Color primary = Color.fromARGB(255, 0, 0, 0);
+  static const Color second = Color.fromARGB(255, 238, 149, 16);
   static const Color accent = Color(0xFFFFE7A0);
   static const Color backgroundLight = Color(0xFFFFFFFF);
   static const Color inputFocus = primary;

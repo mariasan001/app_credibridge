@@ -22,15 +22,15 @@ class LogoTitle extends StatelessWidget {
             style: TextStyle(
               color: AppColors.primary,
               fontSize: 42.sp,
-              fontWeight: FontWeight.w800,
+              fontWeight: FontWeight.w900,
             ),
           ),
           TextSpan(
             text: 'Bridge.',
             style: TextStyle(
-              color: isDark ? Colors.white : Colors.black,
+              color: isDark ? Colors.white : const Color.fromARGB(255, 233, 132, 45),
               fontSize: 42.sp,
-              fontWeight: FontWeight.w800,
+              fontWeight: FontWeight.w900,
             ),
           ),
         ],

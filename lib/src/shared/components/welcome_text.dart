@@ -51,6 +51,7 @@ class WelcomeText extends StatelessWidget {
                 style: AppTextStyles.logoHighlight(context).copyWith(
                   fontSize: 25.sp,
                   fontWeight: FontWeight.w900,
+                  
                 ),
               ),
               TextSpan(text: ' $titleSuffix'),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:animations/animations.dart';
+import 'package:lottie/lottie.dart';
 import 'package:app_creditos/src/shared/theme/app_colors.dart';
 
 class SinPromocionesWidget extends StatelessWidget {
@@ -16,55 +17,43 @@ class SinPromocionesWidget extends StatelessWidget {
       child: FadeScaleTransition(
         animation: AlwaysStoppedAnimation(1.0),
         child: Container(
-          margin: EdgeInsets.symmetric(horizontal: 12.w, vertical: 32.h),
-          padding: EdgeInsets.symmetric(horizontal: 18.w, vertical: 30.h),
+          padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 12.h),
           decoration: BoxDecoration(
             color: AppColors.promoCardBackground(context),
-            borderRadius: BorderRadius.circular(20.r),
-            boxShadow: [
-              BoxShadow(
-                color: AppColors.promoShadow(context),
-                blurRadius: 8.r,
-                offset: Offset(0, 4.h),
-              ),
-            ],
+            borderRadius: BorderRadius.circular(24.r),
           ),
-          width: double.infinity,
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              // Icono Emoji
-              Text(
-                '🛍️',
-                style: TextStyle(fontSize: 48.sp),
+              // 🎞️ Animación Lottie
+              SizedBox(
+                width: 120.h,
+                child: Lottie.asset(
+                  'assets/img/ani_promocion.json',
+                  fit: BoxFit.contain,
+                ),
               ),
 
               SizedBox(height: 20.h),
 
-              // Título
               Text(
                 'No hay promociones activas',
                 style: TextStyle(
-                  fontSize: 18.sp,
-                  fontWeight: FontWeight.w600,
+                  fontSize: 12.sp,
+                  fontWeight: FontWeight.bold,
                   color: AppColors.text(context),
                 ),
                 textAlign: TextAlign.center,
               ),
-
-              SizedBox(height: 8.h),
-
-              // Subtítulo
+              SizedBox(height: 0.h),
               Text(
                 'Vuelve pronto para descubrir nuevas oportunidades exclusivas.',
                 style: TextStyle(
-                  fontSize: 13.sp,
+                  fontSize: 11.sp,
                   color: AppColors.textMuted(context),
                 ),
                 textAlign: TextAlign.center,
               ),
-
-              // Botón de recarga si aplica
               if (onAccionNueva != null) ...[
                 SizedBox(height: 24.h),
                 OutlinedButton.icon(
@@ -72,7 +61,7 @@ class SinPromocionesWidget extends StatelessWidget {
                   icon: Icon(Icons.refresh, size: 18.sp),
                   label: Text(
                     'Volver a intentar',
-                    style: TextStyle(fontSize: 13.sp),
+                    style: TextStyle(fontSize: 14.sp),
                   ),
                   style: OutlinedButton.styleFrom(
                     foregroundColor: AppColors.text(context),
@@ -80,11 +69,11 @@ class SinPromocionesWidget extends StatelessWidget {
                       color: isDark ? Colors.white24 : const Color(0xFFE2E8F0),
                     ),
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10.r),
+                      borderRadius: BorderRadius.circular(8.r),
                     ),
                   ),
                 ),
-              ]
+              ],
             ],
           ),
         ),

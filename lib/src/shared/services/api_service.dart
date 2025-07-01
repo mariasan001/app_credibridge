@@ -4,7 +4,7 @@ import 'package:dio/dio.dart';
 enum Environment { casa, oficina, prod }
 
 class ApiService {
-  static const Environment currentEnv = Environment.casa;
+  static const Environment currentEnv = Environment.oficina;
 
   static String _getBaseUrl() {
     switch (currentEnv) {
@@ -35,9 +35,9 @@ class ApiService {
     _dio.interceptors.add(
       InterceptorsWrapper(
         onRequest: (options, handler) async {
-        final token = await SessionManager.getToken();
+          final token = await SessionManager.getToken();
           if (token != null) {
-            options.headers['cookie'] = 'JWT=$token';
+            options.headers['cookie'] = 'JWT=$token'; // Cookie manual
             print('✅ JWT enviado por cookie');
           } else {
             print('⚠️ No se encontró token en el storage');
@@ -55,4 +55,10 @@ class ApiService {
 
   static Dio get dio => _dio;
   static set dio(Dio client) => _dio = client;
+
+  // ✅ NUEVO: Método para cerrar sesión
+  static Future<void> logout() async {
+    await SessionManager.deleteToken();
+    print('✅ Token eliminado. Sesión cerrada.');
+  }
 }

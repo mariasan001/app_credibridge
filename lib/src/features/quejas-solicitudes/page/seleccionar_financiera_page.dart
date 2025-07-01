@@ -63,119 +63,115 @@ class _ReportePaso1FinancieraPageState
     }
   }
 
-  Future<void> _enviarTicket() async {
-    if (_isSubmitting) return;
+ Future<void> _enviarTicket() async {
+  if (_isSubmitting) return;
 
-    if (_lenderSeleccionado == null ||
-        _tipoSeleccionado == null ||
-        (_tipoSeleccionado?.ticketTypeDesc.toLowerCase() == 'solicitud' &&
-            _clarificationSeleccionado == null))
-      return;
+  if (_lenderSeleccionado == null ||
+      _tipoSeleccionado == null ||
+      (_tipoSeleccionado?.ticketTypeDesc.toLowerCase() == 'solicitud' &&
+          _clarificationSeleccionado == null)) {
+    return;
+  }
 
-    final ticket = TicketCreateModel(
-      userId: widget.user.userId,
-      subject: subjectController.text.trim(),
-      description: descriptionController.text.trim(),
-      ticketTypeId: _tipoSeleccionado!.id,
-      lenderId: _lenderSeleccionado!.id,
-      clarificationType:
-          _tipoSeleccionado?.ticketTypeDesc.toLowerCase() == 'solicitud'
-              ? _clarificationSeleccionado?.id
-              : null,
+  final ticket = TicketCreateModel(
+    userId: widget.user.userId,
+    subject: subjectController.text.trim(),
+    description: descriptionController.text.trim(),
+    ticketTypeId: _tipoSeleccionado!.id,
+    lenderId: _lenderSeleccionado!.id,
+    clarificationType: _tipoSeleccionado?.ticketTypeDesc.toLowerCase() == 'solicitud'
+        ? _clarificationSeleccionado?.id
+        : null,
+    initialMessage: messageController.text.trim(),
+  );
+print('🔍 Ticket enviado: ${ticket.toMap()}'); // 👈 Aquí imprimes los datos
+  setState(() => _isSubmitting = true);
 
-      initialMessage: messageController.text.trim(),
+print('🔍 Ticket enviado: ${ticket.toMap()}'); // 👈 Aquí imprimes los datos
+  try {
+    final response = await TicketService.createTicket(
+      ticket,
+      filePath: _archivoPath,
+      fileName: _archivoNombre,
     );
 
-    setState(() => _isSubmitting = true);
+    if (!mounted) return;
 
-    try {
-      final response = await TicketService.createTicket(
-        ticket,
-        filePath: _archivoPath,
-        fileName: _archivoNombre,
-      );
-
-      if (!mounted) return;
-
-      // ✅ ALERTA MODERNA DE ÉXITO
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Row(
-            children: [
-              const Icon(Icons.check_circle_outline, color: Colors.white),
-              SizedBox(width: 12.w),
-              Expanded(
-                child: Text(
-                  'Tu solicitud fue enviada con éxito.',
-                  style: TextStyle(fontSize: 13.sp),
-                ),
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Row(
+          children: [
+            const Icon(Icons.check_circle_outline, color: Colors.white),
+            SizedBox(width: 12.w),
+            Expanded(
+              child: Text(
+                'Tu solicitud fue enviada con éxito.',
+                style: TextStyle(fontSize: 13.sp),
               ),
-            ],
-          ),
-          backgroundColor: Colors.green.shade600,
-          behavior: SnackBarBehavior.floating,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12.r),
-          ),
-          duration: const Duration(seconds: 2),
-          margin: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
+            ),
+          ],
+        ),
+        backgroundColor: Colors.green.shade600,
+        behavior: SnackBarBehavior.floating,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12.r),
+        ),
+        duration: const Duration(seconds: 2),
+        margin: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
+      ),
+    );
+
+    await Future.delayed(const Duration(milliseconds: 500));
+
+    if (mounted) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (_) => HistorialSolicitudesPage(user: widget.user),
         ),
       );
-
-      // Esperar a que se muestre el snackbar antes de navegar
-      await Future.delayed(const Duration(milliseconds: 500));
-
-      // Navegar al historial de solicitudes
-      if (mounted) {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (_) => HistorialSolicitudesPage(user: widget.user),
-          ),
-        );
-      }
-
-      // Limpiar estado tras éxito
-      setState(() {
-        _lenderSeleccionado = null;
-        _tipoSeleccionado = null;
-        _clarificationSeleccionado = null;
-        _clarifications = [];
-        _archivoNombre = null;
-        _archivoPath = null;
-        subjectController.clear();
-        descriptionController.clear();
-        messageController.clear();
-      });
-    } catch (e) {
-      // ❌ ALERTA MODERNA DE ERROR
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Row(
-            children: [
-              const Icon(Icons.error_outline, color: Colors.white),
-              SizedBox(width: 12.w),
-              Expanded(
-                child: Text(
-                  'Error al enviar la solicitud.',
-                  style: TextStyle(fontSize: 13.sp),
-                ),
-              ),
-            ],
-          ),
-          backgroundColor: Colors.red.shade600,
-          behavior: SnackBarBehavior.floating,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12.r),
-          ),
-          duration: const Duration(seconds: 4),
-          margin: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
-        ),
-      );
-    } finally {
-      setState(() => _isSubmitting = false);
     }
+
+    setState(() {
+      _lenderSeleccionado = null;
+      _tipoSeleccionado = null;
+      _clarificationSeleccionado = null;
+      _clarifications = [];
+      _archivoNombre = null;
+      _archivoPath = null;
+      subjectController.clear();
+      descriptionController.clear();
+      messageController.clear();
+    });
+  } catch (e) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Row(
+          children: [
+            const Icon(Icons.error_outline, color: Colors.white),
+            SizedBox(width: 12.w),
+            Expanded(
+              child: Text(
+                'Error al enviar la solicitud.',
+                style: TextStyle(fontSize: 13.sp),
+              ),
+            ),
+          ],
+        ),
+        backgroundColor: Colors.red.shade600,
+        behavior: SnackBarBehavior.floating,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12.r),
+        ),
+        duration: const Duration(seconds: 4),
+        margin: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
+      ),
+    );
+  } finally {
+    setState(() => _isSubmitting = false);
   }
+}
+
 
   Future<void> _cargarClarificacionesSiEsSolicitud(TicketTypeModel tipo) async {
     if (tipo.ticketTypeDesc.toLowerCase() == 'solicitud') {

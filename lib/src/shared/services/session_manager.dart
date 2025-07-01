@@ -1,18 +1,26 @@
-// lib/src/shared/services/session_manager.dart
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class SessionManager {
   static const _storage = FlutterSecureStorage();
+  static const _tokenKey = 'jwt_token';
 
+  // Guardar el token
   static Future<void> saveToken(String token) async {
-    await _storage.write(key: 'jwt_token', value: token); // 🔑 esta clave
+    await _storage.write(key: _tokenKey, value: token);
   }
 
+  // Obtener el token
   static Future<String?> getToken() async {
-    return await _storage.read(key: 'jwt_token'); // 👈 debe coincidir
+    return await _storage.read(key: _tokenKey);
   }
 
-  static Future<void> clearToken() async {
-    await _storage.delete(key: 'jwt_token'); // 👈 y aquí también
+  // ✅ Eliminar el token (cerrar sesión)
+  static Future<void> deleteToken() async {
+    await _storage.delete(key: _tokenKey);
+  }
+
+  // (opcional) Limpiar todo el storage
+  static Future<void> clearAll() async {
+    await _storage.deleteAll();
   }
 }
