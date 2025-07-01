@@ -1,7 +1,11 @@
 import 'package:app_creditos/src/features/auth/models/user_model.dart';
+import 'package:app_creditos/src/features/quejas-solicitudes/page/historial_solicitudes_page.dart';
+import 'package:app_creditos/src/features/solicitudes/page/page_solicitudes.dart';
+import 'package:app_creditos/src/shared/theme/app_colors.dart';
+
 import 'package:flutter/material.dart';
 import 'package:line_icons/line_icons.dart';
-import 'mas_options_sheet.dart'; // Asegúrate de importar correctamente
+import 'mas_options_sheet.dart';
 
 class CapsuleBottomNavBar extends StatelessWidget {
   final int selectedIndex;
@@ -30,7 +34,7 @@ class CapsuleBottomNavBar extends StatelessWidget {
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
       decoration: BoxDecoration(
-        color: const Color.fromARGB(255, 255, 255, 255),
+        color: AppColors.containernav(context),
         borderRadius: BorderRadius.circular(40),
       ),
       child: Row(
@@ -45,7 +49,7 @@ class CapsuleBottomNavBar extends StatelessWidget {
                 // Mostrar hoja inferior (más opciones)
                 showModalBottomSheet(
                   context: context,
-                  backgroundColor: Colors.white,
+                  backgroundColor: AppColors.fondoPrimary(context),
                   shape: const RoundedRectangleBorder(
                     borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
                   ),
@@ -55,7 +59,24 @@ class CapsuleBottomNavBar extends StatelessWidget {
                   ),
                 );
               } else {
-                onTabChanged(index);
+                onTabChanged(index); // actualiza estado en MainPage
+
+                // Navegación a otras páginas
+                if (index == 1) {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => HistorialSolicitudesPage(user: user),
+                    ),
+                  );
+                } else if (index == 2) {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => PageSolicitudes(user: user),
+                    ),
+                  );
+                }
               }
             },
             child: AnimatedContainer(
@@ -64,9 +85,7 @@ class CapsuleBottomNavBar extends StatelessWidget {
                   ? const EdgeInsets.symmetric(horizontal: 16, vertical: 8)
                   : const EdgeInsets.all(8),
               decoration: BoxDecoration(
-                color: isSelected
-                    ? const Color.fromARGB(255, 54, 54, 54)
-                    : const Color.fromARGB(0, 53, 53, 53),
+                color: isSelected ? AppColors.optionseelct(context) : Colors.transparent,
                 borderRadius: BorderRadius.circular(30),
               ),
               child: Row(
@@ -74,16 +93,14 @@ class CapsuleBottomNavBar extends StatelessWidget {
                   Icon(
                     item['icon'] as IconData,
                     size: 20,
-                    color: isSelected
-                        ? const Color.fromARGB(255, 255, 255, 255)
-                        : const Color.fromARGB(179, 0, 0, 0),
+                    color: isSelected ? AppColors.textbtn(context) : AppColors.iconsbton(context),
                   ),
                   if (isSelected && index != 3) ...[
                     const SizedBox(width: 8),
                     Text(
                       item['label'],
-                      style: const TextStyle(
-                        color: Color.fromARGB(255, 255, 255, 255),
+                      style:  TextStyle(
+                        color:AppColors.backgroundLight,
                         fontWeight: FontWeight.w600,
                       ),
                     ),
@@ -97,3 +114,4 @@ class CapsuleBottomNavBar extends StatelessWidget {
     );
   }
 }
+

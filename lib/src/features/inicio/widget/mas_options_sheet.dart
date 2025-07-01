@@ -2,8 +2,10 @@ import 'package:app_creditos/src/features/auth/models/user_model.dart';
 import 'package:app_creditos/src/features/auth/page/login_page.dart';
 import 'package:app_creditos/src/features/perfil/page/page_perfil.dart';
 import 'package:app_creditos/src/shared/services/api_service.dart';
+import 'package:app_creditos/src/shared/theme/theme_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:line_icons/line_icons.dart';
+import 'package:provider/provider.dart';
 
 class MasOptionsSheet extends StatelessWidget {
   final User user;
@@ -40,7 +42,7 @@ class MasOptionsSheet extends StatelessWidget {
             context,
             LineIcons.fileAlt,
             'Documentos',
-            onTap: close, // Reemplaza con tu lógica real
+            onTap: close, // en este boton proximante ira documetnacion de los usauarios 
           ),
           _buildTile(
             context,
@@ -48,9 +50,22 @@ class MasOptionsSheet extends StatelessWidget {
             'Modo oscuro',
             onTap: () {
               close();
-              // Aquí puedes usar Provider, Bloc o similar para cambiar el modo
+              final themeNotifier = context.read<ThemeNotifier>();
+              themeNotifier.toggleTheme();
+
+              final isDark = themeNotifier.isDark;
+              final nuevoTema =
+                  isDark ? 'Modo oscuro activado' : 'Modo claro activado';
+
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(nuevoTema),
+                  duration: const Duration(milliseconds: 900),
+                ),
+              );
             },
           ),
+
           _buildTile(
             context,
             LineIcons.alternateSignOut,

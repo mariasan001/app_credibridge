@@ -17,7 +17,7 @@ class AppColors {
       Theme.of(context).brightness == Brightness.dark
           ? const Color.fromARGB(255, 26, 23, 23)
           : const Color.fromARGB(255, 255, 255, 255);
-          
+
   static Color inputBackground3(BuildContext context) =>
       Theme.of(context).brightness == Brightness.dark
           ? const Color.fromARGB(255, 26, 23, 23)
@@ -67,20 +67,88 @@ class AppColors {
       Theme.of(context).brightness == Brightness.dark
           ? Colors.black26
           : const Color(0x11000000);
-static Color divider(BuildContext context) =>
-    Theme.of(context).brightness == Brightness.dark
-        ? Colors.grey[700]! 
-        : Colors.grey[300]!;
+  static Color divider(BuildContext context) =>
+      Theme.of(context).brightness == Brightness.dark
+          ? Colors.grey[700]!
+          : Colors.grey[300]!;
 
-static Color textCar(BuildContext context) =>
-    Theme.of(context).brightness == Brightness.dark
-        ?  const Color.fromARGB(255, 234, 221, 197)
-        :  const Color.fromARGB(255, 61, 61, 61);
+  static Color textCar(BuildContext context) =>
+      Theme.of(context).brightness == Brightness.dark
+          ? const Color.fromARGB(255, 234, 221, 197)
+          : const Color.fromARGB(255, 61, 61, 61);
 
-static Color cardtextfondo(BuildContext context) =>
-    Theme.of(context).brightness == Brightness.dark
-        ?  const Color.fromARGB(255, 52, 205, 141)
-        :   const Color.fromARGB(255, 0, 0, 0);
+  static Color cardtextfondo(BuildContext context) =>
+      Theme.of(context).brightness == Brightness.dark
+          ? const Color.fromARGB(255, 52, 205, 141)
+          : const Color.fromARGB(255, 0, 0, 0);
+
+
+  // este fodo es es para el fondo principal de la app
+  static Color fondoPrimary(BuildContext context) =>
+      Theme.of(context).brightness == Brightness.dark
+          ? const Color.fromARGB(255, 51, 51, 51)
+          : const Color.fromARGB(255, 241, 241, 241);
+
+  // es es el fododo superior de la app
+  static Color fondoSeconds(BuildContext context) =>
+      Theme.of(context).brightness == Brightness.dark
+          ? const Color.fromARGB(255, 27, 26, 26)
+          : const Color.fromARGB(255, 253, 253, 253);
+
+  // estes es el color de los textods, y dubitulos
+
+  static Color textapp(BuildContext context) =>
+      Theme.of(context).brightness == Brightness.dark
+          ? const Color.fromARGB(255, 197, 197, 197)
+          : const Color.fromARGB(255, 93, 93, 93);
+
+  // estas son las varianted de titlos   titlos dentro de la app
+  static Color titleapp(BuildContext context) =>
+      Theme.of(context).brightness == Brightness.dark
+          ? const Color.fromARGB(255, 255, 255, 255)
+          : const Color.fromARGB(255, 0, 0, 0);
+
+  // secciones de como el seelctor de simulr,movimiento y directorio
+
+  static Color selectoption(BuildContext context) =>
+      Theme.of(context).brightness == Brightness.dark
+          ? const Color.fromARGB(255, 255, 255, 255)
+          : const Color.fromARGB(255, 0, 0, 0);
+
+
+// seccion de del nav ingerior 
+
+  static Color containernav(BuildContext context) =>
+      Theme.of(context).brightness == Brightness.dark
+          ? const Color.fromARGB(255, 26, 25, 25)
+          : const Color.fromARGB(255, 255, 255, 255);
+
+
+  static Color optionseelct(BuildContext context) =>
+      Theme.of(context).brightness == Brightness.dark
+          ? const Color.fromARGB(255, 55, 54, 54)
+          : const Color.fromARGB(255, 0, 0, 0);
+
+
+  static Color textbtn(BuildContext context) =>
+      Theme.of(context).brightness == Brightness.dark
+          ? const Color.fromARGB(255, 255, 255, 255)
+          : const Color.fromARGB(255, 224, 224, 224);
+
+
+  static Color iconsbton(BuildContext context) =>
+      Theme.of(context).brightness == Brightness.dark
+          ? const Color.fromARGB(255, 226, 226, 226)
+          : const Color.fromARGB(255, 36, 36, 36);
+
+
+
+
+
+
+
+
+
 
 
 

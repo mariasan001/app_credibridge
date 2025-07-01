@@ -11,12 +11,12 @@ import 'src/shared/router/app_router.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await initializeDateFormatting('es_MX', null);
-  ApiService.init();
+  await initializeDateFormatting('es_MX', null); // para fechas en español
+  ApiService.init(); //inicializa el API service 
 
   runApp(
     ChangeNotifierProvider(
-      create: (_) => ThemeNotifier(),
+      create: (_) => ThemeNotifier(), // prove del tema del app
       child: const AppWrapper(),
     ),
   );

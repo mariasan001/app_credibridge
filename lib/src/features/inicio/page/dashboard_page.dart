@@ -1,6 +1,6 @@
 import 'dart:async';
-import 'package:app_creditos/src/features/inicio/widget/mas_options_sheet.dart';
 import 'package:app_creditos/src/features/inicio/widget/opicones.dart';
+import 'package:app_creditos/src/shared/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:app_creditos/src/shared/theme/app_text_styles.dart';
@@ -16,9 +16,9 @@ import 'package:app_creditos/src/features/inicio/widget/PromocionesActivasWidget
 import 'package:app_creditos/src/features/inicio/widget/DescuentoCardSkeleton.dart';
 import 'package:app_creditos/src/features/inicio/widget/sin_promociones_widget.dart';
 
-
 class HomePage extends StatefulWidget {
   final double? descuento;
+
   final ContractModel? contrato;
   final User user;
 
@@ -92,17 +92,12 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
-  void _onNavTap(int index) {
-    setState(() {
-      _currentIndex = index;
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       extendBodyBehindAppBar: true,
-      backgroundColor: const Color.fromARGB(255, 247, 247, 247),
+      backgroundColor: AppColors.fondoPrimary(context),
       appBar: CustomAppBar(user: widget.user),
       body: Stack(
         children: [
@@ -113,8 +108,8 @@ class _HomePageState extends State<HomePage> {
             right: 0,
             height: MediaQuery.of(context).size.height * 0.52,
             child: Container(
-              decoration: const BoxDecoration(
-                color: Colors.white,
+              decoration: BoxDecoration(
+                color: AppColors.fondoSeconds(context),
                 borderRadius: BorderRadius.only(
                   bottomLeft: Radius.circular(40),
                   bottomRight: Radius.circular(40),
@@ -153,10 +148,10 @@ class _HomePageState extends State<HomePage> {
                           ).copyWith(
                             fontSize: 15.sp,
                             fontWeight: FontWeight.w400,
-                            color: Colors.black,
+                            color: AppColors.titleapp(context),
                           ),
                         ),
-                        SizedBox(height: 16.h),
+                      
                       ],
                     ),
                   ),
@@ -232,7 +227,15 @@ class _HomePageState extends State<HomePage> {
       ),
       bottomNavigationBar: CapsuleBottomNavBar(
         selectedIndex: _currentIndex,
-        onTabChanged: _onNavTap, user: widget.user, onLogout: () {  },
+        onTabChanged: (index) {
+          setState(() {
+            _currentIndex = index;
+          });
+        },
+        user: widget.user,
+        onLogout: () {
+          // Aquí va tu lógica de cerrar sesión
+        },
       ),
     );
   }
