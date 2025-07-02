@@ -23,9 +23,10 @@ class ResumenPagoCard extends StatelessWidget {
     final ahora = DateTime.now();
     final dia = ahora.day;
 
-    DateTime proximo = dia < 15
-        ? DateTime(ahora.year, ahora.month, 15)
-        : DateTime(ahora.year, ahora.month + 1, 0);
+    DateTime proximo =
+        dia < 15
+            ? DateTime(ahora.year, ahora.month, 15)
+            : DateTime(ahora.year, ahora.month + 1, 0);
 
     final formatterFecha = DateFormat("d MMM y", 'es_MX');
     final formatterMonto = NumberFormat.currency(locale: 'es_MX', symbol: '\$');
@@ -36,16 +37,16 @@ class ResumenPagoCard extends StatelessWidget {
     final lastPayment = contrato.lastPayment;
 
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: 9.w, vertical: 12.h),
-      padding: EdgeInsets.all(20.r),
+      margin: EdgeInsets.symmetric(horizontal: 0.w, vertical: 2.h),
+      padding: EdgeInsets.all(15.r),
       decoration: BoxDecoration(
-        color: AppColors.promoCardBackground(context),
+        color: AppColors.fondoSeconds(context),
         borderRadius: BorderRadius.circular(24.r),
         boxShadow: [
           BoxShadow(
-            color: AppColors.promoShadow(context),
-            blurRadius: 6,
-            offset: const Offset(0, 3),
+            color: Colors.black.withOpacity(0.05), // sombra muy suave
+            blurRadius: 12,
+            offset: const Offset(0, 2),
           ),
         ],
       ),
@@ -75,10 +76,9 @@ class ResumenPagoCard extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (_) => HistorialPage(
-                            contrato: contrato,
-                            user: user,
-                          ),
+                          builder:
+                              (_) =>
+                                  HistorialPage(contrato: contrato, user: user),
                         ),
                       );
                     },
@@ -96,8 +96,8 @@ class ResumenPagoCard extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (_) =>
-                              ReportePaso1FinancieraPage(user: user),
+                          builder:
+                              (_) => ReportePaso1FinancieraPage(user: user),
                         ),
                       );
                     },
@@ -144,10 +144,9 @@ class ResumenPagoCard extends StatelessWidget {
                     TextSpan(text: '${partes[0]}.'),
                     TextSpan(
                       text: partes.length > 1 ? partes[1] : '00',
-                      style: AppTextStyles.promoTitle(context).copyWith(
-                        fontSize: 14.sp,
-                        color: Colors.grey.shade600,
-                      ),
+                      style: AppTextStyles.promoTitle(
+                        context,
+                      ).copyWith(fontSize: 14.sp, color: Colors.grey.shade600),
                     ),
                   ],
                 ),
@@ -178,83 +177,141 @@ class ResumenPagoCard extends StatelessWidget {
 
           /// Último descuento
           contrato.discountsAplied > 0 && lastPayment != null
-              ? Row(
-                  children: [
-                    CircleAvatar(
-                      radius: 22.r,
-                      backgroundColor: Colors.grey.shade300,
-                      child: Icon(
-                        Icons.history,
-                        color: Colors.white,
-                        size: 22.sp,
-                      ),
-                    ),
-                    SizedBox(width: 14.w),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            "Último descuento",
-                            style: AppTextStyles.promoListText(context).copyWith(
-                              color: Colors.grey.shade600,
-                            ),
-                          ),
-                          SizedBox(height: 2.h),
-                          Text(
-                            formatterFecha.format(lastPayment.date),
-                            style: AppTextStyles.promoFooterDate(context).copyWith(
-                              color: Colors.grey.shade500,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    RichText(
-                      text: TextSpan(
-                        style: AppTextStyles.promoBold(context),
-                        children: [
-                          TextSpan(
-                            text: '${partes[0]}.',
-                            style: AppTextStyles.promoBold(context).copyWith(
-                              fontSize: 16.sp,
-                              color: Colors.grey.shade600,
-                            ),
-                          ),
-                          TextSpan(
-                            text: partes.length > 1 ? partes[1] : '00',
-                            style: AppTextStyles.promoBold(context).copyWith(
-                              fontSize: 10.sp,
-                              color: const Color.fromARGB(255, 170, 170, 170),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                )
-              : Padding(
-                  padding: EdgeInsets.symmetric(vertical: 8.h),
-                  child: Row(
+              ? Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
                     children: [
-                      Icon(
-                        Icons.info_outline,
-                        size: 20.sp,
-                        color: Colors.grey.shade400,
+                      CircleAvatar(
+                        radius: 22.r,
+                        backgroundColor: Colors.grey.shade300,
+                        child: Icon(
+                          Icons.history,
+                          color: Colors.white,
+                          size: 22.sp,
+                        ),
                       ),
-                      SizedBox(width: 8.w),
+                      SizedBox(width: 14.w),
                       Expanded(
-                        child: Text(
-                          "No se ha registrado ningún descuento aún",
-                          style: AppTextStyles.bodySmall(context).copyWith(
-                            fontSize: 12.sp,
-                            color: Colors.grey.shade500,
-                          ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "Último descuento",
+                              style: AppTextStyles.promoListText(
+                                context,
+                              ).copyWith(color: Colors.grey.shade600),
+                            ),
+                            SizedBox(height: 2.h),
+                            Text(
+                              formatterFecha.format(lastPayment.date),
+                              style: AppTextStyles.promoFooterDate(
+                                context,
+                              ).copyWith(color: Colors.grey.shade500),
+                            ),
+                          ],
+                        ),
+                      ),
+                      RichText(
+                        text: TextSpan(
+                          style: AppTextStyles.promoBold(context),
+                          children: [
+                            TextSpan(
+                              text: '${partes[0]}.',
+                              style: AppTextStyles.promoBold(context).copyWith(
+                                fontSize: 16.sp,
+                                color: Colors.grey.shade600,
+                              ),
+                            ),
+                            TextSpan(
+                              text: partes.length > 1 ? partes[1] : '00',
+                              style: AppTextStyles.promoBold(context).copyWith(
+                                fontSize: 10.sp,
+                                color: const Color.fromARGB(255, 170, 170, 170),
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                     ],
                   ),
+                  SizedBox(height: 16.h),
+
+                  /// NUEVOS TEXTOS CENTRADOS
+                  Center(
+                    child: Wrap(
+                      spacing: 20.w,
+                      alignment: WrapAlignment.center,
+                      children: [
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder:
+                                    (_) =>
+                                        ReportePaso1FinancieraPage(user: user),
+                              ),
+                            );
+                          },
+                          child: Text(
+                            "Solicitar aclaración",
+                            style: AppTextStyles.bodySmall(context).copyWith(
+                              fontSize: 13.sp,
+                              fontWeight: FontWeight.w500,
+                              color: AppColors.primary,
+                            ),
+                          ),
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder:
+                                    (_) => HistorialPage(
+                                      contrato: contrato,
+                                      user: user,
+                                    ),
+                              ),
+                            );
+                          },
+                          child: Text(
+                            "Ver historial completo",
+                            style: AppTextStyles.bodySmall(context).copyWith(
+                              fontSize: 13.sp,
+                              fontWeight: FontWeight.w500,
+                              color: AppColors.primary,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              )
+              : Padding(
+                padding: EdgeInsets.symmetric(vertical: 8.h),
+                child: Row(
+                  children: [
+                    Icon(
+                      Icons.info_outline,
+                      size: 20.sp,
+                      color: Colors.grey.shade400,
+                    ),
+                    SizedBox(width: 8.w),
+                    Expanded(
+                      child: Text(
+                        "No se ha registrado ningún descuento aún",
+                        style: AppTextStyles.bodySmall(context).copyWith(
+                          fontSize: 12.sp,
+                          color: Colors.grey.shade500,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
+              ),
         ],
       ),
     );

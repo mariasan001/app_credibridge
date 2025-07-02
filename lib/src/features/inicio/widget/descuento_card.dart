@@ -34,10 +34,9 @@ class DescuentoCard extends StatelessWidget {
           // Título
           Text(
             'Límite de descuento  ',
-            style: AppTextStyles.heading(context).copyWith(
-              fontSize: 14.sp,
-              color: AppColors.textapp(context)
-            ),
+            style: AppTextStyles.heading(
+              context,
+            ).copyWith(fontSize: 14.sp, color: AppColors.textapp(context)),
           ),
           SizedBox(height: 10.h),
 
@@ -59,25 +58,25 @@ class DescuentoCard extends StatelessWidget {
                   children: [
                     TextSpan(
                       text: '\$${partes[0]}.',
-                      style: AppTextStyles.heading(context).copyWith(
-                        fontSize: 55.sp,
-                        fontWeight: FontWeight.w900,
-                        color: AppColors.titleapp(context)
+                      style: TextStyle(
+                        fontSize: 68.sp,
+                        fontWeight: FontWeight.w700,
+                        color: AppColors.primary,
                       ),
                     ),
                     TextSpan(
                       text: partes[1],
-                      style: AppTextStyles.heading(context).copyWith(
+                     style: TextStyle(
                         fontSize: 30.sp,
-                        fontWeight: FontWeight.w500,
-                        color: const Color.fromARGB(255, 245, 210, 36),
+                        fontWeight: FontWeight.w600,
+                        color: const Color.fromARGB(255, 178, 163, 4),
                       ),
                     ),
                     TextSpan(
                       text: ' mx',
                       style: AppTextStyles.bodySmall(context).copyWith(
                         fontSize: 18.sp,
-                           color: const Color.fromARGB(255, 245, 210, 36),
+                        color: const Color.fromARGB(255, 172, 161, 8),
                       ),
                     ),
                   ],
@@ -117,14 +116,12 @@ class DescuentoCard extends StatelessWidget {
                   icon: LineIcons.wallet,
                   label: 'Simular',
                   destination: SimulacionPage(user: user, descuento: descuento),
-               
                 ),
                 _buildAnimatedAccess(
                   context: context,
                   icon: LineIcons.history, // Más claro para "Movimientos"
                   label: 'Movimientos',
                   destination: PageMovimientos(user: user),
-                   
                 ),
                 _buildAnimatedAccess(
                   context: context,
@@ -132,7 +129,6 @@ class DescuentoCard extends StatelessWidget {
                       LineIcons.users, // Más cálido y social para "Directorio"
                   label: 'Directorio',
                   destination: DirectorioPage(user: user),
-                  
                 ),
               ],
             ),
